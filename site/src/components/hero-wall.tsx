@@ -3,53 +3,47 @@ import Image from "next/image";
 const COLS = 4;
 
 // Portrait source photos get cropped hard by the aspect-video tiles below;
-// these bias the crop toward the rider instead of the default center.
+// these bias the crop toward the subject's face instead of the default center.
 const OBJECT_POSITIONS: Record<string, string> = {
-  "moto-sunset-portrait": "center 25%",
-  "moto-front-sunset": "center 43%",
-  "moto-rear-closeup": "center 30%",
-  "moto-over-shoulder": "center 18%",
-  "moto-helmet-closeup": "center 16%",
-  "moto-trees": "center 28%",
-  "moto-behind-trees": "center 30%",
-  "moto-helmet-mount": "center 25%",
-  "moto-street": "center 43%",
+  "flics-01": "center 42%",
+  "flics-02": "center 21%",
+  "flics-03": "center 21%",
+  "flics-04": "35% 45%",
+  "flics-05": "center 31%",
+  "flics-06": "center 50%",
+  "flics-07": "center 47%",
+  "flics-08": "center 31%",
+  "flics-09": "center 39%",
+  "flics-10": "center 47%",
+  "flics-11": "center 31%",
+  "flics-12": "center 28%",
+  "flics-13": "center 42%",
+  "flics-14": "center 26%",
+  "flics-15": "center 31%",
 };
 
-const WALL: string[] = [
-  "lilskies-recap",
-  "moto-over-shoulder",
-  "singer-portrait-color",
-  "singer-portrait-bw",
-  "ian-tour-recap",
-  "babytron-recap",
-  "singer-portrait-blue",
-  "singer-portrait-green",
-  "laroi-chicago",
-  "moto-helmet-mount",
-  "fl-preset",
-  "moto-sunset-portrait",
-  "moto-trees",
-  "ian-tulsa",
-  "moto-lying-back",
-  "moto-helmet-mount",
-  "singer-portrait-blue",
-  "singer-portrait-green",
-  "laroi-song",
-  "moto-trees",
-  "singer-portrait-color",
-  "moto-helmet-closeup",
-  "moto-trees",
-  "song-for-album",
-  "moto-helmet-closeup",
-  "moto-behind-trees",
-  "singer-portrait-green",
-  "moto-rear-closeup",
-  "moto-front-sunset",
-  "moto-street",
-  "moto-rear-closeup",
-  "spec-ad",
+const POOL = [
+  "flics-01",
+  "flics-02",
+  "flics-03",
+  "flics-04",
+  "flics-05",
+  "flics-06",
+  "flics-07",
+  "flics-08",
+  "flics-09",
+  "flics-10",
+  "flics-11",
+  "flics-12",
+  "flics-13",
+  "flics-14",
+  "flics-15",
 ];
+
+// Cycled to 32 slots. With COLS = 4 and 15 names, a name only repeats in the
+// same scroll column once every lcm(4, 15) = 60 slots, so this never puts the
+// same photo twice in one column.
+const WALL: string[] = Array.from({ length: 32 }, (_, i) => POOL[i % POOL.length]);
 
 function columns(): string[][] {
   const MIN_PER_COLUMN = 8;
