@@ -4,15 +4,9 @@ import { Link } from "next-view-transitions";
 import { motion, useMotionValue, useReducedMotion, useSpring } from "motion/react";
 import type { Product } from "@/content/site";
 import { ProductCover } from "./product-cover";
-import { Price, SaveBadge } from "./price";
+import { SaveBadge } from "./price";
 
 const MotionLink = motion.create(Link);
-
-const TYPE_LABEL: Record<Product["type"], string> = {
-  preset: "Preset",
-  template: "Template",
-  service: "Service",
-};
 
 export function ProductCard({ product }: { product: Product }) {
   const href = product.type === "service" ? "/mixing-mastering" : `/store/${product.slug}`;
@@ -56,18 +50,7 @@ export function ProductCard({ product }: { product: Product }) {
           </span>
         )}
       </div>
-      <div className="overflow-hidden">
-        <div>
-          <ProductCover product={product} />
-        </div>
-      </div>
-      <div className="flex items-center justify-between gap-3 border-t border-line px-4 py-3">
-        <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-faint">
-          {TYPE_LABEL[product.type]}
-          {product.daw ? ` · ${product.daw}` : ""}
-        </p>
-        <Price price={product.price} compareAtPrice={product.compareAtPrice} />
-      </div>
+      <ProductCover product={product} />
     </MotionLink>
   );
 }

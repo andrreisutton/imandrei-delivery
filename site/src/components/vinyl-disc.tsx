@@ -23,7 +23,7 @@ type Props = {
  */
 export function VinylDisc({ daws = [], className = "", idKey = "vinyl" }: Props) {
   const W = 200;
-  const H = 250;
+  const H = 200;
   const coverW = W * 0.62;
   const spineW = W * 0.09;
   const spineEnd = coverW + spineW;
