@@ -24,6 +24,8 @@ export type Credential = {
   name: string;
   role: string;
   videoUrl?: string;
+  avatar?: string;
+  instagram?: string;
 };
 
 export const credentials: Credential[] = [
@@ -31,26 +33,36 @@ export const credentials: Credential[] = [
     name: "Ian",
     role: "US Tour Pt. 2 recap, shot and edited",
     videoUrl: "https://www.youtube.com/watch?v=s3wYxy3mg48",
+    avatar: "/avatars/ian.jpg",
+    instagram: "https://www.instagram.com/iaaaaaaaaaaannnnnnnn/",
   },
   {
     name: "Lil Skies",
     role: "Tour recap, shot, cut, and colored",
     videoUrl: "https://www.youtube.com/watch?v=MnZgt0shLco",
+    avatar: "/avatars/lilskies.jpg",
+    instagram: "https://www.instagram.com/lilskies/",
   },
   {
     name: "BabyTron",
     role: "Out On Bond, official concert recap",
     videoUrl: "https://www.youtube.com/watch?v=ykBo8ExufGU",
+    avatar: "/avatars/babytron.jpg",
+    instagram: "https://www.instagram.com/babytron/",
   },
   {
     name: "The Kid LAROI",
     role: "Chicago show recap, shot and edited",
     videoUrl: "https://www.instagram.com/reel/DY2go9pqCa4/",
+    avatar: "/avatars/thekidlaroi.jpg",
+    instagram: "https://www.instagram.com/thekidlaroi/",
   },
   {
     name: "Will Swinton",
     role: "Artist visuals and recaps",
     videoUrl: "https://www.youtube.com/shorts/C-deacPxHLM",
+    avatar: "/avatars/willswinton.jpg",
+    instagram: "https://www.instagram.com/willswinton/",
   },
 ];
 

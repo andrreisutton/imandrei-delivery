@@ -195,7 +195,15 @@ function sanitizeCredentials(v: unknown, defaults: Credential[], h: Helpers): Cr
     const name = h.s(raw.name, "", 60);
     if (!name) continue;
     const videoUrl = h.urlOpt(raw.videoUrl);
-    out.push({ name, role: h.s(raw.role, "", 120), ...(videoUrl ? { videoUrl } : {}) });
+    const avatar = h.imgOpt(raw.avatar);
+    const instagram = h.urlOpt(raw.instagram);
+    out.push({
+      name,
+      role: h.s(raw.role, "", 120),
+      ...(videoUrl ? { videoUrl } : {}),
+      ...(avatar ? { avatar } : {}),
+      ...(instagram ? { instagram } : {}),
+    });
   }
   return out;
 }

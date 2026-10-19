@@ -87,6 +87,20 @@ export const creditsType = defineType({
                 "Leave empty until there is a public video of your own footage. The name still shows, it just is not a link.",
               validation: (r) => r.uri({ scheme: ["https"] }),
             }),
+            defineField({
+              name: "avatar",
+              title: "Profile picture path (optional)",
+              type: "string",
+              description:
+                "A site asset path, not an upload, for example /avatars/lilskies.jpg. Shown as a small Instagram-style circular photo next to the name.",
+            }),
+            defineField({
+              name: "instagram",
+              title: "Instagram profile (optional)",
+              type: "url",
+              description: "The name and photo link here when set, instead of the public video.",
+              validation: (r) => r.uri({ scheme: ["https"] }),
+            }),
           ],
           preview: {
             select: { title: "name", subtitle: "role", link: "videoUrl" },

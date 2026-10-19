@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { ArrowUpRight } from "@phosphor-icons/react";
 import type { Credential } from "@/content/site";
 import { SocialIcon, platformOf } from "./social-icon";
@@ -13,19 +14,56 @@ function rosterPlatforms(credentials: Credential[]) {
   return seen;
 }
 
-function CredentialName({ c, className = "" }: { c: Credential; className?: string }) {
+const IG_RING = "linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888)";
+
+function InstagramAvatar({ src, size = 22, className = "" }: { src: string; size?: number; className?: string }) {
+  return (
+    <span
+      className={`inline-flex shrink-0 items-center justify-center rounded-full p-[1.5px] ${className}`}
+      style={{ background: IG_RING, width: size, height: size }}
+      aria-hidden="true"
+    >
+      <span className="block size-full rounded-full bg-bg p-[1.5px]">
+        <Image
+          src={src}
+          alt=""
+          width={size}
+          height={size}
+          className="size-full rounded-full object-cover"
+        />
+      </span>
+    </span>
+  );
+}
+
+function CredentialName({
+  c,
+  className = "",
+  avatarSize = 22,
+}: {
+  c: Credential;
+  className?: string;
+  avatarSize?: number;
+}) {
+  const avatar = c.avatar ? <InstagramAvatar src={c.avatar} size={avatarSize} /> : null;
   if (!c.videoUrl) {
-    return <span className={`credential ${className}`}>{c.name}</span>;
+    return (
+      <span className="inline-flex items-center gap-1.5">
+        {avatar}
+        <span className={`credential ${className}`}>{c.name}</span>
+      </span>
+    );
   }
   return (
     <a
       href={c.videoUrl}
       target="_blank"
       rel="noopener"
-      className={`credential ${className}`}
+      className="inline-flex items-center gap-1.5"
       title={`${c.name}: ${c.role}`}
     >
-      {c.name}
+      {avatar}
+      <span className={`credential ${className}`}>{c.name}</span>
     </a>
   );
 }
@@ -65,7 +103,7 @@ export function HeroCredits({
                 : "credential-rule shrink-0 px-3.5 sm:px-4"
             }
           >
-            <CredentialName c={c} className="text-[17px] sm:text-xl" />
+            <CredentialName c={c} className="text-[17px] sm:text-xl" avatarSize={24} />
           </li>
         ))}
       </ul>
@@ -102,7 +140,7 @@ export function TrustedByStrip({
         >
           {credentials.map((c) => (
             <li key={c.name} className="shrink-0 py-0.5">
-              <CredentialName c={c} className="text-[15px] sm:text-base" />
+              <CredentialName c={c} className="text-[15px] sm:text-base" avatarSize={20} />
             </li>
           ))}
         </ul>
@@ -121,37 +159,53 @@ export function CredentialRoster({
   if (!credentials.length) return null;
   return (
     <ul className={`grid gap-px overflow-hidden rounded-[12px] border border-line bg-line ${className}`}>
-      {credentials.map((c) => (
-        <li key={c.name} className="bg-bg">
-          {c.videoUrl ? (
-            <a
-              href={c.videoUrl}
-              target="_blank"
-              rel="noopener"
-              className="group flex items-center justify-between gap-5 px-5 py-5 transition-colors duration-200 hover:bg-surface sm:px-7 sm:py-6"
-            >
-              <span className="min-w-0">
-                <span className="credential block text-2xl transition-colors duration-200 group-hover:text-accent-bright sm:text-3xl">
-                  {c.name}
-                </span>
-                <span className="mt-1.5 block text-sm leading-snug text-muted">{c.role}</span>
+      {credentials.map((c) => {
+        const nameBlock = (
+          <span className="flex min-w-0 items-center gap-3.5">
+            {c.avatar && <InstagramAvatar src={c.avatar} size={40} className="shrink-0" />}
+            <span className="min-w-0">
+              <span
+                className={`credential block text-2xl sm:text-3xl ${
+                  c.instagram ? "transition-colors duration-200 group-hover:text-accent-bright" : ""
+                }`}
+              >
+                {c.name}
               </span>
-              <span className="flex shrink-0 items-center gap-2 text-[10px] font-bold uppercase tracking-[0.16em] text-faint transition-colors duration-200 group-hover:text-ink">
+              <span className="mt-1.5 block text-sm leading-snug text-muted">{c.role}</span>
+            </span>
+          </span>
+        );
+        return (
+          <li key={c.name} className="flex items-center justify-between gap-5 bg-bg px-5 py-5 sm:px-7 sm:py-6">
+            {c.instagram ? (
+              <a
+                href={c.instagram}
+                target="_blank"
+                rel="noopener"
+                className="group min-w-0"
+                title={`${c.name} on Instagram`}
+              >
+                {nameBlock}
+              </a>
+            ) : (
+              nameBlock
+            )}
+            {c.videoUrl && (
+              <a
+                href={c.videoUrl}
+                target="_blank"
+                rel="noopener"
+                className="group flex shrink-0 items-center gap-2 text-[10px] font-bold uppercase tracking-[0.16em] text-faint transition-colors duration-200 hover:text-ink"
+                title={`Watch: ${c.name}`}
+              >
                 <SocialIcon label={platformOf(c.videoUrl) ?? "YouTube"} size={15} />
                 <span className="hidden sm:inline">Watch</span>
                 <ArrowUpRight size={11} weight="bold" aria-hidden="true" />
-              </span>
-            </a>
-          ) : (
-            <div className="flex items-center justify-between gap-5 px-5 py-5 sm:px-7 sm:py-6">
-              <span className="min-w-0">
-                <span className="credential block text-2xl sm:text-3xl">{c.name}</span>
-                <span className="mt-1.5 block text-sm leading-snug text-muted">{c.role}</span>
-              </span>
-            </div>
-          )}
-        </li>
-      ))}
+              </a>
+            )}
+          </li>
+        );
+      })}
     </ul>
   );
 }
