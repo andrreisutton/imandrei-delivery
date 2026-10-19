@@ -52,6 +52,7 @@ export type BookingRecord = {
   extraTime?: string;
   paymentMode?: "stripe" | "at-session";
   notes?: string;
+  fileUrls?: string[];
   createdAt: string;
 };
 
@@ -78,6 +79,7 @@ export type ServiceRequestRecord = {
   channelUrl?: string;
   cadence?: string;
   notes?: string;
+  fileUrls?: string[];
   createdAt: string;
 };
 

@@ -278,6 +278,15 @@ export default async function AdminPage() {
                     {b.artistName ? ` (${b.artistName})` : ""} · {b.email}
                   </p>
                   {b.notes && <p className="mt-1 text-xs text-faint">{b.notes}</p>}
+                  {b.fileUrls && b.fileUrls.length > 0 && (
+                    <p className="mt-1 flex flex-wrap gap-x-2 text-xs text-faint">
+                      {b.fileUrls.map((u, i) => (
+                        <a key={u} href={u} target="_blank" rel="noreferrer" className="underline hover:text-ink">
+                          File {i + 1}
+                        </a>
+                      ))}
+                    </p>
+                  )}
                 </div>
               ))
             )}
@@ -303,6 +312,15 @@ export default async function AdminPage() {
                     <p className="mt-1 text-xs text-faint">Reference: {r.referenceTrack}</p>
                   )}
                   {r.notes && <p className="mt-1 text-xs text-faint">{r.notes}</p>}
+                  {r.fileUrls && r.fileUrls.length > 0 && (
+                    <p className="mt-1 flex flex-wrap gap-x-2 text-xs text-faint">
+                      {r.fileUrls.map((u, i) => (
+                        <a key={u} href={u} target="_blank" rel="noreferrer" className="underline hover:text-ink">
+                          File {i + 1}
+                        </a>
+                      ))}
+                    </p>
+                  )}
                 </div>
               ))
             )}

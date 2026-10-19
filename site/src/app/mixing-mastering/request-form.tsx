@@ -1,13 +1,15 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { submitServiceRequest, type ActionState } from "@/app/actions";
 import { CheckCircle } from "@phosphor-icons/react";
 import { Select } from "@/components/select";
 import { ProofCtaNote } from "@/components/proof";
+import { StemsUpload } from "@/components/stems-upload";
 
 export function ServiceRequestForm({ services }: { services: { slug: string; title: string }[] }) {
   const [state, action, pending] = useActionState<ActionState, FormData>(submitServiceRequest, {});
+  const [uploading, setUploading] = useState(false);
 
   if (state.ok) {
     return (
@@ -66,13 +68,14 @@ export function ServiceRequestForm({ services }: { services: { slug: string; tit
           placeholder="Genre, stem count, deadline, anything that matters"
         />
       </div>
+      <StemsUpload name="fileUrls" onBusyChange={setUploading} />
       {state.error && (
         <p role="alert" className="text-sm font-medium text-accent-bright">
           {state.error}
         </p>
       )}
-      <button type="submit" className="btn btn-primary" disabled={pending}>
-        {pending ? "Sending…" : "Send request"}
+      <button type="submit" className="btn btn-primary" disabled={pending || uploading}>
+        {pending ? "Sending…" : uploading ? "Uploading files…" : "Send request"}
       </button>
       <ProofCtaNote className="justify-center" />
     </form>

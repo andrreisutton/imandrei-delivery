@@ -8,6 +8,7 @@ import { submitReview } from "@/lib/reviews";
 import { createBookingStripeCheckout, createStripeCheckout, stripeEnabled } from "@/lib/stripe";
 import {
   esc,
+  filesHtml,
   renderBookingConfirmation,
   renderOwnerNotification,
   renderServiceRequestConfirmation,
@@ -26,6 +27,23 @@ const MAX_EXTRA_HOURS = 6;
 function str(fd: FormData, key: string, max = 300): string {
   const v = fd.get(key);
   return typeof v === "string" ? v.trim().slice(0, max) : "";
+}
+
+const MAX_FILES = 20;
+
+function fileUrls(fd: FormData, key: string): string[] {
+  const raw = fd.get(key);
+  if (typeof raw !== "string" || !raw) return [];
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    return [];
+  }
+  if (!Array.isArray(parsed)) return [];
+  return parsed
+    .filter((u): u is string => typeof u === "string" && /^https:\/\//.test(u))
+    .slice(0, MAX_FILES);
 }
 
 async function notifyOwner(kind: string, summary: string, detailsHtml: string) {
@@ -118,6 +136,7 @@ export async function submitBooking(prev: ActionState, formData: FormData): Prom
     quotedTotal,
     paymentMode: payOnline ? "stripe" : "at-session",
     notes: str(formData, "notes", 1000) || undefined,
+    fileUrls: fileUrls(formData, "fileUrls"),
     createdAt: new Date().toISOString(),
   };
   await saveJSON(`bookings/${booking.id}`, booking);
@@ -138,7 +157,7 @@ export async function submitBooking(prev: ActionState, formData: FormData): Prom
   await notifyOwner(
     "session request",
     `${session.title} · ${preferredDate}`,
-    `<p style="color:#b7b4ae;font-size:15px;">${esc(name)} (${esc(email)}) requested a <strong style="color:#f5f4f2">${esc(session.title)}</strong> on ${esc(preferredDate)} at ${esc(preferredTime)}. ${booking.duration}, <strong style="color:#f5f4f2">$${quotedTotal}</strong> total (paid at the session).${booking.notes ? `<br/><br/>Notes: ${esc(booking.notes)}` : ""}</p>`
+    `<p style="color:#b7b4ae;font-size:15px;">${esc(name)} (${esc(email)}) requested a <strong style="color:#f5f4f2">${esc(session.title)}</strong> on ${esc(preferredDate)} at ${esc(preferredTime)}. ${booking.duration}, <strong style="color:#f5f4f2">$${quotedTotal}</strong> total (paid at the session).${booking.notes ? `<br/><br/>Notes: ${esc(booking.notes)}` : ""}${filesHtml(booking.fileUrls)}</p>`
   );
 
   return { ok: true };
@@ -173,6 +192,7 @@ export async function submitServiceRequest(prev: ActionState, formData: FormData
     channelUrl: str(formData, "channelUrl", 300) || undefined,
     cadence: str(formData, "cadence", 120) || undefined,
     notes: str(formData, "notes", 1000) || undefined,
+    fileUrls: fileUrls(formData, "fileUrls"),
     createdAt: new Date().toISOString(),
   };
   await saveJSON(`requests/${request.id}`, request);
@@ -182,7 +202,7 @@ export async function submitServiceRequest(prev: ActionState, formData: FormData
   await notifyOwner(
     "service request",
     `${service.title} from ${name}`,
-    `<p style="color:#b7b4ae;font-size:15px;">${esc(name)} (${esc(email)}) requested <strong style="color:#f5f4f2">${esc(service.title)}</strong>.${request.songTitle ? `<br/>Song: ${esc(request.songTitle)}` : ""}${request.referenceTrack ? `<br/>Reference: ${esc(request.referenceTrack)}` : ""}${request.channelUrl ? `<br/>Channel: ${esc(request.channelUrl)}` : ""}${request.cadence ? `<br/>Cadence: ${esc(request.cadence)}` : ""}${request.notes ? `<br/><br/>Notes: ${esc(request.notes)}` : ""}</p>`
+    `<p style="color:#b7b4ae;font-size:15px;">${esc(name)} (${esc(email)}) requested <strong style="color:#f5f4f2">${esc(service.title)}</strong>.${request.songTitle ? `<br/>Song: ${esc(request.songTitle)}` : ""}${request.referenceTrack ? `<br/>Reference: ${esc(request.referenceTrack)}` : ""}${request.channelUrl ? `<br/>Channel: ${esc(request.channelUrl)}` : ""}${request.cadence ? `<br/>Cadence: ${esc(request.cadence)}` : ""}${request.notes ? `<br/><br/>Notes: ${esc(request.notes)}` : ""}${filesHtml(request.fileUrls)}</p>`
   );
 
   return { ok: true };

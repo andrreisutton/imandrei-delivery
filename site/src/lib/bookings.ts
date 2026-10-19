@@ -1,6 +1,6 @@
 import { claimJSON, readJSON, saveJSON } from "./store";
 import type { BookingCheckoutEvent, BookingEvent, BookingRecord } from "./types";
-import { esc, renderBookingConfirmation, renderOwnerNotification, sendEmail } from "./email";
+import { esc, filesHtml, renderBookingConfirmation, renderOwnerNotification, sendEmail } from "./email";
 import { getStripe, stripeEnabled } from "./stripe";
 
 export async function getBooking(id: string): Promise<BookingRecord | null> {
@@ -42,7 +42,7 @@ export async function markBookingPaid(bookingId: string): Promise<void> {
     const email = await renderOwnerNotification(
       "paid session booking",
       `${booking.sessionTitle} · ${booking.preferredDate}`,
-      `<p style="color:#b7b4ae;font-size:15px;">${esc(booking.name)} (${esc(booking.email)}) booked and <strong style="color:#f5f4f2">paid</strong> a <strong style="color:#f5f4f2">${esc(booking.sessionTitle)}</strong> on ${esc(booking.preferredDate)} at ${esc(booking.preferredTime)}. ${esc(booking.duration ?? "")}, <strong style="color:#f5f4f2">$${booking.quotedTotal ?? 0}</strong> collected through Stripe.${booking.notes ? `<br/><br/>Notes: ${esc(booking.notes)}` : ""}</p>`
+      `<p style="color:#b7b4ae;font-size:15px;">${esc(booking.name)} (${esc(booking.email)}) booked and <strong style="color:#f5f4f2">paid</strong> a <strong style="color:#f5f4f2">${esc(booking.sessionTitle)}</strong> on ${esc(booking.preferredDate)} at ${esc(booking.preferredTime)}. ${esc(booking.duration ?? "")}, <strong style="color:#f5f4f2">$${booking.quotedTotal ?? 0}</strong> collected through Stripe.${booking.notes ? `<br/><br/>Notes: ${esc(booking.notes)}` : ""}${filesHtml(booking.fileUrls)}</p>`
     );
     await sendEmail({ to, ...email, type: "owner-notification", refId: bookingId });
   }

@@ -21,6 +21,12 @@ export function esc(s: string): string {
   );
 }
 
+export function filesHtml(urls?: string[]): string {
+  if (!urls || urls.length === 0) return "";
+  const items = urls.map((u, i) => `<a href="${esc(u)}" style="color:#f5f4f2;">File ${i + 1}</a>`).join(", ");
+  return `<br/><br/>Files: ${items}`;
+}
+
 const C = {
   bg: "#0a0a0a",
   card: "#141212",

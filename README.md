@@ -41,6 +41,7 @@ Set these in the hosting project (Vercel). Never commit them.
 | `CRON_SECRET` | Protects the scheduled review-email job |
 | `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` | Card payments. Without them checkout runs in demo mode and says so. |
 | `RESEND_API_KEY`, `EMAIL_FROM`, `NOTIFY_EMAIL` | Sending email. Without them emails are listed in `/admin` instead of sent. |
+| `BLOB_READ_WRITE_TOKEN` | File storage (Vercel Blob): the product download zips, and customer-uploaded stems from the booking and mixing/mastering forms. Without it, uploads are turned off and the rest of the form still works. |
 
 The database table is created by `node --env-file=<your env file> scripts/migrate.mjs`
 from `site/`.

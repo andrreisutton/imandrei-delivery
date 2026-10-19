@@ -7,6 +7,7 @@ import { CheckCircle } from "@phosphor-icons/react";
 import { Select } from "@/components/select";
 import { ApertureDisc } from "@/components/aperture-disc";
 import { ProofCtaNote } from "@/components/proof";
+import { StemsUpload } from "@/components/stems-upload";
 
 const START_TIMES = [
   "10:00 AM",
@@ -51,6 +52,7 @@ export function BookingForm({
   stripeOn: boolean;
 }) {
   const [state, action, pending] = useActionState<ActionState, FormData>(submitBooking, {});
+  const [uploading, setUploading] = useState(false);
   const [sessionId, setSessionId] = useState(sessions[0]?.id);
   const session = sessions.find((s) => s.id === sessionId) ?? sessions[0];
   const base = parseBaseHours(session?.duration ?? "2 hours");
@@ -183,20 +185,24 @@ export function BookingForm({
         />
       </div>
 
+      <StemsUpload name="fileUrls" onBusyChange={setUploading} />
+
       {state.error && (
         <p role="alert" className="text-sm font-medium text-accent-bright">
           {state.error}
         </p>
       )}
 
-      <button type="submit" className="btn btn-primary" disabled={pending}>
-        {pending
-          ? stripeOn
-            ? "Starting secure checkout…"
-            : "Sending…"
-          : stripeOn
-            ? `Book & pay · $${total}`
-            : `Request session · $${total}`}
+      <button type="submit" className="btn btn-primary" disabled={pending || uploading}>
+        {uploading
+          ? "Uploading files…"
+          : pending
+            ? stripeOn
+              ? "Starting secure checkout…"
+              : "Sending…"
+            : stripeOn
+              ? `Book & pay · $${total}`
+              : `Request session · $${total}`}
       </button>
       <p className="text-center text-xs text-faint">
         {stripeOn
