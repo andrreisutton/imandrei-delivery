@@ -46,7 +46,8 @@ function CredentialName({
   avatarSize?: number;
 }) {
   const avatar = c.avatar ? <InstagramAvatar src={c.avatar} size={avatarSize} /> : null;
-  if (!c.videoUrl) {
+  const href = c.instagram ?? c.videoUrl;
+  if (!href) {
     return (
       <span className="inline-flex items-center gap-1.5">
         {avatar}
@@ -56,11 +57,11 @@ function CredentialName({
   }
   return (
     <a
-      href={c.videoUrl}
+      href={href}
       target="_blank"
       rel="noopener"
       className="inline-flex items-center gap-1.5"
-      title={`${c.name}: ${c.role}`}
+      title={c.instagram ? `${c.name} on Instagram` : `${c.name}: ${c.role}`}
     >
       {avatar}
       <span className={`credential ${className}`}>{c.name}</span>
