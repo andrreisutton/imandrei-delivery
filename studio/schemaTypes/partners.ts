@@ -2,19 +2,19 @@ import { defineArrayMember, defineField, defineType } from "sanity";
 
 export const partnersType = defineType({
   name: "partners",
-  title: "Partners & Codes",
+  title: "Affiliates & Codes",
   type: "document",
   fields: [
     defineField({
       name: "partners",
-      title: "Partners",
+      title: "Affiliates",
       description:
-        "Drag to reorder. A partner with no code still gets a finished card with a link, so add brands before you have the code sorted.",
+        "Drag to reorder. An affiliate with no code still gets a finished card with a link, so add brands before you have the code sorted.",
       type: "array",
       of: [
         defineArrayMember({
           name: "partner",
-          title: "Partner",
+          title: "Affiliate",
           type: "object",
           fields: [
             defineField({
@@ -69,7 +69,7 @@ export const partnersType = defineType({
             select: { title: "name", subtitle: "what", code: "code", media: "logo" },
             prepare({ title, subtitle, code, media }) {
               return {
-                title: title || "Untitled partner",
+                title: title || "Untitled affiliate",
                 subtitle: [code ? `Code: ${code}` : "No code yet", subtitle].filter(Boolean).join(" · "),
                 media,
               };
@@ -80,5 +80,5 @@ export const partnersType = defineType({
       validation: (r) => r.max(16),
     }),
   ],
-  preview: { prepare: () => ({ title: "Partners & Codes" }) },
+  preview: { prepare: () => ({ title: "Affiliates & Codes" }) },
 });

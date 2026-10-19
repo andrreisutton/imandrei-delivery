@@ -47,7 +47,7 @@ export default defineConfig({
           { route: "/book", filter: `_id == "catalog"` },
           { route: "/work", filter: `_id == "credits"` },
           { route: "/credits", filter: `_id == "credits"` },
-          { route: "/partners", filter: `_id == "partners"` },
+          { route: "/affiliates", filter: `_id == "partners"` },
           { route: "/about", filter: `_id == "pagesCopy"` },
         ],
         locations: {
@@ -59,7 +59,7 @@ export default defineConfig({
             ["Home", "/"]
           ),
           credits: where(["Work", "/work"], ["Credits", "/credits"], ["Home", "/"]),
-          partners: where(["Partners", "/partners"]),
+          partners: where(["Affiliates", "/affiliates"]),
           homePage: where(["Home", "/"]),
           pagesCopy: where(
             ["Services", "/services"],
@@ -67,7 +67,7 @@ export default defineConfig({
             ["Monthly Editing", "/editing"],
             ["Work", "/work"],
             ["Credits", "/credits"],
-            ["Partners", "/partners"],
+            ["Affiliates", "/affiliates"],
             ["About", "/about"]
           ),
           siteSettings: defineLocations({
@@ -91,7 +91,7 @@ export default defineConfig({
             S.divider(),
             singleton(S, "catalog", "Store", TagIcon),
             singleton(S, "credits", "My Work & Credits", StarIcon),
-            singleton(S, "partners", "Partners & Codes", UsersIcon),
+            singleton(S, "partners", "Affiliates & Codes", UsersIcon),
             singleton(S, "homePage", "Home Page", HomeIcon),
             singleton(S, "pagesCopy", "Other Pages", DocumentTextIcon),
             singleton(S, "siteSettings", "Logo, Links & Socials", CogIcon),

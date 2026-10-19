@@ -7,6 +7,11 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "*.mzstatic.com" },
     ],
   },
+  async redirects() {
+    return [
+      { source: "/partners", destination: "/affiliates", permanent: true },
+    ];
+  },
   async headers() {
     return [
       {

@@ -34,7 +34,7 @@ export const credentials: Credential[] = [
   },
   {
     name: "Lil Skies",
-    role: "Greekfest Tour recap, shot, cut, and colored",
+    role: "Tour recap, shot, cut, and colored",
     videoUrl: "https://www.youtube.com/watch?v=MnZgt0shLco",
   },
   {
@@ -83,7 +83,7 @@ export const videoWork: VideoWork[] = [
   },
   {
     videoId: "MnZgt0shLco",
-    title: "Lil Skies, Greekfest Tour recap",
+    title: "Lil Skies, Tour recap",
     credit: "Shot, cut, and colored by me",
     year: "2025",
   },
@@ -874,8 +874,8 @@ export const partners: Partner[] = [
   },
   {
     name: "Comfrt",
-    what: "Comfort wear I partner with",
-    code: "ANDREI35",
+    what: "Comfort wear I'm an affiliate for",
+    code: "",
     perk: "",
     href: "https://comfrt.com/ANDREI35",
     referral: true,
@@ -965,7 +965,7 @@ export const photoSets: PhotoSet[] = [
   {
     id: "lil-skies",
     artist: "Lil Skies",
-    note: "Greekfest, Oct 2025",
+    note: "Oct 2025",
     href: "https://www.instagram.com/p/DPcXc8OEbD3/",
     photos: [
       p("/photos/skies-1.jpg", 1200, 1500, "Lil Skies performing, head bowed over the mic"),
@@ -1452,7 +1452,7 @@ export const pages = {
     editingHeading: "Editing credits",
   },
   partners: {
-    heading: "Partners",
+    heading: "Affiliates",
     intro:
       "The brands I actually work with, and the codes that come with them. Nothing here is a link I have not used myself.",
     codeLabel: "Code",

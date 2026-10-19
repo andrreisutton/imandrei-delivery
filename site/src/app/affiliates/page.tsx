@@ -7,10 +7,10 @@ import { TrustedByStrip } from "@/components/credentials";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { pages } = await getSiteContent();
-  return { title: "Partners", description: pages.partners.intro };
+  return { title: "Affiliates", description: pages.partners.intro };
 }
 
-export default async function PartnersPage() {
+export default async function AffiliatesPage() {
   const { pages, partners, credentials, home } = await getSiteContent();
   const labels = {
     codeLabel: pages.partners.codeLabel,

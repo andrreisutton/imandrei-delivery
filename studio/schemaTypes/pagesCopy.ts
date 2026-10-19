@@ -30,7 +30,7 @@ export const pagesCopyType = defineType({
     { name: "editing", title: "Monthly Editing page" },
     { name: "work", title: "Work page" },
     { name: "credits", title: "Credits page" },
-    { name: "partners", title: "Partners page" },
+    { name: "partners", title: "Affiliates page" },
     { name: "book", title: "Booking page" },
     { name: "about", title: "About page" },
     { name: "notFound", title: "Page not found" },
@@ -147,7 +147,7 @@ export const pagesCopyType = defineType({
     }),
     defineField({
       name: "partners",
-      title: "Partners page",
+      title: "Affiliates page",
       type: "object",
       group: "partners",
       fields: [
@@ -161,7 +161,7 @@ export const pagesCopyType = defineType({
           name: "referralLabel",
           title: "Button label when the link is yours",
           type: "string",
-          description: 'Shown instead of "Visit" on any partner whose link is your referral or affiliate link.',
+          description: 'Shown instead of "Visit" on any affiliate whose link is your referral or affiliate link.',
           validation: (r) => r.max(30),
         }),
         defineField({ name: "outro", title: "Closing line", type: "text", rows: 2, validation: (r) => r.max(300) }),

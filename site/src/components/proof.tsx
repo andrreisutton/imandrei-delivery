@@ -5,16 +5,16 @@ import { SocialIcon } from "./social-icon";
 const RECAP = {
   videoId: "MnZgt0shLco",
   videoUrl: "https://www.youtube.com/watch?v=MnZgt0shLco",
-  videoTitle: "Lil Skies Greekfest Tour recap, October 2025",
+  videoTitle: "Lil Skies Tour recap, October 2025",
   channelUrl: "https://www.youtube.com/@andreisutton",
 };
 
 const copy = {
-  badge: "Shot the Lil Skies Greekfest Tour recap",
+  badge: "Shot the Lil Skies Tour recap",
   eyebrow: "Real work · From my channel",
   heading: "The Lil Skies tour stop, through this lens.",
   body1:
-    "When the Greekfest Tour came through, I was on the floor with a camera. The recap is my shot, my cut, my color.",
+    "When the tour came through, I was on the floor with a camera. The recap is my shot, my cut, my color.",
   body2:
     "That finish is not a separate service I buy in. I cut in Premiere Pro and grade in DaVinci Resolve with the same PowerGrade sitting in the store, and the records I release as andrei! go through the same ear you are booking for your mix.",
   plaque: ["Shot on the floor", "Cut in Premiere Pro", "Colored with the Everyday PowerGrade"],
@@ -22,7 +22,7 @@ const copy = {
   watchCta: "Watch the recap",
   browseCta: "Browse the store",
   videoCaption:
-    "From my channel: the Lil Skies Greekfest Tour recap, October 2025. Shot, cut, and colored by me.",
+    "From my channel: the Lil Skies Tour recap, October 2025. Shot, cut, and colored by me.",
   storeStrip: "was shot, cut, and colored with the exact tools on this page.",
   mixingStrip: "Your mix gets someone who also shoots and grades my own records. One taste, end to end.",
   reviewEyebrow: "Notable work",
@@ -125,7 +125,7 @@ export function ProofCtaNote({ className = "" }: { className?: string }) {
       <SocialIcon label="YouTube" size={13} />
       <span>
         <RecapLink className="font-semibold text-muted underline-offset-4 transition-colors hover:text-ink hover:underline">
-          Lil Skies Greekfest Tour recap
+          Lil Skies Tour recap
         </RecapLink>{" "}
         shot with these tools
       </span>
@@ -144,7 +144,7 @@ export function ProofStrip({ variant = "store" }: { variant?: "store" | "mixing"
           <>
             The{" "}
             <RecapLink className="font-semibold text-ink underline-offset-4 hover:underline">
-              Lil Skies Greekfest Tour recap
+              Lil Skies Tour recap
             </RecapLink>{" "}
             {copy.storeStrip}
           </>
@@ -167,7 +167,7 @@ export function ProofReviewPlaque() {
         </p>
       </div>
       <blockquote className="h-editorial mt-4 text-3xl sm:text-4xl">
-        Lil Skies Greekfest Tour recap
+        Lil Skies Tour recap
       </blockquote>
       <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted">
         <span>{copy.reviewMeta}</span>

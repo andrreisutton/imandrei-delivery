@@ -9,7 +9,7 @@ const TASKS: [string, string][] = [
   ["Add concert photos", "My Work & Credits, Photos: drag them in"],
   ["Swap the featured video (the Lil Skies one)", "My Work & Credits, Featured video"],
   ["Update your muso.ai numbers or records", "My Work & Credits, Music & credits"],
-  ["Add a brand and its discount code", "Partners & Codes"],
+  ["Add a brand and its discount code", "Affiliates & Codes"],
   ["Change your Instagram, TikTok or other links", "Logo, Links & Socials"],
   ["Change any heading, paragraph or button", "Click it in Edit the site, or find it in Home Page or Other Pages"],
 ];

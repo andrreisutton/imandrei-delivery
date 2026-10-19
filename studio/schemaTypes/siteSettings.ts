@@ -85,7 +85,7 @@ export const siteSettingsType = defineType({
         label("editing", "Monthly Editing (footer)"),
         label("book", "Book a Session (footer)"),
         label("credits", "Credits"),
-        label("partners", "Partners"),
+        label("partners", "Affiliates"),
         label("work", "Work"),
         label("about", "About"),
         label("browseStore", "Red menu button"),
