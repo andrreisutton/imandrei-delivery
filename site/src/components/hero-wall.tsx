@@ -2,38 +2,52 @@ import Image from "next/image";
 
 const COLS = 4;
 
+// Portrait source photos get cropped hard by the aspect-video tiles below;
+// these bias the crop toward the rider instead of the default center.
+const OBJECT_POSITIONS: Record<string, string> = {
+  "moto-sunset-portrait": "center 25%",
+  "moto-front-sunset": "center 43%",
+  "moto-rear-closeup": "center 30%",
+  "moto-over-shoulder": "center 18%",
+  "moto-helmet-closeup": "center 16%",
+  "moto-trees": "center 28%",
+  "moto-behind-trees": "center 30%",
+  "moto-helmet-mount": "center 25%",
+  "moto-street": "center 43%",
+};
+
 const WALL: string[] = [
   "lilskies-recap",
   "laroi-show",
-  "grade-method",
-  "recap-editing",
+  "singer-portrait-color",
+  "singer-portrait-bw",
   "ian-tour-recap",
   "babytron-recap",
-  "mix-vocals",
-  "vocal-preset",
+  "singer-portrait-blue",
+  "singer-portrait-green",
   "laroi-chicago",
-  "title-card-red",
+  "moto-helmet-mount",
   "fl-preset",
-  "premiere-plugin",
-  "live-warm",
+  "moto-sunset-portrait",
+  "moto-trees",
   "ian-tulsa",
-  "beats-laroi",
+  "moto-lying-back",
   "laroi-hours",
   "colorado-video",
   "gone-video",
   "laroi-song",
   "laroi-fl",
-  "title-card",
-  "live-teal",
+  "singer-portrait-color",
+  "moto-helmet-closeup",
   "song-live",
   "song-for-album",
   "missouri",
-  "the-lake",
+  "moto-behind-trees",
   "johnnyphilp",
   "dream-car",
-  "zurkie-edit",
-  "title-card-ut",
-  "about-hug",
+  "moto-front-sunset",
+  "moto-street",
+  "moto-rear-closeup",
   "spec-ad",
 ];
 
@@ -73,6 +87,7 @@ export function HeroWall({ scrims = true }: { scrims?: boolean } = {}) {
                     fill
                     sizes="(min-width: 1024px) 25vw, (min-width: 640px) 34vw, 50vw"
                     className="object-cover"
+                    style={{ objectPosition: OBJECT_POSITIONS[name] ?? "center" }}
                     priority={pass === 0 && (i < 2 ? idx < 2 : idx < 1)}
                   />
                 </div>
