@@ -527,6 +527,79 @@ export const creditsType = defineType({
                   description: "Only when the channel is named: the public channel page.",
                   validation: (r) => r.uri({ scheme: ["https"] }),
                 }),
+                defineField({
+                  name: "links",
+                  title: "Multiple links (optional)",
+                  description:
+                    "Use this instead of the single channel link above when more than one person or channel should be credited here, for example two co-hosts who each have their own channel.",
+                  type: "array",
+                  of: [
+                    defineArrayMember({
+                      name: "link",
+                      title: "Link",
+                      type: "object",
+                      fields: [
+                        defineField({
+                          name: "label",
+                          title: "Link text",
+                          type: "string",
+                          validation: (r) => r.required().max(60),
+                        }),
+                        defineField({
+                          name: "href",
+                          title: "URL",
+                          type: "url",
+                          validation: (r) => r.required().uri({ scheme: ["https"] }),
+                        }),
+                        defineField({
+                          name: "banner",
+                          title: "Banner image path (optional)",
+                          type: "string",
+                          description:
+                            "A site asset path, not an upload, for example /credits/trewcrew-banner.jpg. Leave empty for a plain text link.",
+                        }),
+                        defineField({
+                          name: "avatar",
+                          title: "Avatar image path (optional)",
+                          type: "string",
+                          description: "A site asset path, for example /credits/trewcrew-avatar.jpg.",
+                        }),
+                        defineField({
+                          name: "handle",
+                          title: "Channel handle (optional)",
+                          type: "string",
+                          description: 'As shown on the channel, for example "@trewcrew".',
+                          validation: (r) => r.max(40),
+                        }),
+                        defineField({
+                          name: "subscribers",
+                          title: "Subscriber count (optional)",
+                          type: "string",
+                          description: 'As shown on the channel, for example "269K subscribers".',
+                          validation: (r) => r.max(40),
+                        }),
+                        defineField({
+                          name: "videos",
+                          title: "Video count (optional)",
+                          type: "string",
+                          description: 'As shown on the channel, for example "466 videos".',
+                          validation: (r) => r.max(40),
+                        }),
+                        defineField({
+                          name: "description",
+                          title: "Channel description (optional)",
+                          type: "string",
+                          description: "The channel's own one-line bio.",
+                          validation: (r) => r.max(160),
+                        }),
+                      ],
+                      preview: {
+                        select: { title: "label", subtitle: "href" },
+                      },
+                    }),
+                  ],
+                  validation: (r) => r.max(4),
+                }),
               ],
               preview: {
                 select: { title: "name", subtitle: "note" },

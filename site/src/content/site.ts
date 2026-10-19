@@ -227,6 +227,16 @@ export type EditingClient = {
   role: string;
   note: string;
   href?: string;
+  links?: {
+    label: string;
+    href: string;
+    banner?: string;
+    avatar?: string;
+    handle?: string;
+    subscribers?: string;
+    videos?: string;
+    description?: string;
+  }[];
 };
 
 export type MusoStat = { value: string; label: string };
@@ -291,12 +301,36 @@ export const industry = {
       name: "",
       role: "Video editor, long form and shorts",
       note: "One of the largest hockey channels on YouTube",
+      links: [
+        {
+          label: "Trew Crew",
+          href: "https://www.youtube.com/c/trewcrew",
+          banner: "/credits/trewcrew-banner.jpg",
+          avatar: "/credits/trewcrew-avatar.jpg",
+          handle: "@trewcrew",
+          subscribers: "269K subscribers",
+          videos: "466 videos",
+          description: "I make ice hockey videos :)",
+        },
+      ],
     },
     {
       name: "zurkie",
       role: "Video editor on channel uploads",
       note: "Storytelling vlogs on YouTube",
       href: "https://www.youtube.com/@zurkie",
+      links: [
+        {
+          label: "The Zurkie Show",
+          href: "https://www.youtube.com/@thezurkieshow",
+          banner: "/credits/zurkieshow-banner.jpg",
+          avatar: "/credits/zurkieshow-avatar.jpg",
+          handle: "@thezurkieshow",
+          subscribers: "130K subscribers",
+          videos: "237 videos",
+          description: "A fireside chat in the 21st century.",
+        },
+      ],
     },
   ] as EditingClient[],
 };

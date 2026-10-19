@@ -233,7 +233,40 @@ function sanitizeEditingClients(v: unknown, defaults: EditingClient[], h: Helper
     const note = h.s(raw.note, "", 200);
     if (!name && !note) continue;
     const href = h.urlOpt(raw.href);
-    out.push({ name, role: h.s(raw.role, "", 120), note, ...(href ? { href } : {}) });
+    const links = Array.isArray(raw.links)
+      ? raw.links
+          .filter(isObj)
+          .map((l) => ({
+            label: h.s(l.label, "", 60),
+            href: h.urlOpt(l.href),
+            banner: h.imgOpt(l.banner),
+            avatar: h.imgOpt(l.avatar),
+            handle: h.sOpt(l.handle, 40),
+            subscribers: h.sOpt(l.subscribers, 40),
+            videos: h.sOpt(l.videos, 40),
+            description: h.sOpt(l.description, 160),
+          }))
+          .filter(
+            (l): l is {
+              label: string;
+              href: string;
+              banner?: string;
+              avatar?: string;
+              handle?: string;
+              subscribers?: string;
+              videos?: string;
+              description?: string;
+            } => !!l.label && !!l.href,
+          )
+          .slice(0, 4)
+      : [];
+    out.push({
+      name,
+      role: h.s(raw.role, "", 120),
+      note,
+      ...(href ? { href } : {}),
+      ...(links.length ? { links } : {}),
+    });
   }
   return out.length ? out : defaults;
 }

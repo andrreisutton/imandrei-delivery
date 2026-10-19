@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { Link } from "next-view-transitions";
 import { ArrowUpRight } from "@phosphor-icons/react/dist/ssr";
 import { getSiteContent } from "@/lib/content";
@@ -128,16 +129,96 @@ export default async function CreditsPage() {
                   <p className="mt-2.5 text-[15px] leading-relaxed text-muted">
                     {ec.name ? `${ec.note}. ${ec.role}.` : `${ec.role}.`}
                   </p>
-                  {ec.href && (
-                    <a
-                      href={ec.href}
-                      target="_blank"
-                      rel="noopener"
-                      className="mt-4 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.14em] text-ink transition-colors hover:text-accent-bright"
-                    >
-                      Open the channel
-                      <ArrowUpRight size={12} weight="bold" aria-hidden="true" />
-                    </a>
+                  {ec.links && ec.links.length > 0 ? (
+                    ec.links.some((l) => l.banner) ? (
+                      <div className="mt-5 grid gap-4">
+                        {ec.links.map((l) =>
+                          l.banner ? (
+                            <a
+                              key={l.href}
+                              href={l.href}
+                              target="_blank"
+                              rel="noopener"
+                              className="group block overflow-hidden rounded-[10px] border border-line bg-raised transition-colors duration-200 hover:border-line-strong"
+                            >
+                              <div className="relative aspect-[4/1] w-full overflow-hidden">
+                                <Image
+                                  src={l.banner}
+                                  alt=""
+                                  fill
+                                  sizes="(min-width: 1024px) 36vw, 90vw"
+                                  className="object-cover"
+                                />
+                              </div>
+                              <div className="relative px-4 pb-4 pt-8">
+                                {l.avatar && (
+                                  <span className="absolute -top-7 left-4 block size-14 overflow-hidden rounded-full ring-4 ring-raised">
+                                    <Image src={l.avatar} alt="" width={56} height={56} className="size-full object-cover" />
+                                  </span>
+                                )}
+                                <div className="flex items-start justify-between gap-2 pl-16">
+                                  <div>
+                                    <span className="h-editorial block text-base sm:text-lg">{l.label}</span>
+                                    {(l.handle || l.subscribers || l.videos) && (
+                                      <p className="mt-0.5 text-[12px] text-faint">
+                                        {[l.handle, l.subscribers, l.videos].filter(Boolean).join(" · ")}
+                                      </p>
+                                    )}
+                                  </div>
+                                  <ArrowUpRight
+                                    size={14}
+                                    weight="bold"
+                                    className="mt-1 shrink-0 text-faint transition-colors duration-200 group-hover:text-accent-bright"
+                                    aria-hidden="true"
+                                  />
+                                </div>
+                                {l.description && (
+                                  <p className="mt-3 text-[13px] leading-relaxed text-muted">{l.description}</p>
+                                )}
+                              </div>
+                            </a>
+                          ) : (
+                            <a
+                              key={l.href}
+                              href={l.href}
+                              target="_blank"
+                              rel="noopener"
+                              className="inline-flex items-center gap-2 self-start text-[11px] font-bold uppercase tracking-[0.14em] text-ink transition-colors hover:text-accent-bright"
+                            >
+                              {l.label}
+                              <ArrowUpRight size={12} weight="bold" aria-hidden="true" />
+                            </a>
+                          ),
+                        )}
+                      </div>
+                    ) : (
+                      <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2">
+                        {ec.links.map((l) => (
+                          <a
+                            key={l.href}
+                            href={l.href}
+                            target="_blank"
+                            rel="noopener"
+                            className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.14em] text-ink transition-colors hover:text-accent-bright"
+                          >
+                            {l.label}
+                            <ArrowUpRight size={12} weight="bold" aria-hidden="true" />
+                          </a>
+                        ))}
+                      </div>
+                    )
+                  ) : (
+                    ec.href && (
+                      <a
+                        href={ec.href}
+                        target="_blank"
+                        rel="noopener"
+                        className="mt-4 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.14em] text-ink transition-colors hover:text-accent-bright"
+                      >
+                        Open the channel
+                        <ArrowUpRight size={12} weight="bold" aria-hidden="true" />
+                      </a>
+                    )
                   )}
                 </div>
               ))}
