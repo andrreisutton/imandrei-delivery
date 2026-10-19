@@ -16,13 +16,13 @@ function GeneratedCover({ product }: { product: Product }) {
     <div className="grain-panel absolute inset-0" aria-hidden="true">
       <VinylDisc daws={daws} idKey={product.slug} className="absolute inset-0 size-full" />
       <div className="absolute inset-0 z-[2] flex flex-col justify-between p-4">
-        <h3 className="font-sans max-w-[58%] text-[21px] font-bold leading-[1.08] tracking-tight text-ink">
+        <h3 className="font-sans max-w-[46%] text-[19px] font-bold leading-[1.1] tracking-tight text-ink">
           {product.title}
         </h3>
-        <p className="max-w-[58%] text-[12px] italic leading-snug text-muted">
+        <p className="max-w-[46%] text-[12px] italic leading-snug text-muted">
           {product.subtitle}
         </p>
-        <div className="flex max-w-[58%] items-end justify-between gap-2">
+        <div className="flex max-w-[46%] flex-col items-start gap-1.5">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/brand/andrei-logo-white.png"

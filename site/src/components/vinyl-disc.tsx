@@ -24,18 +24,18 @@ type Props = {
 export function VinylDisc({ daws = [], className = "", idKey = "vinyl" }: Props) {
   const W = 200;
   const H = 200;
-  const coverW = W * 0.62;
-  const spineW = W * 0.09;
+  const coverW = W * 0.52;
+  const spineW = W * 0.17;
   const spineEnd = coverW + spineW;
   const r = W * 0.27;
-  const exposedW = W * 0.21;
+  const exposedW = W * 0.19;
   const recordCx = spineEnd + exposedW - r;
   const recordCy = H * 0.47;
   const grooves = Array.from({ length: 20 }, (_, i) => 0.35 + i * (0.63 / 19));
 
   const icons = daws.map((d) => DAW_LOGO[d]);
-  const iconSlot = Math.min(H * 0.6, 40) / Math.max(icons.length, 1);
-  const iconSize = Math.min(spineW * 0.82, iconSlot * 0.72);
+  const iconSlot = Math.min(H * 0.62, 46) / Math.max(icons.length, 1);
+  const iconSize = Math.min(spineW * 0.78, iconSlot * 0.8);
   const stackTop = H / 2 - (icons.length * iconSlot) / 2;
 
   const hiCx = recordCx + r * 0.62;
