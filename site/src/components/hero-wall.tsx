@@ -27,7 +27,7 @@ const WALL: string[] = [
   "singer-portrait-green",
   "laroi-chicago",
   "moto-helmet-mount",
-  "moto-helmet-closeup",
+  "fl-preset",
   "moto-sunset-portrait",
   "moto-trees",
   "ian-tulsa",
@@ -35,12 +35,12 @@ const WALL: string[] = [
   "moto-helmet-mount",
   "singer-portrait-blue",
   "singer-portrait-green",
-  "ian-tulsa",
+  "laroi-song",
   "moto-trees",
   "singer-portrait-color",
   "moto-helmet-closeup",
   "moto-trees",
-  "moto-front-sunset",
+  "song-for-album",
   "moto-helmet-closeup",
   "moto-behind-trees",
   "singer-portrait-green",
@@ -48,7 +48,7 @@ const WALL: string[] = [
   "moto-front-sunset",
   "moto-street",
   "moto-rear-closeup",
-  "babytron-recap",
+  "spec-ad",
 ];
 
 function columns(): string[][] {
