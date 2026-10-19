@@ -14,7 +14,7 @@ const TYPE_LABEL: Record<Product["type"], string> = {
   service: "Service",
 };
 
-export function ProductCard({ product, priority = false }: { product: Product; priority?: boolean }) {
+export function ProductCard({ product }: { product: Product }) {
   const href = product.type === "service" ? "/mixing-mastering" : `/store/${product.slug}`;
   const reduce = useReducedMotion();
 
@@ -58,7 +58,7 @@ export function ProductCard({ product, priority = false }: { product: Product; p
       </div>
       <div className="overflow-hidden">
         <div>
-          <ProductCover product={product} priority={priority} />
+          <ProductCover product={product} />
         </div>
       </div>
       <div className="flex items-center justify-between gap-3 border-t border-line px-4 py-3">

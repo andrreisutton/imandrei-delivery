@@ -72,7 +72,7 @@ export default async function ProductPage({ params }: Props) {
           </div>
           <div className="lg:sticky lg:top-24">
             <div className="card card-flush">
-              <ProductCover product={product} priority />
+              <ProductCover product={product} />
             </div>
             {product.showGradeCompare && (
               <div className="mt-5">

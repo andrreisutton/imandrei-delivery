@@ -139,8 +139,8 @@ export default async function HomePage() {
             </Link>
           </div>
           <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {featured.map((p, i) => (
-              <ProductCard key={p.slug} product={p} priority={i < 2} />
+            {featured.map((p) => (
+              <ProductCard key={p.slug} product={p} />
             ))}
           </div>
           <Link href="/store" className="btn btn-ghost mt-8 w-full sm:hidden">

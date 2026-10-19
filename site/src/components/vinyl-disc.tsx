@@ -1,70 +1,82 @@
-function frameSrc(src: string): string {
-  if (!/^https:\/\/cdn\.sanity\.io\//.test(src)) return src;
-  const [base] = src.split("?");
-  return `${base}?w=360&h=360&fit=crop&crop=entropy&auto=format`;
-}
+import type { Daw } from "@/content/site";
+
+const DAW_LOGO: Record<Daw, string> = {
+  "DaVinci Resolve": "/logos/davinci-resolve.svg",
+  "Premiere Pro": "/logos/premiere-pro.svg",
+  "Lightroom": "/logos/lightroom.svg",
+  "FL Studio": "/logos/fl-studio.png",
+};
 
 type Props = {
-  hue: number;
+  daws?: Daw[];
   className?: string;
-  labelImage?: string;
   idKey?: string;
 };
 
 /**
- * A record sleeve with the vinyl slid halfway out from behind it. The sleeve
- * carries the title typography and the compatible-app badges (drawn by the
- * caller, in HTML, over this SVG); the record itself stays plain — grooves,
- * sheen, and a label showing the cover art when there is one.
+ * A record sleeve with the vinyl slid just slightly out from behind it:
+ * plain charcoal cover and spine, compatible-app badges stacked down the
+ * spine (their own icon art, no added chip), and a sliver of glossy black
+ * record showing past the spine's edge. Nothing is drawn on the vinyl
+ * itself. Title/description/brand mark are layered on top in HTML by the
+ * caller, confined to the cover panel's width.
  */
-export function VinylDisc({ hue, className = "", labelImage, idKey = "vinyl" }: Props) {
+export function VinylDisc({ daws = [], className = "", idKey = "vinyl" }: Props) {
   const W = 200;
   const H = 250;
-  const sleeveW = W * 0.6;
-  const r = W * 0.293;
-  const recordCx = sleeveW + r * 0.35;
-  const recordCy = H * 0.235 + r;
-  const labelR = r * 0.3;
-  const grooves = [0.55, 0.66, 0.77, 0.88, 0.97];
-  const clipId = `${idKey}-label-clip`;
+  const coverW = W * 0.62;
+  const spineW = W * 0.09;
+  const spineEnd = coverW + spineW;
+  const r = W * 0.17;
+  const recordCx = coverW + spineW * 0.33;
+  const recordCy = H * 0.46;
+  const grooves = Array.from({ length: 20 }, (_, i) => 0.35 + i * (0.63 / 19));
+
+  const icons = daws.map((d) => DAW_LOGO[d]);
+  const iconSlot = Math.min(H * 0.6, 40) / Math.max(icons.length, 1);
+  const iconSize = Math.min(spineW * 0.82, iconSlot * 0.72);
+  const stackTop = H / 2 - (icons.length * iconSlot) / 2;
+
+  const hiCx = recordCx + r * 0.62;
+  const hiCy = recordCy - r * 0.15;
+  const sheenX1 = spineEnd + 2;
+  const sheenY1 = recordCy - r * 0.55;
+  const sheenX2 = recordCx + r * 0.95;
+  const sheenY2 = recordCy + r * 0.55;
 
   return (
     <svg viewBox={`0 0 ${W} ${H}`} className={className} aria-hidden="true">
       <defs>
-        <clipPath id={clipId}>
-          <circle cx={recordCx} cy={recordCy} r={labelR} />
-        </clipPath>
-        <radialGradient id={`${idKey}-vinyl`} cx="0.34" cy="0.26" r="0.95">
-          <stop offset="0%" stopColor="oklch(0.40 0.01 60)" />
-          <stop offset="45%" stopColor="oklch(0.19 0.008 60)" />
-          <stop offset="100%" stopColor="oklch(0.08 0.004 60)" />
+        <radialGradient id={`${idKey}-vinyl`} gradientUnits="userSpaceOnUse" cx={hiCx} cy={hiCy} r={r * 0.85}>
+          <stop offset="0%" stopColor="oklch(0.62 0.004 60)" />
+          <stop offset="30%" stopColor="oklch(0.32 0.002 60)" />
+          <stop offset="65%" stopColor="oklch(0.18 0.002 60)" />
+          <stop offset="100%" stopColor="oklch(0.07 0 60)" />
         </radialGradient>
-        <linearGradient id={`${idKey}-sheen`} x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="oklch(1 0 0 / 0.22)" />
+        <linearGradient id={`${idKey}-sheen`} gradientUnits="userSpaceOnUse" x1={sheenX1} y1={sheenY1} x2={sheenX2} y2={sheenY2}>
+          <stop offset="0%" stopColor="oklch(1 0 0 / 0)" />
           <stop offset="35%" stopColor="oklch(1 0 0 / 0)" />
+          <stop offset="48%" stopColor="oklch(1 0 0 / 0.5)" />
+          <stop offset="60%" stopColor="oklch(1 0 0 / 0)" />
+          <stop offset="100%" stopColor="oklch(1 0 0 / 0)" />
         </linearGradient>
-        <radialGradient id={`${idKey}-label-fallback`} cx="0.35" cy="0.3" r="0.9">
-          <stop offset="0%" stopColor={`oklch(0.42 0.05 ${hue})`} />
-          <stop offset="100%" stopColor={`oklch(0.24 0.03 ${hue})`} />
-        </radialGradient>
-        <linearGradient id={`${idKey}-sleeve`} x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor={`oklch(0.20 0.015 ${hue})`} />
-          <stop offset="100%" stopColor={`oklch(0.13 0.012 ${hue})`} />
+        <linearGradient id={`${idKey}-cover`} x1="0" y1="0" x2="0.3" y2="1">
+          <stop offset="0%" stopColor="oklch(0.27 0.004 60)" />
+          <stop offset="100%" stopColor="oklch(0.19 0.004 60)" />
+        </linearGradient>
+        <linearGradient id={`${idKey}-spine`} x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="oklch(0.16 0.003 60)" />
+          <stop offset="100%" stopColor="oklch(0.24 0.003 60)" />
         </linearGradient>
       </defs>
 
-      {/* contact shadow */}
-      <ellipse cx={recordCx + 2} cy={recordCy + r + 5} rx={r * 0.7} ry="5" fill="oklch(0 0 0 / 0.35)" />
+      <rect x="0" y="0" width={W} height={H} fill="oklch(0.045 0.002 60)" />
 
-      {/* record: drawn before the sleeve so the sleeve hides its left half */}
-      <circle
-        cx={recordCx}
-        cy={recordCy}
-        r={r}
-        fill={`url(#${idKey}-vinyl)`}
-        stroke="oklch(0.95 0.02 60 / 0.4)"
-        strokeWidth="0.8"
-      />
+      {/* contact shadow */}
+      <ellipse cx={recordCx + 2} cy={recordCy + r + 6} rx={r * 0.75} ry="5" fill="oklch(0 0 0 / 0.5)" />
+
+      {/* record, plain: grooves and a specular sweep, nothing printed on it */}
+      <circle cx={recordCx} cy={recordCy} r={r} fill={`url(#${idKey}-vinyl)`} />
       {grooves.map((g) => (
         <circle
           key={g}
@@ -72,33 +84,34 @@ export function VinylDisc({ hue, className = "", labelImage, idKey = "vinyl" }: 
           cy={recordCy}
           r={r * g}
           fill="none"
-          stroke="oklch(1 0 0 / 0.07)"
-          strokeWidth="0.5"
+          stroke={`oklch(1 0 0 / ${g > 0.9 ? 0.05 : 0.09})`}
+          strokeWidth="0.35"
         />
       ))}
+      <circle cx={recordCx} cy={recordCy} r={r} fill="none" stroke="oklch(1 0 0 / 0.22)" strokeWidth="0.8" />
       <circle cx={recordCx} cy={recordCy} r={r} fill={`url(#${idKey}-sheen)`} />
 
-      {/* label: product art when we have it, otherwise a plain color field */}
-      <circle cx={recordCx} cy={recordCy} r={labelR + 1.6} fill="oklch(0 0 0 / 0.4)" />
-      {labelImage ? (
-        <image
-          href={frameSrc(labelImage)}
-          x={recordCx - labelR}
-          y={recordCy - labelR}
-          width={labelR * 2}
-          height={labelR * 2}
-          preserveAspectRatio="xMidYMid slice"
-          clipPath={`url(#${clipId})`}
-        />
-      ) : (
-        <circle cx={recordCx} cy={recordCy} r={labelR} fill={`url(#${idKey}-label-fallback)`} />
-      )}
-      <circle cx={recordCx} cy={recordCy} r={labelR} fill="none" stroke="oklch(0.95 0.02 60 / 0.4)" strokeWidth="0.8" />
-      <circle cx={recordCx} cy={recordCy} r="1.8" fill="oklch(0.07 0 0)" />
+      {/* cover */}
+      <rect x="0" y="0" width={coverW} height={H} fill={`url(#${idKey}-cover)`} />
 
-      {/* sleeve, opaque, occludes the hidden half of the record */}
-      <rect x="0" y="0" width={sleeveW} height={H} fill={`url(#${idKey}-sleeve)`} />
-      <rect x={sleeveW - 0.5} y="0" width="1" height={H} fill="oklch(1 0 0 / 0.06)" />
+      {/* spine, carrying the compatible-app badges top to bottom */}
+      <rect x={coverW} y="0" width={spineW} height={H} fill={`url(#${idKey}-spine)`} />
+      <rect x={coverW - 0.4} y="0" width="0.8" height={H} fill="oklch(0 0 0 / 0.4)" />
+      <rect x={spineEnd - 0.4} y="0" width="0.8" height={H} fill="oklch(1 0 0 / 0.08)" />
+      {icons.map((href, i) => {
+        const cy = stackTop + iconSlot * i + iconSlot / 2;
+        return (
+          <image
+            key={href}
+            href={href}
+            x={coverW + spineW / 2 - iconSize / 2}
+            y={cy - iconSize / 2}
+            width={iconSize}
+            height={iconSize}
+            preserveAspectRatio="xMidYMid meet"
+          />
+        );
+      })}
     </svg>
   );
 }
