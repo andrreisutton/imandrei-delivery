@@ -19,10 +19,10 @@ function seeded(seed: string) {
 const GLYPHS = [MusicNote, FilmSlate, MusicNotes, Aperture];
 
 const COLORS = [
-  "oklch(0.66 0.215 27)",
-  "oklch(0.50 0.19 22)",
-  "oklch(0.92 0.02 60)",
-  "oklch(0.66 0.215 27)",
+  "oklch(0.685 0.185 280)",
+  "oklch(0.52 0.17 305)",
+  "oklch(0.90 0.02 255)",
+  "oklch(0.685 0.185 280)",
 ];
 
 export function HeroNotes({ count = 11 }: { count?: number }) {

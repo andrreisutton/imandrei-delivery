@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { draftMode } from "next/headers";
 import { VisualEditing } from "next-sanity/visual-editing";
 import { ViewTransitions } from "next-view-transitions";
-import { Big_Shoulders, Geist } from "next/font/google";
+import { Big_Shoulders } from "next/font/google";
 import "./globals.css";
 import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
@@ -22,11 +22,6 @@ const display = Big_Shoulders({
   weight: ["400", "700"],
   adjustFontFallback: false,
   fallback: ["Arial Narrow", "sans-serif"],
-});
-
-const bodySans = Geist({
-  variable: "--font-geist",
-  subsets: ["latin"],
 });
 
 export const viewport: Viewport = {
@@ -103,7 +98,7 @@ export default async function RootLayout({
     <ViewTransitions>
     <html
       lang="en"
-      className={`${display.variable} ${bodySans.variable} h-full antialiased`}
+      className={`${display.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <script

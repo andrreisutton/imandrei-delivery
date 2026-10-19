@@ -1062,7 +1062,7 @@ export const products: Product[] = [
     ],
     price: 89,
     badge: "Flagship",
-    coverHue: 25,
+    coverHue: 300,
     showGradeCompare: true,
   },
   {
@@ -1080,7 +1080,7 @@ export const products: Product[] = [
       "Download link emailed the moment payment clears",
     ],
     price: 39,
-    coverHue: 16,
+    coverHue: 264,
     showGradeCompare: true,
     compare: "photo",
   },
@@ -1099,7 +1099,7 @@ export const products: Product[] = [
       "Download link emailed the moment payment clears",
     ],
     price: 29,
-    coverHue: 30,
+    coverHue: 320,
   },
   {
     slug: "social-animation-template",
@@ -1116,7 +1116,7 @@ export const products: Product[] = [
       "Download link emailed the moment payment clears",
     ],
     price: 34,
-    coverHue: 10,
+    coverHue: 240,
   },
   {
     slug: "vocal-presets-starter",
@@ -1135,7 +1135,7 @@ export const products: Product[] = [
     ],
     price: 29,
     badge: "Beginner",
-    coverHue: 20,
+    coverHue: 280,
   },
   {
     slug: "vocal-presets-pro",
@@ -1154,7 +1154,7 @@ export const products: Product[] = [
     ],
     price: 79,
     badge: "Advanced",
-    coverHue: 28,
+    coverHue: 312,
   },
   {
     slug: "artist-promo-kit",
@@ -1172,7 +1172,7 @@ export const products: Product[] = [
     ],
     price: 149,
     badge: "Best value",
-    coverHue: 14,
+    coverHue: 256,
     showGradeCompare: true,
     compare: "footage",
   },
@@ -1190,7 +1190,7 @@ export const products: Product[] = [
       "Delivered in 3 to 5 days",
     ],
     price: 250,
-    coverHue: 27,
+    coverHue: 308,
   },
   {
     slug: "custom-mix-master",
@@ -1208,7 +1208,7 @@ export const products: Product[] = [
     ],
     price: 400,
     badge: "Most booked",
-    coverHue: 27,
+    coverHue: 308,
   },
   {
     slug: "master-only",
@@ -1224,7 +1224,7 @@ export const products: Product[] = [
       "Delivered in 1 to 2 days",
     ],
     price: 125,
-    coverHue: 27,
+    coverHue: 308,
   },
 ];
 

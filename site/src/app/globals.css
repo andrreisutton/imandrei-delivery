@@ -2,23 +2,36 @@
 
 @theme {
   --color-bg: oklch(0.145 0 0);
-  --color-surface: oklch(0.185 0.004 25);
-  --color-raised: oklch(0.235 0.006 25);
-  --color-line: oklch(0.95 0.004 25 / 10%);
-  --color-line-strong: oklch(0.95 0.004 25 / 18%);
+  --color-surface: oklch(0.185 0.005 265);
+  --color-raised: oklch(0.235 0.007 265);
+  --color-line: oklch(0.95 0.004 265 / 10%);
+  --color-line-strong: oklch(0.95 0.004 265 / 18%);
   --color-ink: oklch(0.975 0 0);
-  --color-muted: oklch(0.735 0.004 25);
-  --color-faint: oklch(0.65 0.005 25);
-  --color-accent: oklch(0.555 0.212 27);
-  --color-accent-bright: oklch(0.66 0.215 27);
+  --color-muted: oklch(0.735 0.005 265);
+  --color-faint: oklch(0.65 0.006 265);
+  --color-accent: oklch(0.58 0.19 280);
+  --color-accent-bright: oklch(0.685 0.185 280);
   --color-card-accent: var(--color-accent-bright);
-  --color-accent-deep: oklch(0.42 0.17 27);
+  --color-accent-deep: oklch(0.40 0.15 280);
   --color-accent-ink: oklch(0.995 0 0);
-  --color-accent-dim: oklch(0.66 0.215 27 / 12%);
+  --color-accent-dim: oklch(0.685 0.185 280 / 12%);
+
+  --gradient-accent: linear-gradient(
+    135deg,
+    oklch(0.64 0.19 250) 0%,
+    oklch(0.60 0.21 285) 48%,
+    oklch(0.65 0.20 322) 100%
+  );
+  --gradient-accent-soft: linear-gradient(
+    135deg,
+    oklch(0.64 0.19 250 / 16%) 0%,
+    oklch(0.60 0.21 285 / 16%) 48%,
+    oklch(0.65 0.20 322 / 16%) 100%
+  );
 
   --font-display: var(--font-poster);
-  --font-sans: var(--font-geist);
-  --font-mono: var(--font-geist);
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 
   --radius-card: 12px;
   --radius-input: 8px;
@@ -53,7 +66,7 @@
   h1,
   h2 {
     text-shadow:
-      0 2px 30px oklch(0.12 0.05 27 / 55%),
+      0 2px 30px oklch(0.12 0.04 280 / 55%),
       0 1px 2px oklch(0 0 0 / 40%);
   }
 
@@ -86,24 +99,24 @@
 
   .btn-primary {
     color: var(--color-accent-ink);
-    background: var(--color-accent);
+    background: var(--gradient-accent);
     box-shadow:
       0 1px 2px oklch(0 0 0 / 45%),
-      0 10px 30px -12px oklch(0.555 0.212 27 / 55%);
+      0 10px 30px -12px oklch(0.58 0.19 280 / 55%);
   }
 
   @media (hover: hover) and (pointer: fine) {
     .btn-primary:hover {
-      background: var(--color-accent-bright);
+      filter: brightness(1.1) saturate(1.08);
       transform: translateY(-1px);
       box-shadow:
         0 2px 4px oklch(0 0 0 / 40%),
-        0 16px 40px -12px oklch(0.66 0.215 27 / 70%);
+        0 16px 40px -12px oklch(0.685 0.185 280 / 70%);
     }
   }
 
   .btn-primary:active {
-    background: oklch(0.485 0.20 27);
+    filter: brightness(0.86);
     box-shadow: 0 1px 2px oklch(0 0 0 / 40%);
   }
 
@@ -115,7 +128,7 @@
 
   @media (hover: hover) and (pointer: fine) {
     .btn-ghost:hover {
-      border-color: oklch(0.66 0.215 27 / 60%);
+      border-color: oklch(0.685 0.185 280 / 60%);
       color: var(--color-accent-bright);
       background: var(--color-accent-dim);
       transform: translateY(-1px);
@@ -158,11 +171,11 @@
 
   .input:focus {
     outline: none;
-    border-color: oklch(0.66 0.215 27 / 70%);
-    background: oklch(0.215 0.006 25);
+    border-color: oklch(0.685 0.185 280 / 70%);
+    background: oklch(0.215 0.007 265);
     box-shadow:
-      0 0 0 3px oklch(0.66 0.215 27 / 22%),
-      0 4px 16px oklch(0.66 0.215 27 / 12%);
+      0 0 0 3px oklch(0.685 0.185 280 / 22%),
+      0 4px 16px oklch(0.685 0.185 280 / 12%);
   }
 
   a:focus-visible,
@@ -315,13 +328,13 @@
 
   @media (hover: hover) and (pointer: fine) {
     .input:hover:not(:focus) {
-      border-color: oklch(0.95 0.004 25 / 30%);
+      border-color: oklch(0.95 0.004 265 / 30%);
     }
   }
 
   * {
     scrollbar-width: thin;
-    scrollbar-color: oklch(0.95 0.004 25 / 20%) transparent;
+    scrollbar-color: oklch(0.95 0.004 265 / 20%) transparent;
   }
 
   *::-webkit-scrollbar {
@@ -330,14 +343,14 @@
   }
 
   *::-webkit-scrollbar-thumb {
-    background: oklch(0.95 0.004 25 / 18%);
+    background: oklch(0.95 0.004 265 / 18%);
     border-radius: 999px;
     border: 2px solid transparent;
     background-clip: content-box;
   }
 
   *::-webkit-scrollbar-thumb:hover {
-    background: oklch(0.95 0.004 25 / 30%);
+    background: oklch(0.95 0.004 265 / 30%);
     background-clip: content-box;
     border: 2px solid transparent;
   }
@@ -509,7 +522,7 @@
   .wall-burn {
     background: radial-gradient(
       56% 44% at 76% 0%,
-      oklch(0.50 0.20 27 / 0.20),
+      oklch(0.50 0.17 280 / 0.20),
       transparent 68%
     );
   }
@@ -542,7 +555,7 @@
   .hero-title {
     color: var(--color-ink);
     text-shadow:
-      0 3px 28px oklch(0.12 0.05 27 / 60%),
+      0 3px 28px oklch(0.12 0.04 280 / 60%),
       0 1px 2px oklch(0 0 0 / 40%);
   }
 
@@ -587,13 +600,19 @@
     text-transform: uppercase;
     letter-spacing: 0.005em;
     line-height: 0.9;
+    background-image: var(--gradient-accent);
+    background-clip: text;
+    -webkit-background-clip: text;
     color: transparent;
-    -webkit-text-stroke: 1.5px var(--color-accent-bright);
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: 1px oklch(0.685 0.185 280 / 45%);
     text-shadow: none;
   }
 
-  @supports not (-webkit-text-stroke: 1px red) {
+  @supports not (background-clip: text) {
     .h-stroke {
+      background: none;
+      -webkit-text-fill-color: unset;
       color: var(--color-accent-bright);
     }
   }
@@ -603,8 +622,8 @@
     border-radius: 16px;
     border: 1px solid var(--color-line);
     background:
-      radial-gradient(130% 100% at 85% -12%, oklch(0.42 0.12 27 / 0.2), transparent 58%),
-      radial-gradient(110% 85% at 0% 115%, oklch(0.3 0.09 27 / 0.18), transparent 55%),
+      radial-gradient(130% 100% at 85% -12%, oklch(0.42 0.11 280 / 0.2), transparent 58%),
+      radial-gradient(110% 85% at 0% 115%, oklch(0.30 0.08 280 / 0.18), transparent 55%),
       linear-gradient(to bottom, oklch(1 0 0 / 3%), transparent 42%),
       var(--color-surface);
     box-shadow: inset 0 1px 0 oklch(1 0 0 / 7%);
@@ -619,7 +638,7 @@
     inset: -1px -1px auto -1px;
     height: 2px;
     border-radius: 16px 16px 0 0;
-    background: var(--color-card-accent);
+    background: var(--gradient-accent);
     clip-path: inset(0 100% 0 0);
     transition: clip-path 340ms var(--ease-out-quint);
     pointer-events: none;
@@ -700,7 +719,7 @@
   }
 
   .card .badge-on-card {
-    background: var(--color-card-accent);
+    background: var(--gradient-accent);
     color: var(--color-accent-ink);
   }
 
@@ -720,8 +739,9 @@
     scale: 1 0;
     background: linear-gradient(
       to bottom,
-      var(--color-accent) 0%,
-      var(--color-accent-bright) 100%
+      oklch(0.64 0.19 250) 0%,
+      oklch(0.60 0.21 285) 48%,
+      oklch(0.65 0.20 322) 100%
     );
   }
 
@@ -777,13 +797,19 @@
     text-transform: uppercase;
     letter-spacing: 0.005em;
     line-height: 0.9;
+    background-image: var(--gradient-accent);
+    background-clip: text;
+    -webkit-background-clip: text;
     color: transparent;
-    -webkit-text-stroke: max(1px, 0.025em) var(--color-accent-bright);
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: max(1px, 0.02em) oklch(0.685 0.185 280 / 45%);
     text-shadow: none;
   }
 
-  @supports not (-webkit-text-stroke: 1px red) {
+  @supports not (background-clip: text) {
     .h-title {
+      background: none;
+      -webkit-text-fill-color: unset;
       color: var(--color-accent-bright);
     }
   }
