@@ -27,9 +27,10 @@ export function VinylDisc({ daws = [], className = "", idKey = "vinyl" }: Props)
   const coverW = W * 0.62;
   const spineW = W * 0.09;
   const spineEnd = coverW + spineW;
-  const r = W * 0.17;
-  const recordCx = coverW + spineW * 0.33;
-  const recordCy = H * 0.46;
+  const r = W * 0.27;
+  const exposedW = W * 0.21;
+  const recordCx = spineEnd + exposedW - r;
+  const recordCy = H * 0.47;
   const grooves = Array.from({ length: 20 }, (_, i) => 0.35 + i * (0.63 / 19));
 
   const icons = daws.map((d) => DAW_LOGO[d]);
@@ -73,7 +74,7 @@ export function VinylDisc({ daws = [], className = "", idKey = "vinyl" }: Props)
       <rect x="0" y="0" width={W} height={H} fill="oklch(0.045 0.002 60)" />
 
       {/* contact shadow */}
-      <ellipse cx={recordCx + 2} cy={recordCy + r + 6} rx={r * 0.75} ry="5" fill="oklch(0 0 0 / 0.5)" />
+      <ellipse cx={recordCx + 2} cy={recordCy + r + 7} rx={r * 0.75} ry="6" fill="oklch(0 0 0 / 0.5)" />
 
       {/* record, plain: grooves and a specular sweep, nothing printed on it */}
       <circle cx={recordCx} cy={recordCy} r={r} fill={`url(#${idKey}-vinyl)`} />
