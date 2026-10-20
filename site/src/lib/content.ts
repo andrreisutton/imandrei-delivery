@@ -580,6 +580,7 @@ export function sanitizeContent(
         musicIntro: h.s(pg("credits").musicIntro, d.pages.credits.musicIntro, 400),
         recordsHeading: h.s(pg("credits").recordsHeading, d.pages.credits.recordsHeading, 80),
         collabHeading: h.s(pg("credits").collabHeading, d.pages.credits.collabHeading, 80),
+        collabMoreHeading: h.s(pg("credits").collabMoreHeading, d.pages.credits.collabMoreHeading, 80),
         editingHeading: h.s(pg("credits").editingHeading, d.pages.credits.editingHeading, 80),
       },
       partners: {

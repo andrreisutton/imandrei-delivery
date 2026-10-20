@@ -773,16 +773,22 @@ export const collaborators: Credential[] = [
     name: "SSGKobe",
     role: "Featured on TOO MUCH",
     videoUrl: "https://open.spotify.com/track/2afwBFPutCnvnuJupwTWll",
+    avatar: "/avatars/ssgkobe.jpg",
+    instagram: "https://www.instagram.com/ssgkobe/",
   },
   {
     name: "CNN Mikey",
     role: "Featured on LET ME DOWN",
     videoUrl: "https://open.spotify.com/track/0sizBw7nSXZ19wnNseQa7Q",
+    avatar: "/avatars/cnnmikey.jpg",
+    instagram: "https://www.instagram.com/cnnmikey/",
   },
   {
     name: "Valious",
-    role: "7 records together, including ANOTHER DAY",
+    role: "8 records together, including ANOTHER DAY",
     videoUrl: "https://open.spotify.com/album/7u3sOVaz4lii13pyO7RxyL",
+    avatar: "/avatars/valious.jpg",
+    instagram: "https://www.instagram.com/valious/",
   },
   {
     name: "dcmbur",
@@ -803,11 +809,15 @@ export const collaborators: Credential[] = [
     name: "73Delta",
     role: "WASTE TIME",
     videoUrl: "https://open.spotify.com/album/2rA2jvqvbhUuEWrxF5zCOQ",
+    avatar: "/avatars/73delta.jpg",
+    instagram: "https://www.instagram.com/73delta/",
   },
   {
     name: "cam85",
     role: "AIN'T OVER",
     videoUrl: "https://open.spotify.com/album/72wlrRjvaXjyhFGRrNsTlh",
+    avatar: "/avatars/cam85.jpg",
+    instagram: "https://www.instagram.com/cam85__/",
   },
   {
     name: "Ethan Terrana",
@@ -818,11 +828,15 @@ export const collaborators: Credential[] = [
     name: "Gavin Ross",
     role: "21",
     videoUrl: "https://open.spotify.com/album/1dbYQqntQvijcc31f0aAyb",
+    avatar: "/avatars/gavinross.jpg",
+    instagram: "https://www.instagram.com/gaavinross/",
   },
   {
     name: "Jadon Reese",
     role: "21",
     videoUrl: "https://open.spotify.com/album/1dbYQqntQvijcc31f0aAyb",
+    avatar: "/avatars/jadonreese.jpg",
+    instagram: "https://www.instagram.com/r.ee.s.ee/",
   },
   {
     name: "Jai XO",
@@ -868,11 +882,6 @@ export const collaborators: Credential[] = [
     name: "Trendy",
     role: "ESSENTIAL!",
     videoUrl: "https://open.spotify.com/album/2DvwKqSg3sf6YNz8oqQYqJ",
-  },
-  {
-    name: "Vxlious",
-    role: "idk what im doing anymore",
-    videoUrl: "https://open.spotify.com/album/2Qifri987mPEDuxK94i233",
   },
   {
     name: "X A N",
@@ -1508,6 +1517,7 @@ export const pages = {
       "I release as andrei!, which is why a record you send lands with someone who has been on the other side of it. These are the records and the people on them.",
     recordsHeading: "The records",
     collabHeading: "The collaborators",
+    collabMoreHeading: "Also on the records",
     editingHeading: "Editing credits",
   },
   partners: {

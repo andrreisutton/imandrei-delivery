@@ -22,6 +22,8 @@ export default async function CreditsPage() {
   const musicCredits = await withNewReleases(content.musicCredits);
   const releaseCount = musicCredits.length;
   const featureCount = musicCredits.filter((m) => m.role.startsWith("Featured artist")).length;
+  const featuredCollaborators = collaborators.filter((c) => c.avatar);
+  const otherCollaborators = collaborators.filter((c) => !c.avatar);
 
   return (
     <>
@@ -72,11 +74,18 @@ export default async function CreditsPage() {
             </>
           )}
 
-          {collaborators.length > 0 && (
+          {featuredCollaborators.length > 0 && (
             <>
               <h3 className="h-rule mt-12 text-[11px] sm:text-xs">{pages.credits.collabHeading}</h3>
+              <CredentialRoster credentials={featuredCollaborators} className="mt-6" />
+            </>
+          )}
+
+          {otherCollaborators.length > 0 && (
+            <>
+              <h3 className="h-rule mt-12 text-[11px] sm:text-xs">{pages.credits.collabMoreHeading}</h3>
               <ul className="mt-6 grid grid-cols-2 gap-x-6 gap-y-7 sm:grid-cols-3 lg:grid-cols-4">
-                {collaborators.map((c) => (
+                {otherCollaborators.map((c) => (
                   <li key={c.name} className="border-t border-line-strong pt-4">
                     {c.videoUrl ? (
                       <a
