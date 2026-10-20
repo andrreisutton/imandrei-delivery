@@ -4,7 +4,7 @@ import { Price } from "./price";
 
 export function ProductCover({ product }: { product: Product }) {
   return (
-    <div className="relative aspect-square overflow-hidden">
+    <div data-sleeve className="sleeve-stage relative aspect-square overflow-hidden">
       <GeneratedCover product={product} />
     </div>
   );

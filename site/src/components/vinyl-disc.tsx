@@ -73,6 +73,13 @@ export function VinylDisc({ daws = [], className = "", idKey = "vinyl" }: Props)
 
       <rect x="0" y="0" width={W} height={H} fill="oklch(0.045 0.002 60)" />
 
+      {/* The record rides in two nested groups so the two motions never fight
+          over one transform: the outer one plays the slide-out once on load,
+          the inner one eases the sleeve open and shut as the card crosses the
+          viewport. Both are decorative and sit behind the cover and spine, so
+          the record appears to be drawn out of its sleeve. */}
+      <g className="sleeve-load">
+      <g className="sleeve-scroll">
       {/* contact shadow */}
       <ellipse cx={recordCx + 2} cy={recordCy + r + 7} rx={r * 0.75} ry="6" fill="oklch(0 0 0 / 0.5)" />
 
@@ -91,6 +98,8 @@ export function VinylDisc({ daws = [], className = "", idKey = "vinyl" }: Props)
       ))}
       <circle cx={recordCx} cy={recordCy} r={r} fill="none" stroke="oklch(1 0 0 / 0.22)" strokeWidth="0.8" />
       <circle cx={recordCx} cy={recordCy} r={r} fill={`url(#${idKey}-sheen)`} />
+      </g>
+      </g>
 
       {/* cover */}
       <rect x="0" y="0" width={coverW} height={H} fill={`url(#${idKey}-cover)`} />

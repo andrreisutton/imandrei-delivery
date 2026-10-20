@@ -125,6 +125,85 @@
      the official brand colour (stripe.com/newsroom/information). No border at
      rest and none on any state, matching .btn-primary exactly: a 1px border
      here would make this button 2px taller than its siblings. */
+  /* The record sleeve.
+     Two motions, deliberately on two different elements so neither resets the
+     other's transform: .sleeve-load slides the record out of the sleeve once
+     when the page opens, .sleeve-scroll eases it a little further out as the
+     card crosses the viewport and tucks it back as the card leaves.
+     Both are decorative, so they are progressive enhancement: with no
+     scroll-driven-animation support (Firefox today) the record simply sits at
+     its resting position, which is how the cover was designed anyway. */
+  .sleeve-load,
+  .sleeve-scroll {
+    transform-box: view-box;
+    will-change: transform;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* Snappy draw-out on load. The overshoot is what makes it read as a hand
+       pulling the record rather than a value being interpolated. */
+    @keyframes sleeve-draw {
+      0% {
+        transform: translateX(-17px);
+      }
+      62% {
+        transform: translateX(2.2px);
+      }
+      100% {
+        transform: translateX(0);
+      }
+    }
+
+    .sleeve-load {
+      animation: sleeve-draw 620ms var(--ease-out-quint) both;
+    }
+
+    /* Hold the record at frame zero (fully tucked) until the cover is actually
+       on screen, then let it draw. Covers below the fold would otherwise finish
+       their entrance before anyone saw them. Both the section's reveal and the
+       cover's own are honoured, so a cover inside a revealing section waits for
+       the section too. Pausing rather than re-declaring keeps it to one
+       animation, and reduced motion skips the whole block. */
+    [data-reveal]:not([data-seen]) .sleeve-load,
+    [data-sleeve]:not([data-seen]) .sleeve-load {
+      animation-play-state: paused;
+    }
+
+    @supports ((animation-timeline: view()) and (animation-range: entry)) {
+      /* Named timeline, declared on the CARD rather than on the square cover.
+         A view timeline resolves against the nearest ancestor scroll container
+         of its subject, and both .sleeve-stage and .card are overflow:hidden,
+         which makes them scroll containers. Hang it off .sleeve-stage and the
+         timeline resolves to a box that never scrolls, so its progress freezes
+         and nothing moves. The card's own ancestors are overflow:visible up to
+         the document, so the subject travels against the page. */
+      .card:has(.sleeve-stage) {
+        view-timeline: --sleeve block;
+      }
+
+      @keyframes sleeve-open {
+        from {
+          transform: translateX(-7px);
+        }
+      }
+
+      @keyframes sleeve-close {
+        to {
+          transform: translateX(-7px);
+        }
+      }
+
+      .sleeve-scroll {
+        animation:
+          sleeve-open auto linear backwards,
+          sleeve-close auto linear forwards;
+        /* Declared after the shorthand on purpose: the shorthand resets it. */
+        animation-timeline: --sleeve, --sleeve;
+        animation-range: entry 10% entry 90%, exit 10% exit 90%;
+      }
+    }
+  }
+
   .btn-stripe {
     color: #ffffff;
     background: #635bff;
