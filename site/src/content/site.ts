@@ -339,19 +339,10 @@ export type MusicCredit = {
   platform?: "spotify" | "apple";
 };
 
-export const CATALOGUE_THROUGH = "2026-09-18";
+export const CATALOGUE_THROUGH = "2026-10-10";
 export const APPLE_ARTIST_ID = "1731667293";
 
 export const musicCredits: MusicCredit[] = [
-  {
-    title: "LET ME DOWN",
-    kind: "Single",
-    artists: "andrei! with CNN Mikey",
-    role: "Performed, mixed, and mastered as andrei!",
-    year: "2026",
-    href: "https://open.spotify.com/track/0sizBw7nSXZ19wnNseQa7Q",
-    cover: "/covers/let-me-down.jpg",
-  },
   {
     title: "TOO MUCH",
     kind: "Single",
@@ -360,6 +351,15 @@ export const musicCredits: MusicCredit[] = [
     year: "2026",
     href: "https://open.spotify.com/track/2afwBFPutCnvnuJupwTWll",
     cover: "/covers/too-much.jpg",
+  },
+  {
+    title: "LET ME DOWN",
+    kind: "Single",
+    artists: "andrei! with CNN Mikey",
+    role: "Performed, mixed, and mastered as andrei!",
+    year: "2026",
+    href: "https://open.spotify.com/track/0sizBw7nSXZ19wnNseQa7Q",
+    cover: "/covers/let-me-down.jpg",
   },
   {
     title: "nothing right",
@@ -769,6 +769,11 @@ export const musicCredits: MusicCredit[] = [
 ];
 
 export const collaborators: Credential[] = [
+  {
+    name: "SSGKobe",
+    role: "Featured on TOO MUCH",
+    videoUrl: "https://open.spotify.com/track/2afwBFPutCnvnuJupwTWll",
+  },
   {
     name: "CNN Mikey",
     role: "Featured on LET ME DOWN",
