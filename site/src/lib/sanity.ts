@@ -4,7 +4,7 @@ import imageUrlBuilder from "@sanity/image-url";
 export const STUDIO_URL = "https://andreisutton.sanity.studio";
 
 export const sanityConfig = {
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "",
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "j92ukzy6",
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || "production",
   apiVersion: "2025-06-01",
 };
