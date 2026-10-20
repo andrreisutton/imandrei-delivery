@@ -1159,7 +1159,7 @@ export const products: Product[] = [
     slug: "vocal-presets-starter",
     type: "preset",
     daw: "FL Studio",
-    title: "Vocal Presets: Starter",
+    title: "Vocal Preset: Starter",
     subtitle: "First vocal chain, stock plugins only",
     description:
       "For the artist who just got a mic and a laptop. One chain that takes a dry take to something you would actually post, built entirely on stock plugins so there is nothing else to buy. Every band and every knob is labeled, so you learn what you are hearing while you use it.",
@@ -1181,7 +1181,7 @@ export const products: Product[] = [
     slug: "vocal-presets-pro",
     type: "preset",
     daw: "FL Studio",
-    title: "Vocal Presets: Pro",
+    title: "Vocal Preset: Pro",
     subtitle: "The full chain rack, for engineers",
     description:
       "The chains behind the andrei! records: lead, double, ad-lib, and background, plus the throwback and telephone sends that carry a hook. Built for people who already mix and want a faster start and a reference to pull apart.",
