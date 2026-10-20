@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
+import { Link } from "next-view-transitions";
 import { Check } from "@phosphor-icons/react/dist/ssr";
 import { getSiteContent } from "@/lib/content";
+import { stripeEnabled } from "@/lib/stripe";
+import { StripeMark } from "@/components/stripe-mark";
 import { HeroWall } from "@/components/hero-wall";
 import { TrustedByStrip } from "@/components/credentials";
 import { VideoWall } from "@/components/video-wall";
@@ -17,6 +20,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function EditingPage() {
   const { pages, retainers, credentials, videoWork, industry, home } = await getSiteContent();
+  const payWithStripe = stripeEnabled();
 
   return (
     <>
@@ -98,8 +102,15 @@ export default async function EditingPage() {
                     </li>
                   ))}
                 </ul>
-                <div className="mt-auto pt-7">
-                  <a href="#start" className={`btn w-full ${r.badge ? "btn-primary" : "btn-ghost"}`}>
+                <div className="mt-auto grid gap-2.5 pt-7">
+                  <Link
+                    href={`/checkout/retainer/${r.id}`}
+                    className={`btn w-full ${payWithStripe ? "btn-stripe" : "btn-primary"}`}
+                  >
+                    {payWithStripe && <StripeMark size={15} />}
+                    Start · ${r.price.toLocaleString("en-US")} a month
+                  </Link>
+                  <a href="#start" className="btn btn-ghost w-full">
                     {pages.editing.bookLabel}
                   </a>
                 </div>

@@ -5,7 +5,12 @@ import { newId } from "@/lib/id";
 import { saveJSON } from "@/lib/store";
 import { createOrder, markPaid } from "@/lib/orders";
 import { submitReview } from "@/lib/reviews";
-import { createBookingStripeCheckout, createStripeCheckout, stripeEnabled } from "@/lib/stripe";
+import {
+  createBookingStripeCheckout,
+  createRetainerStripeCheckout,
+  createStripeCheckout,
+  stripeEnabled,
+} from "@/lib/stripe";
 import {
   esc,
   filesHtml,
@@ -161,6 +166,47 @@ export async function submitBooking(prev: ActionState, formData: FormData): Prom
   );
 
   return { ok: true };
+}
+
+export async function startRetainerCheckout(
+  prev: ActionState,
+  formData: FormData
+): Promise<ActionState> {
+  const retainerId = str(formData, "retainerId", 60);
+  const email = str(formData, "email", 200);
+  const name = str(formData, "name", 120);
+  const channelUrl = str(formData, "channelUrl", 300);
+
+  const { retainers } = await getSiteContent();
+  const retainer = retainers.find((r) => r.id === retainerId);
+  if (!retainer) return { error: "That plan no longer exists." };
+  if (!(retainer.price > 0)) return { error: "That plan has no price set yet." };
+  if (!name) return { error: "Enter your name so the receipt has someone to talk to." };
+  if (!EMAIL_RE.test(email)) return { error: "Enter a valid email. Your receipt goes there." };
+  if (!stripeEnabled()) {
+    return { error: "Card payments are not switched on yet. Use the form below and I'll reply with next steps." };
+  }
+
+  let redirectTo: string;
+  try {
+    redirectTo = await createRetainerStripeCheckout({
+      retainerId: retainer.id,
+      title: `${retainer.title} retainer`,
+      description: retainer.volume,
+      amount: retainer.price,
+      email,
+      channelUrl: channelUrl || undefined,
+    });
+  } catch (e) {
+    console.error("stripe subscription checkout failed for", retainer.id, e);
+    return { error: "Payment provider is unavailable right now. Try again in a minute." };
+  }
+  await notifyOwner(
+    "retainer checkout started",
+    `${retainer.title} ($${retainer.price}/mo)`,
+    `<p style="color:#b7b4ae;font-size:15px;">${esc(name)} (${esc(email)}) started checkout for the <strong style="color:#f5f4f2">${esc(retainer.title)}</strong> retainer at $${retainer.price} a month.${channelUrl ? `<br/>Channel: ${esc(channelUrl)}` : ""}</p>`
+  );
+  redirect(redirectTo);
 }
 
 export async function submitServiceRequest(prev: ActionState, formData: FormData): Promise<ActionState> {
