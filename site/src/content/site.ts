@@ -353,6 +353,15 @@ export const musicCredits: MusicCredit[] = [
     cover: "/covers/let-me-down.jpg",
   },
   {
+    title: "TOO MUCH",
+    kind: "Single",
+    artists: "andrei! with SSGKobe",
+    role: "Written and performed as andrei!",
+    year: "2026",
+    href: "https://open.spotify.com/track/2afwBFPutCnvnuJupwTWll",
+    cover: "/covers/too-much.jpg",
+  },
+  {
     title: "nothing right",
     kind: "Single",
     artists: "andrei!",
