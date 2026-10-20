@@ -120,6 +120,197 @@
     box-shadow: 0 1px 2px oklch(0 0 0 / 40%);
   }
 
+  /* Stripe-branded payment button. Shares .btn's geometry exactly, per the
+     one-component-system law: only colour changes. Stripe blurple #635BFF is
+     the official brand colour (stripe.com/newsroom/information). No border at
+     rest and none on any state, matching .btn-primary exactly: a 1px border
+     here would make this button 2px taller than its siblings. */
+  /* The record sleeve.
+     Two motions, deliberately on two different elements so neither resets the
+     other's transform: .sleeve-load slides the record out of the sleeve once
+     when the page opens, .sleeve-scroll eases it a little further out as the
+     card crosses the viewport and tucks it back as the card leaves.
+     Both are decorative, so they are progressive enhancement: with no
+     scroll-driven-animation support (Firefox today) the record simply sits at
+     its resting position, which is how the cover was designed anyway. */
+  .sleeve-load,
+  .sleeve-scroll {
+    transform-box: view-box;
+    will-change: transform;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* Snappy draw-out on load. The overshoot is what makes it read as a hand
+       pulling the record rather than a value being interpolated. */
+    @keyframes sleeve-draw {
+      0% {
+        transform: translateX(-17px);
+      }
+      62% {
+        transform: translateX(2.2px);
+      }
+      100% {
+        transform: translateX(0);
+      }
+    }
+
+    .sleeve-load {
+      animation: sleeve-draw 620ms var(--ease-out-quint) both;
+    }
+
+    /* Hold the record at frame zero (fully tucked) until the cover is actually
+       on screen, then let it draw. Covers below the fold would otherwise finish
+       their entrance before anyone saw them. Both the section's reveal and the
+       cover's own are honoured, so a cover inside a revealing section waits for
+       the section too. Pausing rather than re-declaring keeps it to one
+       animation, and reduced motion skips the whole block. */
+    [data-reveal]:not([data-seen]) .sleeve-load,
+    [data-sleeve]:not([data-seen]) .sleeve-load {
+      animation-play-state: paused;
+    }
+
+    @supports ((animation-timeline: view()) and (animation-range: entry)) {
+      /* Named timeline, declared on the CARD rather than on the square cover.
+         A view timeline resolves against the nearest ancestor scroll container
+         of its subject, and both .sleeve-stage and .card are overflow:hidden,
+         which makes them scroll containers. Hang it off .sleeve-stage and the
+         timeline resolves to a box that never scrolls, so its progress freezes
+         and nothing moves. The card's own ancestors are overflow:visible up to
+         the document, so the subject travels against the page. */
+      .card:has(.sleeve-stage) {
+        view-timeline: --sleeve block;
+      }
+
+      @keyframes sleeve-open {
+        from {
+          transform: translateX(-7px);
+        }
+      }
+
+      @keyframes sleeve-close {
+        to {
+          transform: translateX(-7px);
+        }
+      }
+
+      .sleeve-scroll {
+        animation:
+          sleeve-open auto linear backwards,
+          sleeve-close auto linear forwards;
+        /* Declared after the shorthand on purpose: the shorthand resets it. */
+        animation-timeline: --sleeve, --sleeve;
+        animation-range: entry 10% entry 90%, exit 10% exit 90%;
+      }
+    }
+  }
+
+  /* Service lane tiles.
+     The photograph runs clean across the top and the gradient gathers into a
+     dark foot the copy sits on, rather than a wash over the whole frame that
+     would pass every contrast check and still erase the picture. */
+  .lane-foot {
+    background: linear-gradient(
+      to top,
+      oklch(0.045 0.002 60 / 0.97) 0%,
+      oklch(0.045 0.002 60 / 0.93) 40%,
+      oklch(0.045 0.002 60 / 0.74) 66%,
+      oklch(0.045 0.002 60 / 0.32) 86%,
+      oklch(0.045 0.002 60 / 0) 100%
+    );
+  }
+
+  /* The cover mosaic is the brightest art of the three (snow, a polaroid wall,
+     an eye), and the kicker is the first line of a bottom-aligned block, so it
+     lands on the lightest part of the ramp. Hold the mosaic back a stop so the
+     small type clears 4.5:1 without washing the records out. */
+  .lane-art-dense {
+    filter: saturate(0.92) brightness(0.74);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .lane:hover .lane-art-dense {
+      filter: saturate(1.02) brightness(0.82);
+    }
+  }
+
+  .lane-art {
+    transition: filter 420ms var(--ease-out-quint);
+    filter: saturate(0.92);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .lane:hover .lane-art {
+      filter: saturate(1.06);
+    }
+  }
+
+  .lane:focus-visible {
+    outline: 2px solid var(--color-accent-bright);
+    outline-offset: 2px;
+  }
+
+  /* Retainer tiers. The recommended tier is taller and keeps its art, the
+     other two run a shorter strip, so the three stop reading as one card
+     repeated three times. */
+  .tier-art {
+    position: relative;
+    overflow: hidden;
+    height: 7.5rem;
+  }
+
+  .tier-art-lead {
+    height: 11rem;
+  }
+
+  /* Nothing is set over this strip, so the gradient only has to marry the
+     photograph into the card body. Anything heavier turns a legible frame into
+     a brown smudge, which is a missing picture rather than a subtle one. */
+  .tier-foot {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      oklch(0.045 0.002 60 / 0.94) 0%,
+      oklch(0.045 0.002 60 / 0.5) 34%,
+      oklch(0.045 0.002 60 / 0.1) 70%,
+      oklch(0.045 0.002 60 / 0) 100%
+    );
+  }
+
+  /* A 120px band through a portrait frame centre-crops past the face. Bias the
+     crop up so the subject's head lands inside the strip. */
+  .tier-art img {
+    object-position: 50% 30%;
+  }
+
+  .btn-stripe {
+    color: #ffffff;
+    background: #635bff;
+    box-shadow:
+      0 1px 2px oklch(0 0 0 / 45%),
+      0 10px 30px -12px oklch(0.52 0.24 280 / 55%);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .btn-stripe:hover {
+      background: #7a73ff;
+      transform: translateY(-1px);
+      box-shadow:
+        0 2px 4px oklch(0 0 0 / 40%),
+        0 16px 40px -12px oklch(0.6 0.24 280 / 70%);
+    }
+  }
+
+  /* Press feedback is colour, never movement or geometry. */
+  .btn-stripe:active {
+    background: #4f47e0;
+    box-shadow: 0 1px 2px oklch(0 0 0 / 40%);
+  }
+
+  .btn-stripe:disabled {
+    cursor: not-allowed;
+  }
+
   .btn-ghost {
     border: 1px solid var(--color-line-strong);
     color: var(--color-ink);

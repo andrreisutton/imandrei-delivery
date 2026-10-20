@@ -25,7 +25,17 @@ export async function POST(req: Request) {
     const orderId = session.metadata?.orderId;
     const bookingId = session.metadata?.bookingId;
     const productSlug = session.metadata?.productSlug;
-    if (orderId) {
+    const retainerId = session.metadata?.retainerId;
+    if (retainerId) {
+      // A monthly retainer. There is no product and no download, so no order is
+      // created; the owner just needs to know a subscription started.
+      await notifyOwnerOfRetainer(
+        retainerId,
+        session.amount_total != null ? session.amount_total / 100 : 0,
+        session.customer_details?.email || session.customer_email || "unknown",
+        session.metadata?.channelUrl
+      );
+    } else if (orderId) {
       await markPaid(orderId);
     } else if (bookingId) {
       await markBookingPaid(bookingId);
@@ -73,6 +83,25 @@ export async function POST(req: Request) {
   }
 
   return Response.json({ received: true });
+}
+
+async function notifyOwnerOfRetainer(
+  retainerId: string,
+  amount: number,
+  email: string,
+  channelUrl?: string
+) {
+  const to = process.env.NOTIFY_EMAIL;
+  if (!to) return;
+  try {
+    const mail = await renderOwnerNotification(
+      "retainer started",
+      `${retainerId} ($${amount}/mo)`,
+      `<p style="color:#b7b4ae;font-size:15px;">${esc(email)} started the <strong style="color:#f5f4f2">${esc(retainerId)}</strong> retainer at $${amount} a month.${channelUrl ? `<br/>Channel: ${esc(channelUrl)}` : ""}<br/><br/>Nothing is scheduled automatically. Reply to them with the footage drop and the first week.</p>`
+    );
+    await sendEmail({ to, ...mail, type: "owner-notification", refId: retainerId });
+  } catch {
+  }
 }
 
 async function notifyOwnerOfSale(title: string, amount: number, name: string, email: string) {

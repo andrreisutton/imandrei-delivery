@@ -70,3 +70,43 @@ export async function createBookingStripeCheckout(booking: BookingRecord): Promi
   }
   return session.url;
 }
+
+export async function createRetainerStripeCheckout(input: {
+  retainerId: string;
+  title: string;
+  description: string;
+  amount: number;
+  email: string;
+  channelUrl?: string;
+}): Promise<string> {
+  const stripe = getStripe();
+  const session = await stripe.checkout.sessions.create({
+    mode: "subscription",
+    customer_email: input.email,
+    line_items: [
+      {
+        price_data: {
+          currency: "usd",
+          unit_amount: Math.round(input.amount * 100),
+          recurring: { interval: "month" },
+          product_data: { name: input.title, description: input.description },
+        },
+        quantity: 1,
+      },
+    ],
+    metadata: {
+      retainerId: input.retainerId,
+      ...(input.channelUrl ? { channelUrl: input.channelUrl } : {}),
+    },
+    subscription_data: {
+      metadata: {
+        retainerId: input.retainerId,
+        ...(input.channelUrl ? { channelUrl: input.channelUrl } : {}),
+      },
+    },
+    success_url: `${siteUrl()}/editing?started=${input.retainerId}`,
+    cancel_url: `${siteUrl()}/editing#tiers`,
+  });
+  if (!session.url) throw new Error("Stripe did not return a checkout URL");
+  return session.url;
+}

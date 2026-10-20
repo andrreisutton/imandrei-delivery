@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { LockSimple } from "@phosphor-icons/react/dist/ssr";
 import { getSiteContent } from "@/lib/content";
 import { Price } from "@/components/price";
+import { StripeMark } from "@/components/stripe-mark";
 import { ProductCover } from "@/components/product-cover";
 import { stripeEnabled } from "@/lib/stripe";
 import { isBuyable } from "@/lib/delivery";
@@ -47,7 +48,14 @@ export default async function CheckoutPage({ params }: { params: Promise<{ slug:
           <h1 className="h-title text-6xl sm:text-8xl">Checkout</h1>
           <p className="mt-2 flex items-center gap-1.5 text-sm text-muted">
             <LockSimple size={14} weight="fill" className="text-accent-bright" />
-            {isDemo ? checkoutCopy.demoNote : "Secure payment powered by Stripe."}
+            {isDemo ? (
+              checkoutCopy.demoNote
+            ) : (
+              <>
+                Secure payment powered by
+                <StripeMark size={13} labelled className="ml-0.5 text-[#635BFF]" />
+              </>
+            )}
           </p>
           <CheckoutForm productSlug={product.slug} isDemo={isDemo} price={product.price} />
         </div>

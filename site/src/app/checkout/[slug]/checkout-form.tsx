@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { startCheckout, type ActionState } from "@/app/actions";
 import { ProofCtaNote } from "@/components/proof";
+import { StripeMark } from "@/components/stripe-mark";
 
 export function CheckoutForm({
   productSlug,
@@ -81,7 +82,12 @@ export function CheckoutForm({
         </p>
       )}
 
-      <button type="submit" className="btn btn-primary" disabled={pending}>
+      <button
+        type="submit"
+        className={`btn ${isDemo ? "btn-primary" : "btn-stripe"}`}
+        disabled={pending}
+      >
+        {!isDemo && <StripeMark size={15} />}
         {pending ? "Processing…" : `Pay $${price}`}
       </button>
       <ProofCtaNote className="justify-center" />

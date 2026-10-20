@@ -9,7 +9,9 @@ import { GradeCompare } from "@/components/grade-compare";
 import { AudioCompare } from "@/components/audio-compare";
 import { Price, SaveBadge } from "@/components/price";
 import { ReviewCard, Stars } from "@/components/rating";
+import { StripeMark, StripeSecured } from "@/components/stripe-mark";
 import { ProofCtaNote } from "@/components/proof";
+import { stripeEnabled } from "@/lib/stripe";
 import { averageRating, getReviewsForProduct } from "@/lib/reviews";
 import { isBuyable } from "@/lib/delivery";
 
@@ -31,6 +33,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ProductPage({ params }: Props) {
   const { slug } = await params;
   const { products, deliveryUrls, pages } = await getSiteContent();
+  const payWithStripe = stripeEnabled();
   const product = products.find((p) => p.slug === slug && p.type !== "service");
   if (!product) notFound();
   const deliveredAsLink = !!deliveryUrls[product.slug];
@@ -146,10 +149,12 @@ export default async function ProductPage({ params }: Props) {
             <>
               <Link
                 href={`/checkout/${product.slug}`}
-                className="btn btn-primary mt-8 w-full sm:w-auto sm:min-w-64"
+                className={`btn ${payWithStripe ? "btn-stripe" : "btn-primary"} mt-8 w-full sm:w-auto sm:min-w-64`}
               >
+                {payWithStripe && <StripeMark size={15} />}
                 {pages.product.buyLabel} · ${product.price}
               </Link>
+              {payWithStripe && <StripeSecured className="mt-3 sm:justify-start" />}
               <ProofCtaNote className="mt-3" />
             </>
           )}

@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
+import Image from "next/image";
+import { Link } from "next-view-transitions";
 import { Check } from "@phosphor-icons/react/dist/ssr";
 import { getSiteContent } from "@/lib/content";
+import { stripeEnabled } from "@/lib/stripe";
+import { StripeMark } from "@/components/stripe-mark";
 import { HeroWall } from "@/components/hero-wall";
 import { TrustedByStrip } from "@/components/credentials";
 import { VideoWall } from "@/components/video-wall";
@@ -15,8 +19,29 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
+/**
+ * What each tier actually produces, in Andrei's own frames. Creator and Channel
+ * carry a single show; Label carries the busiest frame of the three, because
+ * that tier is the whole release calendar rather than one upload a week.
+ */
+const TIER_ART: Record<string, { src: string; alt: string }> = {
+  creator: {
+    src: "/photos/ian-0.jpg",
+    alt: "ian on the mic in warm stage light, shot and cut by Andrei",
+  },
+  channel: {
+    src: "/photos/skies-2.jpg",
+    alt: "Lil Skies under blue and magenta wash, shot and cut by Andrei",
+  },
+  label: {
+    src: "/photos/tron-6.jpg",
+    alt: "BabyTron on stage in a lit haze, shot and cut by Andrei",
+  },
+};
+
 export default async function EditingPage() {
   const { pages, retainers, credentials, videoWork, industry, home } = await getSiteContent();
+  const payWithStripe = stripeEnabled();
 
   return (
     <>
@@ -76,13 +101,24 @@ export default async function EditingPage() {
             {retainers.map((r) => (
               <div
                 key={r.id}
-                className={`card card-pad relative flex flex-col ${r.badge ? "card-featured" : ""}`}
+                className={`card card-flush relative flex flex-col ${r.badge ? "card-featured" : ""}`}
               >
                 {r.badge && (
-                  <span className="absolute -top-3 left-6 rounded-[6px] bg-accent px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-accent-ink">
+                  <span className="absolute -top-3 left-6 z-10 rounded-[6px] bg-accent px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-accent-ink">
                     {r.badge}
                   </span>
                 )}
+                <div className={`tier-art ${r.badge ? "tier-art-lead" : ""}`}>
+                  <Image
+                    src={TIER_ART[r.id]?.src ?? TIER_ART.creator.src}
+                    alt={TIER_ART[r.id]?.alt ?? TIER_ART.creator.alt}
+                    fill
+                    sizes="(min-width: 768px) 32vw, 100vw"
+                    className="object-cover"
+                  />
+                  <span className="tier-foot" aria-hidden="true" />
+                </div>
+                <div className="flex flex-1 flex-col p-6 pt-5 sm:p-7 sm:pt-6">
                 <h3 className="text-xl font-bold">{r.title}</h3>
                 <p className="mt-1 text-sm text-muted">{r.volume}</p>
                 <p className="mt-5 flex items-baseline gap-1.5">
@@ -99,9 +135,20 @@ export default async function EditingPage() {
                   ))}
                 </ul>
                 <div className="mt-auto pt-7">
-                  <a href="#start" className={`btn w-full ${r.badge ? "btn-primary" : "btn-ghost"}`}>
+                  <Link
+                    href={`/checkout/retainer/${r.id}`}
+                    className={`btn w-full ${payWithStripe ? "btn-stripe" : "btn-primary"}`}
+                  >
+                    {payWithStripe && <StripeMark size={15} />}
+                    Start · ${r.price.toLocaleString("en-US")} a month
+                  </Link>
+                  <a
+                    href="#start"
+                    className="mt-3.5 block text-center text-[11px] font-bold uppercase tracking-[0.14em] text-muted transition-colors hover:text-ink"
+                  >
                     {pages.editing.bookLabel}
                   </a>
+                </div>
                 </div>
               </div>
             ))}

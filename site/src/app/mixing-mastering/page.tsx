@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Link } from "next-view-transitions";
 import { Check } from "@phosphor-icons/react/dist/ssr";
 import { getSiteContent } from "@/lib/content";
+import { stripeEnabled } from "@/lib/stripe";
+import { StripeMark } from "@/components/stripe-mark";
 import { TrustedByStrip } from "@/components/credentials";
 import { Price, SaveBadge } from "@/components/price";
 import { AudioCompare } from "@/components/audio-compare";
@@ -22,6 +24,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function MixingMasteringPage() {
   const { products, pages, credentials, home, industry } = await getSiteContent();
+  const payWithStripe = stripeEnabled();
   const services = products.filter((p) => p.type === "service");
 
   return (
@@ -116,8 +119,11 @@ export default async function MixingMasteringPage() {
               <div className="mt-auto pt-7">
                 <Link
                   href={`/checkout/${s.slug}`}
-                  className={`btn w-full ${s.badge ? "btn-primary" : "btn-ghost"}`}
+                  className={`btn w-full ${
+                    payWithStripe ? "btn-stripe" : s.badge ? "btn-primary" : "btn-ghost"
+                  }`}
                 >
+                  {payWithStripe && <StripeMark size={15} />}
                   {pages.mixing.bookLabel} · ${s.price}
                 </Link>
               </div>
