@@ -81,7 +81,7 @@ export default async function MixingMasteringPage() {
         <div className="mt-6">
           <SpotifyPlaylist height={352} />
         </div>
-        <MusoPanel industry={industry} compact className="mt-5" />
+        <MusoPanel industry={industry} className="mt-5" />
       </section>
 
       <section data-reveal id="pricing" className="mx-auto max-w-7xl scroll-mt-20 px-4 py-16 sm:px-6 lg:py-24">
