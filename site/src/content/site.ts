@@ -893,16 +893,6 @@ export const collaborators: Credential[] = [
     role: "all we have is now.",
     videoUrl: "https://open.spotify.com/album/68q1Xic7ZkHnIGzWKArtQs",
   },
-  {
-    name: "Khiernan K Films",
-    role: "Directed the colorado video",
-    videoUrl: "https://www.youtube.com/watch?v=1w7j5MoEQgc",
-  },
-  {
-    name: "zurkie",
-    role: "The channel I edit for on YouTube",
-    videoUrl: "https://www.youtube.com/@zurkie",
-  },
 ];
 
 export type Partner = {

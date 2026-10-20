@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import { getSiteContent } from "@/lib/content";
 import { withNewReleases } from "@/lib/catalogue";
-import { TrustedByStrip, CredentialRoster } from "@/components/credentials";
+import { TrustedByStrip } from "@/components/credentials";
 import { HeroWall } from "@/components/hero-wall";
 import { VideoWall } from "@/components/video-wall";
 import { ReelWall } from "@/components/reel-wall";
-import { ReleaseWall } from "@/components/release-wall";
 import { InstagramProfile, SpotifyPlaylist } from "@/components/embeds";
 import { GradeCompare } from "@/components/grade-compare";
 import { PhotoWall } from "@/components/photo-wall";
@@ -21,11 +20,9 @@ const LANES: WorkLane[] = ["color", "video", "photo", "music"];
 
 export default async function WorkPage() {
   const content = await getSiteContent();
-  const { pages, credentials, home, videoWork, collaborators } = content;
+  const { pages, credentials, home, videoWork } = content;
   const musicCredits = await withNewReleases(content.musicCredits);
   const copy = pages.work;
-  const featuredCollaborators = collaborators.filter((c) => c.avatar);
-  const otherCollaborators = collaborators.filter((c) => !c.avatar);
 
   return (
     <>
@@ -77,46 +74,6 @@ export default async function WorkPage() {
               )}
 
               {photos.length > 0 && <PhotoWall sets={photos} className="mt-8" />}
-
-              {records.length > 0 && (
-                <div className="mt-10">
-                  <h3 className="h-rule text-[10px] sm:text-[11px]">{copy.recordsNote}</h3>
-                  <ReleaseWall records={records} className="mt-4" />
-                </div>
-              )}
-
-              {lane === "music" && featuredCollaborators.length > 0 && (
-                <div className="mt-10">
-                  <h3 className="h-rule text-[10px] sm:text-[11px]">{pages.credits.collabHeading}</h3>
-                  <CredentialRoster credentials={featuredCollaborators} className="mt-4" />
-                </div>
-              )}
-
-              {lane === "music" && otherCollaborators.length > 0 && (
-                <div className="mt-10">
-                  <h3 className="h-rule text-[10px] sm:text-[11px]">{pages.credits.collabMoreHeading}</h3>
-                  <ul className="mt-4 grid grid-cols-2 gap-x-6 gap-y-7 sm:grid-cols-3 lg:grid-cols-4">
-                    {otherCollaborators.map((c) => (
-                      <li key={c.name} className="border-t border-line-strong pt-4">
-                        {c.videoUrl ? (
-                          <a
-                            href={c.videoUrl}
-                            target="_blank"
-                            rel="noopener"
-                            className="credential text-lg transition-colors duration-200 hover:text-accent-bright sm:text-xl"
-                            title={c.role}
-                          >
-                            {c.name}
-                          </a>
-                        ) : (
-                          <span className="credential text-lg sm:text-xl">{c.name}</span>
-                        )}
-                        <p className="mt-1.5 text-[13px] leading-snug text-muted">{c.role}</p>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
 
               {lane === "music" && (
                 <div className="mt-10">
