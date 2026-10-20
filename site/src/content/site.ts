@@ -66,14 +66,6 @@ export const credentials: Credential[] = [
   },
 ];
 
-// Shown only on the Affiliates page (alongside its muze.fyi partner card),
-// not in the trusted-by strip on every other page.
-export const wayvbeatsCredential: Credential = {
-  name: "Wayvbeats",
-  role: "Plugin launch, ran the ad campaigns",
-  instagram: "https://www.instagram.com/wayvbeats/",
-};
-
 export type WorkLane = "color" | "video" | "photo" | "music";
 
 export type VideoWork = {

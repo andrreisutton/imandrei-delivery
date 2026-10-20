@@ -12,6 +12,7 @@ const LOGOS: Record<string, { src: string; w: number; h: number; cls: string }> 
   LANDR: { src: "/logos/landr.svg", w: 75, h: 60, cls: "h-11 w-auto sm:h-10" },
   "My Camera Kit": { src: "/logos/amazon.svg", w: 603, h: 182, cls: "h-7 w-auto sm:h-[26px]" },
   Comfrt: { src: "/logos/comfrt.png", w: 900, h: 215, cls: "h-7 w-auto sm:h-[26px]" },
+  "muze.fyi": { src: "/logos/muze.svg", w: 1001, h: 650, cls: "h-9 w-auto sm:h-10" },
 };
 
 export function PartnerCard({
