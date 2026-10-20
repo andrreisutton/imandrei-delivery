@@ -73,6 +73,10 @@ export function AudioCompare({
     lead.addEventListener("timeupdate", onTime);
     lead.addEventListener("loadedmetadata", onMeta);
     lead.addEventListener("ended", onEnd);
+    // The browser can finish loading metadata before this effect runs and
+    // attaches the listener (especially on a fast/cached load), so the
+    // "loadedmetadata" event is missed. Catch that case directly.
+    if (lead.readyState >= 1) onMeta();
     return () => {
       lead.removeEventListener("timeupdate", onTime);
       lead.removeEventListener("loadedmetadata", onMeta);

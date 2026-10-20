@@ -1173,11 +1173,9 @@ export const products: Product[] = [
     price: 29,
     badge: "Beginner",
     coverHue: 280,
-    // Add real clips at these paths (site/public/audio/) to turn the
-    // before/after player on for this product.
-    // audioBefore: "/audio/vocal-starter-before.mp3",
-    // audioAfter: "/audio/vocal-starter-after.mp3",
-    // audioCaption: "Same dry take, run through the Starter chain.",
+    audioBefore: "/audio/vocal-starter-before.mp3",
+    audioAfter: "/audio/vocal-starter-after.mp3",
+    audioCaption: "Same take, no effects vs. the Starter stock-plugin chain.",
   },
   {
     slug: "vocal-presets-pro",
