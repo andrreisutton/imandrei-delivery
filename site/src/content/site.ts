@@ -64,6 +64,11 @@ export const credentials: Credential[] = [
     avatar: "/avatars/willswinton.jpg",
     instagram: "https://www.instagram.com/willswinton/",
   },
+  {
+    name: "Wayvbeats",
+    role: "Plugin launch, ran the ad campaigns",
+    instagram: "https://www.instagram.com/wayvbeats/",
+  },
 ];
 
 export type WorkLane = "color" | "video" | "photo" | "music";

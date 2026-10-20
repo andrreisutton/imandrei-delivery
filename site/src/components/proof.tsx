@@ -10,7 +10,7 @@ const RECAP = {
 };
 
 const copy = {
-  badge: "Shot the Lil Skies Tour recap",
+  badge: "See my own work",
   eyebrow: "Real work · From my channel",
   heading: "The Lil Skies tour stop, through this lens.",
   body1:
@@ -23,14 +23,17 @@ const copy = {
   browseCta: "Browse the store",
   videoCaption:
     "From my channel: the Lil Skies Tour recap, October 2025. Shot, cut, and colored by me.",
-  storeStrip: "was shot, cut, and colored with the exact tools on this page.",
+  ctaNoteLink: "My own work",
+  storeStrip: "is shot, cut, and colored with the exact tools on this page.",
   mixingStrip: "Your mix gets someone who also shoots and grades my own records. One taste, end to end.",
   reviewEyebrow: "Notable work",
   reviewMeta: "Shot, cut, and colored by me",
-  reviewSource: "on my channel, October 2025",
-  reviewLink: "Watch it",
+  reviewSource: "on my channel",
+  reviewLink: "Watch my work",
 };
 
+// Points at one specific showcase video; only the dedicated ProofSection
+// below should use this.
 function RecapLink({ className, children }: { className?: string; children: React.ReactNode }) {
   return (
     <a href={RECAP.videoUrl} target="_blank" rel="noopener" className={className}>
@@ -39,9 +42,19 @@ function RecapLink({ className, children }: { className?: string; children: Reac
   );
 }
 
+// Points at the whole channel, for the generic "my work uses these tools"
+// callouts that appear across the site.
+function ChannelLink({ className, children }: { className?: string; children: React.ReactNode }) {
+  return (
+    <a href={RECAP.channelUrl} target="_blank" rel="noopener" className={className}>
+      {children}
+    </a>
+  );
+}
+
 export function ProofHeroBadge() {
   return (
-    <RecapLink className="group mb-7 inline-flex items-center gap-2.5 rounded-[8px] border border-line-strong bg-surface/70 py-2 pl-3.5 pr-3.5 backdrop-blur-md transition-[border-color,background-color] duration-200 hover:border-accent-bright/50 hover:bg-surface">
+    <ChannelLink className="group mb-7 inline-flex items-center gap-2.5 rounded-[8px] border border-line-strong bg-surface/70 py-2 pl-3.5 pr-3.5 backdrop-blur-md transition-[border-color,background-color] duration-200 hover:border-accent-bright/50 hover:bg-surface">
       <SocialIcon label="YouTube" size={15} />
       <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-muted transition-colors duration-200 group-hover:text-ink">
         {copy.badge}
@@ -52,7 +65,7 @@ export function ProofHeroBadge() {
         className="text-faint transition-colors duration-200 group-hover:text-ink"
         aria-hidden="true"
       />
-    </RecapLink>
+    </ChannelLink>
   );
 }
 
@@ -124,10 +137,10 @@ export function ProofCtaNote({ className = "" }: { className?: string }) {
     <p className={`flex items-center gap-2 text-xs text-faint ${className}`}>
       <SocialIcon label="YouTube" size={13} />
       <span>
-        <RecapLink className="font-semibold text-muted underline-offset-4 transition-colors hover:text-ink hover:underline">
-          Lil Skies Tour recap
-        </RecapLink>{" "}
-        shot with these tools
+        <ChannelLink className="font-semibold text-muted underline-offset-4 transition-colors hover:text-ink hover:underline">
+          {copy.ctaNoteLink}
+        </ChannelLink>{" "}
+        is shot with these tools
       </span>
     </p>
   );
@@ -142,10 +155,9 @@ export function ProofStrip({ variant = "store" }: { variant?: "store" | "mixing"
           copy.mixingStrip
         ) : (
           <>
-            The{" "}
-            <RecapLink className="font-semibold text-ink underline-offset-4 hover:underline">
-              Lil Skies Tour recap
-            </RecapLink>{" "}
+            <ChannelLink className="font-semibold text-ink underline-offset-4 hover:underline">
+              {copy.ctaNoteLink}
+            </ChannelLink>{" "}
             {copy.storeStrip}
           </>
         )}
@@ -167,15 +179,15 @@ export function ProofReviewPlaque() {
         </p>
       </div>
       <blockquote className="h-editorial mt-4 text-3xl sm:text-4xl">
-        Lil Skies Tour recap
+        {copy.ctaNoteLink}
       </blockquote>
       <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted">
         <span>{copy.reviewMeta}</span>
         <span aria-hidden="true">·</span>
-        <RecapLink className="inline-flex items-center gap-1 font-semibold text-ink underline-offset-4 hover:underline">
+        <ChannelLink className="inline-flex items-center gap-1 font-semibold text-ink underline-offset-4 hover:underline">
           {copy.reviewLink}
           <ArrowUpRight size={12} weight="bold" aria-hidden="true" />
-        </RecapLink>
+        </ChannelLink>
       </div>
     </div>
   );
