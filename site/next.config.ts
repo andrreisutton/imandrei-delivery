@@ -23,7 +23,11 @@ const nextConfig: NextConfig = {
           {
             key: "Content-Security-Policy",
             value:
-              "frame-ancestors 'self' https://*.sanity.studio https://www.sanity.io http://localhost:3333",
+              /* studioraine.art and its 1:1 mirror frame this site on the portfolio
+               (2026-10-20). Without them here the stage loads, follows
+               andrei.studioraine.art's 308 to this domain, and the browser
+               blocks the frame, so the entry renders as a dead black box. */
+            "frame-ancestors 'self' https://studioraine.art https://studio-raine.com https://*.sanity.studio https://www.sanity.io http://localhost:3333",
           },
         ],
       },
