@@ -9,6 +9,7 @@ import { GradeCompare } from "@/components/grade-compare";
 import { AudioCompare } from "@/components/audio-compare";
 import { Price, SaveBadge } from "@/components/price";
 import { ReviewCard, Stars } from "@/components/rating";
+import { StripeMark, StripeSecured } from "@/components/stripe-mark";
 import { ProofCtaNote } from "@/components/proof";
 import { averageRating, getReviewsForProduct } from "@/lib/reviews";
 import { isBuyable } from "@/lib/delivery";
@@ -146,10 +147,12 @@ export default async function ProductPage({ params }: Props) {
             <>
               <Link
                 href={`/checkout/${product.slug}`}
-                className="btn btn-primary mt-8 w-full sm:w-auto sm:min-w-64"
+                className="btn btn-stripe mt-8 w-full sm:w-auto sm:min-w-64"
               >
+                <StripeMark size={15} />
                 {pages.product.buyLabel} · ${product.price}
               </Link>
+              <StripeSecured className="mt-3 sm:justify-start" />
               <ProofCtaNote className="mt-3" />
             </>
           )}

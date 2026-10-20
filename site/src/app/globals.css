@@ -120,6 +120,39 @@
     box-shadow: 0 1px 2px oklch(0 0 0 / 40%);
   }
 
+  /* Stripe-branded payment button. Shares .btn's geometry exactly, per the
+     one-component-system law: only colour changes. Stripe blurple #635BFF is
+     the official brand colour (stripe.com/newsroom/information). No border at
+     rest and none on any state, matching .btn-primary exactly: a 1px border
+     here would make this button 2px taller than its siblings. */
+  .btn-stripe {
+    color: #ffffff;
+    background: #635bff;
+    box-shadow:
+      0 1px 2px oklch(0 0 0 / 45%),
+      0 10px 30px -12px oklch(0.52 0.24 280 / 55%);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .btn-stripe:hover {
+      background: #7a73ff;
+      transform: translateY(-1px);
+      box-shadow:
+        0 2px 4px oklch(0 0 0 / 40%),
+        0 16px 40px -12px oklch(0.6 0.24 280 / 70%);
+    }
+  }
+
+  /* Press feedback is colour, never movement or geometry. */
+  .btn-stripe:active {
+    background: #4f47e0;
+    box-shadow: 0 1px 2px oklch(0 0 0 / 40%);
+  }
+
+  .btn-stripe:disabled {
+    cursor: not-allowed;
+  }
+
   .btn-ghost {
     border: 1px solid var(--color-line-strong);
     color: var(--color-ink);

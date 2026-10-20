@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useActionState } from "react";
 import { submitBooking, type ActionState } from "@/app/actions";
+import { StripeMark, StripeSecured } from "@/components/stripe-mark";
 import { CheckCircle } from "@phosphor-icons/react";
 import { Select } from "@/components/select";
 import { ApertureDisc } from "@/components/aperture-disc";
@@ -193,7 +194,12 @@ export function BookingForm({
         </p>
       )}
 
-      <button type="submit" className="btn btn-primary" disabled={pending || uploading}>
+      <button
+        type="submit"
+        className={`btn ${stripeOn ? "btn-stripe" : "btn-primary"}`}
+        disabled={pending || uploading}
+      >
+        {stripeOn && !pending && !uploading && <StripeMark size={15} />}
         {uploading
           ? "Uploading files…"
           : pending
@@ -204,11 +210,18 @@ export function BookingForm({
               ? `Book & pay · $${total}`
               : `Request session · $${total}`}
       </button>
-      <p className="text-center text-xs text-faint">
-        {stripeOn
-          ? "Secure card checkout by Stripe. Your date locks in the moment payment clears."
-          : "No payment now. You pay at the session."}
-      </p>
+      {stripeOn ? (
+        <>
+          <StripeSecured />
+          <p className="text-center text-xs text-faint">
+            Your date locks in the moment payment clears.
+          </p>
+        </>
+      ) : (
+        <p className="text-center text-xs text-faint">
+          No payment now. You pay at the session.
+        </p>
+      )}
       <ProofCtaNote className="-mt-2 justify-center" />
     </form>
   );
