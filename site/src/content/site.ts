@@ -64,12 +64,15 @@ export const credentials: Credential[] = [
     avatar: "/avatars/willswinton.jpg",
     instagram: "https://www.instagram.com/willswinton/",
   },
-  {
-    name: "Wayvbeats",
-    role: "Plugin launch, ran the ad campaigns",
-    instagram: "https://www.instagram.com/wayvbeats/",
-  },
 ];
+
+// Shown only on the Affiliates page (alongside its muze.fyi partner card),
+// not in the trusted-by strip on every other page.
+export const wayvbeatsCredential: Credential = {
+  name: "Wayvbeats",
+  role: "Plugin launch, ran the ad campaigns",
+  instagram: "https://www.instagram.com/wayvbeats/",
+};
 
 export type WorkLane = "color" | "video" | "photo" | "music";
 
@@ -935,6 +938,13 @@ export const partners: Partner[] = [
     perk: "",
     href: "https://distrokid.com/vip/seven/4550336",
     referral: true,
+  },
+  {
+    name: "muze.fyi",
+    what: "Wayvbeats' plugin — I ran the ad campaigns for the launch",
+    code: "",
+    perk: "",
+    href: "https://muze.fyi",
   },
 ];
 

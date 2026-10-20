@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Link } from "next-view-transitions";
 import { getSiteContent } from "@/lib/content";
+import { wayvbeatsCredential } from "@/content/site";
 import { HeroWall } from "@/components/hero-wall";
 import { PartnerCard } from "@/components/partner-card";
 import { TrustedByStrip } from "@/components/credentials";
@@ -36,7 +37,7 @@ export default async function AffiliatesPage() {
         </div>
       </section>
 
-      <TrustedByStrip heading={home.trustedHeading} credentials={credentials} />
+      <TrustedByStrip heading={home.trustedHeading} credentials={[...credentials, wayvbeatsCredential]} />
 
       <section data-reveal>
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:py-24">
