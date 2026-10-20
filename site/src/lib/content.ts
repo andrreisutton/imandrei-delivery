@@ -157,6 +157,13 @@ function sanitizeProducts(
             ...(d?.gradeCaptionHref ? { gradeCaptionHref: d.gradeCaptionHref } : {}),
           }
         : {}),
+      ...(d?.audioBefore && d?.audioAfter
+        ? {
+            audioBefore: d.audioBefore,
+            audioAfter: d.audioAfter,
+            ...(d?.audioCaption ? { audioCaption: d.audioCaption } : {}),
+          }
+        : {}),
       ...(raw.soldOut === true ? { soldOut: true } : {}),
     });
   }

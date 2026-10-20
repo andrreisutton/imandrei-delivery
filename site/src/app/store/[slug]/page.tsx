@@ -6,6 +6,7 @@ import { getSiteContent } from "@/lib/content";
 import { compares } from "@/content/site";
 import { ProductCover } from "@/components/product-cover";
 import { GradeCompare } from "@/components/grade-compare";
+import { AudioCompare } from "@/components/audio-compare";
 import { Price, SaveBadge } from "@/components/price";
 import { ReviewCard, Stars } from "@/components/rating";
 import { ProofCtaNote } from "@/components/proof";
@@ -88,6 +89,20 @@ export default async function ProductPage({ params }: Props) {
                   afterImage={product.gradeAfter}
                   caption={product.gradeCaption}
                   captionHref={product.gradeCaptionHref}
+                />
+              </div>
+            )}
+            {product.audioBefore && product.audioAfter && (
+              <div className="mt-5">
+                <h2 className="h-rule text-[10px] sm:text-[11px]">Hear it</h2>
+                <AudioCompare
+                  className="mt-3.5"
+                  title={product.title}
+                  credit={product.audioCaption}
+                  beforeSrc={product.audioBefore}
+                  afterSrc={product.audioAfter}
+                  beforeLabel="Dry"
+                  afterLabel="Preset"
                 />
               </div>
             )}

@@ -1071,6 +1071,9 @@ export type Product = {
   compare?: CompareKey;
   fileName?: string;
   soldOut?: boolean;
+  audioBefore?: string;
+  audioAfter?: string;
+  audioCaption?: string;
 };
 
 export const products: Product[] = [
@@ -1170,6 +1173,11 @@ export const products: Product[] = [
     price: 29,
     badge: "Beginner",
     coverHue: 280,
+    // Add real clips at these paths (site/public/audio/) to turn the
+    // before/after player on for this product.
+    // audioBefore: "/audio/vocal-starter-before.mp3",
+    // audioAfter: "/audio/vocal-starter-after.mp3",
+    // audioCaption: "Same dry take, run through the Starter chain.",
   },
   {
     slug: "vocal-presets-pro",
@@ -1189,6 +1197,11 @@ export const products: Product[] = [
     price: 79,
     badge: "Advanced",
     coverHue: 312,
+    // Add real clips at these paths (site/public/audio/) to turn the
+    // before/after player on for this product.
+    // audioBefore: "/audio/vocal-pro-before.mp3",
+    // audioAfter: "/audio/vocal-pro-after.mp3",
+    // audioCaption: "Same dry take, run through the full Pro rack.",
   },
   {
     slug: "artist-promo-kit",
