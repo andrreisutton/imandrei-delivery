@@ -93,41 +93,40 @@ export default async function MixingMasteringPage() {
         </h2>
         <div className="mt-10 grid gap-5 md:grid-cols-3">
           {services.map((s) => (
-            <div key={s.slug} className="relative">
+            <div
+              key={s.slug}
+              className={`card card-flush relative flex flex-col ${s.badge ? "card-featured" : ""}`}
+            >
               {s.badge && (
-                <span className="badge-on-card absolute -top-3 right-5 z-10 rounded-[6px] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em]">
+                <span className="badge-on-card absolute right-3 top-3 z-10 rounded-[6px] px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] backdrop-blur-sm">
                   {s.badge}
                 </span>
               )}
-              <div
-                className={`card card-flush flex flex-col ${s.badge ? "card-featured" : ""}`}
-              >
-                <ProductCover product={s} />
-                <div className="flex flex-1 flex-col px-5 pb-5 pt-4 sm:px-6 sm:pb-6">
-                <div className="flex items-center gap-3">
-                  <Price price={s.price} compareAtPrice={s.compareAtPrice} size="lg" />
-                  <SaveBadge price={s.price} compareAtPrice={s.compareAtPrice} />
-                </div>
-                <ul className="mt-6 grid gap-2.5">
-                  {s.includes.map((item) => (
-                    <li key={item} className="flex items-start gap-2.5 text-sm text-muted">
-                      <Check size={16} className="mt-0.5 shrink-0 text-accent-bright" weight="bold" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-                <div className="mt-auto pt-7">
-                  <Link
-                    href={`/checkout/${s.slug}`}
-                    className={`btn w-full ${
-                      payWithStripe ? "btn-stripe" : s.badge ? "btn-primary" : "btn-ghost"
-                    }`}
-                  >
-                    {payWithStripe && <StripeMark size={15} />}
-                    {pages.mixing.bookLabel} · ${s.price}
-                  </Link>
-                </div>
-                </div>
+              <ProductCover product={s} />
+              <div className="flex flex-1 flex-col px-5 pb-5 pt-4 sm:px-6 sm:pb-6">
+              <div className="flex items-center gap-3">
+                <Price price={s.price} compareAtPrice={s.compareAtPrice} size="lg" />
+                <SaveBadge price={s.price} compareAtPrice={s.compareAtPrice} />
+              </div>
+              <ul className="mt-6 grid gap-2.5">
+                {s.includes.map((item) => (
+                  <li key={item} className="flex items-start gap-2.5 text-sm text-muted">
+                    <Check size={16} className="mt-0.5 shrink-0 text-accent-bright" weight="bold" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-auto pt-7">
+                <Link
+                  href={`/checkout/${s.slug}`}
+                  className={`btn w-full ${
+                    payWithStripe ? "btn-stripe" : s.badge ? "btn-primary" : "btn-ghost"
+                  }`}
+                >
+                  {payWithStripe && <StripeMark size={15} />}
+                  {pages.mixing.bookLabel} · ${s.price}
+                </Link>
+              </div>
               </div>
             </div>
           ))}
