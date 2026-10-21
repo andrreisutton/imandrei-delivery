@@ -26,6 +26,7 @@ export type Credential = {
   videoUrl?: string;
   avatar?: string;
   instagram?: string;
+  appleMusicUrl?: string;
 };
 
 export const credentials: Credential[] = [
@@ -775,6 +776,7 @@ export const collaborators: Credential[] = [
     videoUrl: "https://open.spotify.com/track/2afwBFPutCnvnuJupwTWll",
     avatar: "/avatars/ssgkobe.jpg",
     instagram: "https://www.instagram.com/ssgkobe/",
+    appleMusicUrl: "https://music.apple.com/us/album/too-much-feat-ssgkobe-single/6814589662",
   },
   {
     name: "CNN Mikey",
@@ -782,6 +784,7 @@ export const collaborators: Credential[] = [
     videoUrl: "https://open.spotify.com/track/0sizBw7nSXZ19wnNseQa7Q",
     avatar: "/avatars/cnnmikey.jpg",
     instagram: "https://www.instagram.com/cnnmikey/",
+    appleMusicUrl: "https://music.apple.com/us/album/let-me-down-feat-cnn-mikey-single/6811575631",
   },
   {
     name: "Valious",
@@ -789,6 +792,7 @@ export const collaborators: Credential[] = [
     videoUrl: "https://open.spotify.com/album/7u3sOVaz4lii13pyO7RxyL",
     avatar: "/avatars/valious.jpg",
     instagram: "https://www.instagram.com/valious/",
+    appleMusicUrl: "https://music.apple.com/us/album/another-day-single/1821631050",
   },
   {
     name: "dcmbur",
@@ -811,6 +815,7 @@ export const collaborators: Credential[] = [
     videoUrl: "https://open.spotify.com/album/2rA2jvqvbhUuEWrxF5zCOQ",
     avatar: "/avatars/73delta.jpg",
     instagram: "https://www.instagram.com/73delta/",
+    appleMusicUrl: "https://music.apple.com/us/album/waste-time-single/6786844415",
   },
   {
     name: "cam85",
@@ -818,6 +823,7 @@ export const collaborators: Credential[] = [
     videoUrl: "https://open.spotify.com/album/72wlrRjvaXjyhFGRrNsTlh",
     avatar: "/avatars/cam85.jpg",
     instagram: "https://www.instagram.com/cam85__/",
+    appleMusicUrl: "https://music.apple.com/us/album/aint-over-single/1893546422",
   },
   {
     name: "Ethan Terrana",
@@ -830,6 +836,7 @@ export const collaborators: Credential[] = [
     videoUrl: "https://open.spotify.com/album/1dbYQqntQvijcc31f0aAyb",
     avatar: "/avatars/gavinross.jpg",
     instagram: "https://www.instagram.com/gaavinross/",
+    appleMusicUrl: "https://music.apple.com/us/album/21/6817913764",
   },
   {
     name: "Jadon Reese",
@@ -837,6 +844,7 @@ export const collaborators: Credential[] = [
     videoUrl: "https://open.spotify.com/album/1dbYQqntQvijcc31f0aAyb",
     avatar: "/avatars/jadonreese.jpg",
     instagram: "https://www.instagram.com/r.ee.s.ee/",
+    appleMusicUrl: "https://music.apple.com/us/album/21/6817913764",
   },
   {
     name: "Jai XO",

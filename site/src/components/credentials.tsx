@@ -191,18 +191,48 @@ export function CredentialRoster({
             ) : (
               nameBlock
             )}
-            {c.videoUrl && (
-              <a
-                href={c.videoUrl}
-                target="_blank"
-                rel="noopener"
-                className="group flex shrink-0 items-center gap-2 text-[10px] font-bold uppercase tracking-[0.16em] text-faint transition-colors duration-200 hover:text-ink"
-                title={`Watch: ${c.name}`}
-              >
-                <SocialIcon label={platformOf(c.videoUrl) ?? "YouTube"} size={15} />
-                <span className="hidden sm:inline">Watch</span>
-                <ArrowUpRight size={11} weight="bold" aria-hidden="true" />
-              </a>
+            {c.appleMusicUrl ? (
+              <span className="flex shrink-0 items-center gap-3">
+                <span className="hidden text-[10px] font-bold uppercase tracking-[0.16em] text-faint sm:inline">
+                  Listen here
+                </span>
+                <span className="flex items-center gap-2.5">
+                  {c.videoUrl && (
+                    <a
+                      href={c.videoUrl}
+                      target="_blank"
+                      rel="noopener"
+                      title={`${c.name} on Spotify`}
+                      className="transition-opacity duration-200 hover:opacity-75"
+                    >
+                      <SocialIcon label="Spotify" size={18} />
+                    </a>
+                  )}
+                  <a
+                    href={c.appleMusicUrl}
+                    target="_blank"
+                    rel="noopener"
+                    title={`${c.name} on Apple Music`}
+                    className="transition-opacity duration-200 hover:opacity-75"
+                  >
+                    <SocialIcon label="Apple Music" size={18} />
+                  </a>
+                </span>
+              </span>
+            ) : (
+              c.videoUrl && (
+                <a
+                  href={c.videoUrl}
+                  target="_blank"
+                  rel="noopener"
+                  className="group flex shrink-0 items-center gap-2 text-[10px] font-bold uppercase tracking-[0.16em] text-faint transition-colors duration-200 hover:text-ink"
+                  title={`Watch: ${c.name}`}
+                >
+                  <SocialIcon label={platformOf(c.videoUrl) ?? "YouTube"} size={15} />
+                  <span className="hidden sm:inline">Watch</span>
+                  <ArrowUpRight size={11} weight="bold" aria-hidden="true" />
+                </a>
+              )
             )}
           </li>
         );
