@@ -15,7 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function ServicesPage() {
   const { pages, products, retainers, sessions, credentials, home } = await getSiteContent();
-  const mixing = products.filter((p) => p.type === "service");
+  const mixing = products.filter((p) => p.type === "service" && p.category !== "photoVideo");
   const lines = buildServiceLines({ products, retainers, sessions });
 
   return (

@@ -1104,6 +1104,7 @@ export type Session = {
 export type Product = {
   slug: string;
   type: "preset" | "template" | "service";
+  category?: "photoVideo";
   daw?: Daw;
   title: string;
   subtitle: string;
@@ -1322,6 +1323,58 @@ export const products: Product[] = [
     price: 125,
     coverHue: 308,
   },
+  {
+    slug: "photo-video-session",
+    type: "service",
+    category: "photoVideo",
+    title: "Single Session",
+    subtitle: "Half day, one location",
+    description:
+      "A half day on site, one location. Good for a single show, a short shoot, or a quick turnaround piece. PLACEHOLDER PRICING — edit before this goes live.",
+    includes: [
+      "Up to 4 hours on site",
+      "One location",
+      "Edited photos, or a short recap video",
+      "Delivered in 5 to 7 days",
+    ],
+    price: 450,
+    coverHue: 190,
+  },
+  {
+    slug: "photo-video-full-day",
+    type: "service",
+    category: "photoVideo",
+    title: "Full Day Coverage",
+    subtitle: "Full day, multiple setups",
+    description:
+      "A full day on site across multiple setups or locations. The most-booked option for a show, event, or full day of content. PLACEHOLDER PRICING — edit before this goes live.",
+    includes: [
+      "Up to 8 hours on site",
+      "Multiple locations or setups",
+      "Edited photos and a recap video",
+      "Delivered in 5 to 7 days",
+    ],
+    price: 850,
+    badge: "Most booked",
+    coverHue: 190,
+  },
+  {
+    slug: "photo-video-multi-day",
+    type: "service",
+    category: "photoVideo",
+    title: "Multi-Day Coverage",
+    subtitle: "2+ days, tour or event runs",
+    description:
+      "Two or more days on site — a tour run, a multi-day event, or a full project. Priced per project once the scope is set. PLACEHOLDER PRICING — edit before this goes live.",
+    includes: [
+      "2+ days on site",
+      "Full photo and video coverage",
+      "Priority turnaround",
+      "Delivered in 7 to 10 days",
+    ],
+    price: 1600,
+    coverHue: 190,
+  },
 ];
 
 export const deliveryUrls: Record<string, string> = {
@@ -1517,6 +1570,18 @@ export const pages = {
       beforeLabel: "Rough",
       afterLabel: "Mixed",
     },
+  },
+  photoVideo: {
+    heading: "Photo & video coverage",
+    intro:
+      "On-site photo and video coverage, shot and edited by me. Pick a package below, or send the details and I'll put together a custom quote.",
+    ctaLabel: "See packages",
+    tiersHeading: "Pick your coverage",
+    bookLabel: "Book it",
+    payNote: "Pay now to lock the date, or send the details below first and pay after we talk.",
+    formHeading: "Need something custom, or traveling me in?",
+    formIntro:
+      "Tell me about the shoot — the date, the location, and what you need. If it's outside my usual area, let me know and we'll sort travel together. I'll reply within 24 hours.",
   },
   work: {
     heading: "The work",

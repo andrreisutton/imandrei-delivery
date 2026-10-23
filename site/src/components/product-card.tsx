@@ -9,7 +9,12 @@ import { SaveBadge } from "./price";
 const MotionLink = motion.create(Link);
 
 export function ProductCard({ product }: { product: Product }) {
-  const href = product.type === "service" ? "/mixing-mastering" : `/store/${product.slug}`;
+  const href =
+    product.type === "service"
+      ? product.category === "photoVideo"
+        ? "/photo-video"
+        : "/mixing-mastering"
+      : `/store/${product.slug}`;
   const reduce = useReducedMotion();
 
   const rx = useMotionValue(0);

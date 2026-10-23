@@ -218,7 +218,9 @@ export async function submitServiceRequest(prev: ActionState, formData: FormData
     ? { slug: product.slug, title: product.title }
     : retainer
       ? { slug: retainer.id, title: `${retainer.title} retainer` }
-      : undefined;
+      : serviceSlug === "custom"
+        ? { slug: "custom", title: "Custom request" }
+        : undefined;
   const name = str(formData, "name", 120);
   const email = str(formData, "email", 200);
 
@@ -238,6 +240,8 @@ export async function submitServiceRequest(prev: ActionState, formData: FormData
     channelUrl: str(formData, "channelUrl", 300) || undefined,
     cadence: str(formData, "cadence", 120) || undefined,
     notes: str(formData, "notes", 1000) || undefined,
+    location: str(formData, "location", 200) || undefined,
+    travelCoverage: str(formData, "travelCoverage", 60) || undefined,
     fileUrls: fileUrls(formData, "fileUrls"),
     createdAt: new Date().toISOString(),
   };
@@ -248,7 +252,7 @@ export async function submitServiceRequest(prev: ActionState, formData: FormData
   await notifyOwner(
     "service request",
     `${service.title} from ${name}`,
-    `<p style="color:#b7b4ae;font-size:15px;">${esc(name)} (${esc(email)}) requested <strong style="color:#f5f4f2">${esc(service.title)}</strong>.${request.songTitle ? `<br/>Song: ${esc(request.songTitle)}` : ""}${request.referenceTrack ? `<br/>Reference: ${esc(request.referenceTrack)}` : ""}${request.channelUrl ? `<br/>Channel: ${esc(request.channelUrl)}` : ""}${request.cadence ? `<br/>Cadence: ${esc(request.cadence)}` : ""}${request.notes ? `<br/><br/>Notes: ${esc(request.notes)}` : ""}${filesHtml(request.fileUrls)}</p>`
+    `<p style="color:#b7b4ae;font-size:15px;">${esc(name)} (${esc(email)}) requested <strong style="color:#f5f4f2">${esc(service.title)}</strong>.${request.songTitle ? `<br/>Song: ${esc(request.songTitle)}` : ""}${request.referenceTrack ? `<br/>Reference: ${esc(request.referenceTrack)}` : ""}${request.channelUrl ? `<br/>Channel: ${esc(request.channelUrl)}` : ""}${request.cadence ? `<br/>Cadence: ${esc(request.cadence)}` : ""}${request.location ? `<br/>Location: ${esc(request.location)}` : ""}${request.travelCoverage ? `<br/>Travel: ${esc(request.travelCoverage)}` : ""}${request.notes ? `<br/><br/>Notes: ${esc(request.notes)}` : ""}${filesHtml(request.fileUrls)}</p>`
   );
 
   return { ok: true };

@@ -25,7 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function MixingMasteringPage() {
   const { products, pages, credentials, home, industry } = await getSiteContent();
   const payWithStripe = stripeEnabled();
-  const services = products.filter((p) => p.type === "service");
+  const services = products.filter((p) => p.type === "service" && p.category !== "photoVideo");
 
   return (
     <>

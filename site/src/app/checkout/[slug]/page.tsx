@@ -20,7 +20,13 @@ export default async function CheckoutPage({ params }: { params: Promise<{ slug:
   const deliveredAsLink = !!deliveryUrls[product.slug];
 
   const isDemo = !stripeEnabled();
-  const backHref = product.type === "service" ? "/mixing-mastering" : `/store/${product.slug}`;
+  const isPhotoVideo = product.category === "photoVideo";
+  const backHref =
+    product.type === "service"
+      ? isPhotoVideo
+        ? "/photo-video"
+        : "/mixing-mastering"
+      : `/store/${product.slug}`;
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:py-16">
@@ -37,7 +43,9 @@ export default async function CheckoutPage({ params }: { params: Promise<{ slug:
           </div>
           <div className="mt-5 border-t border-line pt-4 text-sm text-muted">
             {product.type === "service"
-              ? "After payment you'll get an email with exactly how to send your stems."
+              ? isPhotoVideo
+                ? "After payment you'll get an email confirming the date, location, and next steps."
+                : "After payment you'll get an email with exactly how to send your stems."
               : deliveredAsLink
                 ? "Your download link arrives by email the moment payment clears, and it's on the next screen."
                 : "Your download link arrives by email the moment payment clears."}

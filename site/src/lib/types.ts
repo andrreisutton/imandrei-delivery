@@ -79,6 +79,8 @@ export type ServiceRequestRecord = {
   channelUrl?: string;
   cadence?: string;
   notes?: string;
+  location?: string;
+  travelCoverage?: string;
   fileUrls?: string[];
   createdAt: string;
 };

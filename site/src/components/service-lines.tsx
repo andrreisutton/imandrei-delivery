@@ -51,7 +51,12 @@ export function buildServiceLines({
   retainers: Retainer[];
   sessions: Session[];
 }): ServiceLine[] {
-  const servicePrices = products.filter((p) => p.type === "service").map((p) => p.price);
+  const servicePrices = products
+    .filter((p) => p.type === "service" && p.category !== "photoVideo")
+    .map((p) => p.price);
+  const photoVideoPrices = products
+    .filter((p) => p.type === "service" && p.category === "photoVideo")
+    .map((p) => p.price);
   const lines: ServiceLine[] = [];
 
   if (servicePrices.length) {
@@ -62,6 +67,20 @@ export function buildServiceLines({
       href: "/mixing-mastering",
       cta: "See the tiers",
       art: { kind: "covers", covers: MIX_COVERS },
+    });
+  }
+  if (photoVideoPrices.length) {
+    lines.push({
+      title: "Photo & Video",
+      body: "On-site coverage, shot and edited by me. Pick a package or send the details for a custom quote — traveling me in is no problem.",
+      from: `From ${money(Math.min(...photoVideoPrices))}`,
+      href: "/photo-video",
+      cta: "See the packages",
+      art: {
+        kind: "photo",
+        src: "/photos/skies-1.jpg",
+        alt: "Lil Skies performing, shot by Andrei",
+      },
     });
   }
   if (retainers.length) {

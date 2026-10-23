@@ -623,6 +623,16 @@ export function sanitizeContent(
           afterLabel: h.s(mixDemo.afterLabel, d.pages.mixing.demo.afterLabel, 24),
         },
       },
+      photoVideo: {
+        heading: h.s(pg("photoVideo").heading, d.pages.photoVideo.heading, 80),
+        intro: h.s(pg("photoVideo").intro, d.pages.photoVideo.intro, 400),
+        ctaLabel: h.s(pg("photoVideo").ctaLabel, d.pages.photoVideo.ctaLabel, 40),
+        tiersHeading: h.s(pg("photoVideo").tiersHeading, d.pages.photoVideo.tiersHeading, 80),
+        bookLabel: h.s(pg("photoVideo").bookLabel, d.pages.photoVideo.bookLabel, 40),
+        payNote: h.s(pg("photoVideo").payNote, d.pages.photoVideo.payNote, 300),
+        formHeading: h.s(pg("photoVideo").formHeading, d.pages.photoVideo.formHeading, 80),
+        formIntro: h.s(pg("photoVideo").formIntro, d.pages.photoVideo.formIntro, 400),
+      },
       book: {
         heading: h.s(pg("book").heading, d.pages.book.heading, 80),
         intro: h.s(pg("book").intro, d.pages.book.intro, 400),

@@ -20,6 +20,7 @@ export default async function OrderPage({ params }: { params: Promise<{ token: s
 
   const product = products.find((p) => p.slug === state.order.productSlug);
   const isService = product?.type === "service";
+  const isPhotoVideo = product?.category === "photoVideo";
   const presetLink = !isService
     ? (state.order.deliveryUrl ?? deliveryUrls[state.order.productSlug])
     : undefined;
@@ -40,11 +41,23 @@ export default async function OrderPage({ params }: { params: Promise<{ token: s
 
           {isService ? (
             <div className="card card-pad mt-8">
-              <h2 className="font-bold">Next step: send your stems</h2>
-              <p className="mt-2 text-[15px] leading-relaxed text-muted">
-                Reply to your receipt email with your stems (WAV, 24-bit if you have them) and a
-                reference track. Your slot starts the moment the files land.
-              </p>
+              {isPhotoVideo ? (
+                <>
+                  <h2 className="font-bold">Next step: confirm the details</h2>
+                  <p className="mt-2 text-[15px] leading-relaxed text-muted">
+                    Reply to your receipt email with the date, the location, and anything else I
+                    should know. I&apos;ll follow up to lock everything in.
+                  </p>
+                </>
+              ) : (
+                <>
+                  <h2 className="font-bold">Next step: send your stems</h2>
+                  <p className="mt-2 text-[15px] leading-relaxed text-muted">
+                    Reply to your receipt email with your stems (WAV, 24-bit if you have them) and a
+                    reference track. Your slot starts the moment the files land.
+                  </p>
+                </>
+              )}
             </div>
           ) : presetLink ? (
             <PresetHandoff link={presetLink} />
