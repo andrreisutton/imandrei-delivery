@@ -1136,6 +1136,9 @@ export type Product = {
   price: number;
   compareAtPrice?: number;
   badge?: string;
+  // Opts a preset/template out of the "mix & match" bundle builder. Defaults
+  // to eligible; set false on flagship or already-bundled items.
+  bundleEligible?: boolean;
   coverHue: number;
   // Set from a thumbnail uploaded in /admin; replaces the drawn cover.
   coverImage?: string;
@@ -1176,6 +1179,7 @@ export const products: Product[] = [
     ],
     price: 89,
     badge: "Flagship",
+    bundleEligible: false,
     coverHue: 300,
     showGradeCompare: true,
   },
@@ -1271,6 +1275,7 @@ export const products: Product[] = [
     ],
     price: 79,
     badge: "Advanced",
+    bundleEligible: false,
     coverHue: 312,
     // Add real clips at these paths (site/public/audio/) to turn the
     // before/after player on for this product.
@@ -1295,9 +1300,82 @@ export const products: Product[] = [
     price: 149,
     compareAtPrice: 191,
     badge: "Best value",
+    bundleEligible: false,
     coverHue: 256,
     showGradeCompare: true,
     compare: "footage",
+  },
+  {
+    slug: "cinematic-lut-pack",
+    type: "preset",
+    daw: "DaVinci Resolve",
+    title: "Cinematic LUT Pack",
+    subtitle: "Quick-look LUTs for DaVinci Resolve",
+    description:
+      "A set of one-click looks for when a full node-based grade is overkill. Load a LUT, nudge exposure, and you have filmic color in seconds. The faster sibling to the Everyday PowerGrade.",
+    includes: [
+      ".cube LUT files for DaVinci Resolve",
+      "A mix of warm, cool, and desaturated looks",
+      "Stacks cleanly under your own exposure node",
+      "Instant download the moment payment clears",
+    ],
+    price: 34,
+    badge: "Coming soon",
+    coverHue: 288,
+  },
+  {
+    slug: "premiere-transitions-pack",
+    type: "template",
+    daw: "Premiere Pro",
+    title: "Premiere Pro Transitions Pack",
+    subtitle: "Whip pans, hits, and glitch cuts",
+    description:
+      "The motion transitions I reach for to keep a recap or a promo video moving. Drag one onto a cut and it is already timed and keyframed, so you are not animating the same whip pan from scratch again.",
+    includes: [
+      "Drag-and-drop transition presets for Premiere Pro",
+      "Whip pans, hits, glitch cuts, and film-style wipes",
+      "Already keyframed and timed to a standard cut",
+      "Instant download the moment payment clears",
+    ],
+    price: 34,
+    badge: "Coming soon",
+    coverHue: 340,
+  },
+  {
+    slug: "artist-title-cards",
+    type: "template",
+    daw: "Premiere Pro",
+    title: "Artist Title Card Templates",
+    subtitle: "Motion titles for drops and singles",
+    description:
+      "Type in the artist and song name and export a title card for the next single, drop, or tour date post. The same opening and lower-third style I use rolling out my own records.",
+    includes: [
+      "Motion graphics templates (.mogrt) for Premiere Pro",
+      "Editable text for artist name, song title, and date",
+      "A matching lower-third for credits and tour dates",
+      "Instant download the moment payment clears",
+    ],
+    price: 34,
+    badge: "Coming soon",
+    coverHue: 268,
+  },
+  {
+    slug: "fl-studio-mix-template",
+    type: "template",
+    daw: "FL Studio",
+    title: "FL Studio Mix Template",
+    subtitle: "Session template with routing already set",
+    description:
+      "My working FL Studio project: busses, sends, and routing already built, so a session starts at setting levels instead of wiring channels. Pairs with the vocal chains for a faster start top to bottom.",
+    includes: [
+      "FL Studio project file, ready to open",
+      "Vocal, drum, and master busses pre-routed",
+      "Send effects for reverb, delay, and parallel compression",
+      "Instant download the moment payment clears",
+    ],
+    price: 29,
+    badge: "Coming soon",
+    coverHue: 296,
   },
   {
     slug: "custom-mix",

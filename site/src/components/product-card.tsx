@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import { Link } from "next-view-transitions";
 import { motion, useMotionValue, useReducedMotion, useSpring } from "motion/react";
-import { Pause, Play } from "@phosphor-icons/react";
+import { Check, Pause, Plus, Play } from "@phosphor-icons/react";
 import type { Product } from "@/content/site";
 import { ProductCover } from "./product-cover";
 import { SaveBadge } from "./price";
@@ -57,7 +57,38 @@ function AudioPreviewButton({ src, title }: { src: string; title: string }) {
   );
 }
 
-export function ProductCard({ product }: { product: Product }) {
+function BundleToggle({ selected, onToggle }: { selected: boolean; onToggle: () => void }) {
+  const onClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onToggle();
+  };
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={selected}
+      className={`flex items-center gap-1.5 rounded-[6px] px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] backdrop-blur-sm transition-colors duration-150 ${
+        selected ? "bg-accent text-accent-ink" : "bg-bg/90 text-ink hover:text-accent-bright"
+      }`}
+    >
+      {selected ? (
+        <Check size={11} weight="bold" aria-hidden="true" />
+      ) : (
+        <Plus size={11} weight="bold" aria-hidden="true" />
+      )}
+      {selected ? "In bundle" : "Add to bundle"}
+    </button>
+  );
+}
+
+export function ProductCard({
+  product,
+  bundle,
+}: {
+  product: Product;
+  bundle?: { selected: boolean; onToggle: () => void };
+}) {
   const href =
     product.type === "service"
       ? product.category === "photoVideo"
@@ -92,6 +123,7 @@ export function ProductCard({ product }: { product: Product }) {
       className="card card-flush card-interactive group relative block"
     >
       <div className="absolute right-3 top-3 z-10 flex flex-col items-end gap-1.5">
+        {bundle && <BundleToggle selected={bundle.selected} onToggle={bundle.onToggle} />}
         <SaveBadge price={product.price} compareAtPrice={product.compareAtPrice} />
         {product.soldOut && (
           <span className="rounded-[6px] bg-bg/90 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-muted backdrop-blur-sm">

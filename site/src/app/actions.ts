@@ -7,11 +7,14 @@ import { createOrder, markPaid } from "@/lib/orders";
 import { submitReview } from "@/lib/reviews";
 import {
   createBookingStripeCheckout,
+  createBundleStripeCheckout,
   createRetainerStripeCheckout,
   createStripeCheckout,
   demoCheckoutAllowed,
   stripeEnabled,
 } from "@/lib/stripe";
+import { BUNDLE_MIN_ITEMS, bundleItemAmount, isBundleEligible } from "@/lib/bundle";
+import type { Product } from "@/content/site";
 import {
   esc,
   filesHtml,
@@ -103,6 +106,75 @@ export async function startCheckout(prev: ActionState, formData: FormData): Prom
       `<p style="color:#b7b4ae;font-size:15px;">${esc(name)} (${esc(email)}) bought <strong style="color:#f5f4f2">${esc(order.productTitle)}</strong> for $${order.amount}.</p>`
     );
     redirectTo = `/order/${order.deliveryToken}`;
+  }
+  redirect(redirectTo);
+}
+
+export async function startBundleCheckout(prev: ActionState, formData: FormData): Promise<ActionState> {
+  const slugs = Array.from(
+    new Set(
+      str(formData, "items", 600)
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean)
+    )
+  ).slice(0, 12);
+  const email = str(formData, "email", 200);
+  const name = str(formData, "name", 120);
+
+  const [{ products, deliveryUrls }, files] = await Promise.all([getSiteContent(), getProductFiles()]);
+  const eligible = slugs
+    .map((slug) => products.find((p) => p.slug === slug))
+    .filter(
+      (p): p is Product =>
+        !!p && isBundleEligible(p) && productSale(p, files, deliveryUrls).kind === "site"
+    );
+
+  if (eligible.length < BUNDLE_MIN_ITEMS) {
+    return { error: `Pick at least ${BUNDLE_MIN_ITEMS} items to unlock the bundle discount.` };
+  }
+  if (!name) return { error: "Enter your name so the receipts have someone to talk to." };
+  if (!EMAIL_RE.test(email)) return { error: "Enter a valid email. Your links go there." };
+
+  const amounts = eligible.map((p) => bundleItemAmount(p.price));
+
+  let redirectTo: string;
+  if (stripeEnabled()) {
+    const orders = [];
+    for (let i = 0; i < eligible.length; i++) {
+      orders.push(
+        await createOrder({ productSlug: eligible[i].slug, email, name, mode: "stripe", amount: amounts[i] })
+      );
+    }
+    try {
+      redirectTo = await createBundleStripeCheckout(orders);
+    } catch (e) {
+      console.error("stripe bundle checkout failed", e);
+      return { error: "Payment provider is unavailable right now. Try again in a minute." };
+    }
+  } else {
+    if (!demoCheckoutAllowed()) {
+      return { error: "Payments are down for a minute. Try again shortly." };
+    }
+    const orders = [];
+    for (let i = 0; i < eligible.length; i++) {
+      const order = await createOrder({
+        productSlug: eligible[i].slug,
+        email,
+        name,
+        mode: "demo",
+        amount: amounts[i],
+      });
+      await markPaid(order.id);
+      orders.push(order);
+    }
+    const total = orders.reduce((s, o) => s + o.amount, 0);
+    await notifyOwner(
+      "bundle order",
+      `${orders.length} items ($${total.toFixed(2)})`,
+      `<p style="color:#b7b4ae;font-size:15px;">${esc(name)} (${esc(email)}) bought a ${orders.length}-item bundle for $${total.toFixed(2)}: ${esc(orders.map((o) => o.productTitle).join(", "))}.</p>`
+    );
+    redirectTo = `/order/bundle?tokens=${orders.map((o) => o.deliveryToken).join(",")}`;
   }
   redirect(redirectTo);
 }

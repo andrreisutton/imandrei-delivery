@@ -26,6 +26,7 @@ export async function POST(req: Request) {
     const bookingId = session.metadata?.bookingId;
     const productSlug = session.metadata?.productSlug;
     const retainerId = session.metadata?.retainerId;
+    const bundleOrderIds = session.metadata?.bundleOrderIds;
     if (retainerId) {
       // A monthly retainer. There is no product and no download, so no order is
       // created; the owner just needs to know a subscription started.
@@ -35,6 +36,11 @@ export async function POST(req: Request) {
         session.customer_details?.email || session.customer_email || "unknown",
         session.metadata?.channelUrl
       );
+    } else if (bundleOrderIds) {
+      const ids = bundleOrderIds.split(",").filter(Boolean);
+      for (const id of ids) {
+        await markPaid(id);
+      }
     } else if (orderId) {
       await markPaid(orderId);
     } else if (bookingId) {

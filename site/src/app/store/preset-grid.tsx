@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { motion } from "motion/react";
 import type { Product } from "@/content/site";
 import { ProductCard } from "@/components/product-card";
 import { Select } from "@/components/select";
+import { BundleTray } from "@/components/bundle-tray";
 
 const TYPE_FILTERS = [
   { id: "all", label: "All" },
@@ -12,10 +13,19 @@ const TYPE_FILTERS = [
   { id: "template", label: "Templates" },
 ] as const;
 
-export function PresetGrid({ items }: { items: Product[] }) {
+export function PresetGrid({ items, bundleSlugs = [] }: { items: Product[]; bundleSlugs?: string[] }) {
   const daws = Array.from(new Set(items.map((p) => p.daw).filter(Boolean))) as string[];
   const [type, setType] = useState<string>("all");
   const [daw, setDaw] = useState<string>("all");
+  const [selected, setSelected] = useState<string[]>([]);
+
+  const bundleEligible = useMemo(() => new Set(bundleSlugs), [bundleSlugs]);
+  const toggleBundle = (slug: string) => {
+    setSelected((prev) => (prev.includes(slug) ? prev.filter((s) => s !== slug) : [...prev, slug]));
+  };
+  const bundleItems = selected
+    .map((slug) => items.find((p) => p.slug === slug))
+    .filter((p): p is Product => !!p);
 
   const filtered = items.filter(
     (p) => (type === "all" || p.type === type) && (daw === "all" || p.daw === daw)
@@ -89,10 +99,24 @@ export function PresetGrid({ items }: { items: Product[] }) {
       ) : (
         <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {filtered.map((p) => (
-            <ProductCard key={p.slug} product={p} />
+            <ProductCard
+              key={p.slug}
+              product={p}
+              bundle={
+                bundleEligible.has(p.slug)
+                  ? { selected: selected.includes(p.slug), onToggle: () => toggleBundle(p.slug) }
+                  : undefined
+              }
+            />
           ))}
         </div>
       )}
+
+      <BundleTray
+        items={bundleItems}
+        onRemove={(slug) => setSelected((prev) => prev.filter((s) => s !== slug))}
+        onClear={() => setSelected([])}
+      />
     </>
   );
 }

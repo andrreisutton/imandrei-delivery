@@ -8,6 +8,9 @@ import { TrustedByStrip } from "@/components/credentials";
 import { DawBadge } from "@/components/daw-badge";
 import { ReviewCard } from "@/components/rating";
 import { getAllReviews } from "@/lib/reviews";
+import { getProductFiles } from "@/lib/product-files";
+import { productSale } from "@/lib/delivery";
+import { isBundleEligible } from "@/lib/bundle";
 
 export const dynamic = "force-dynamic";
 
@@ -22,9 +25,15 @@ export async function generateMetadata(): Promise<Metadata> {
 const STEP_ICONS = [ShoppingCartSimple, DownloadSimple, FolderOpen, Target];
 
 export default async function PresetsPage() {
-  const { products, pages, home, credentials } = await getSiteContent();
+  const [{ products, deliveryUrls, pages, home, credentials }, files] = await Promise.all([
+    getSiteContent(),
+    getProductFiles(),
+  ]);
   const items = products.filter((p) => p.type === "preset" || p.type === "template");
   const itemSlugs = new Set(items.map((p) => p.slug));
+  const bundleSlugs = items
+    .filter((p) => isBundleEligible(p) && productSale(p, files, deliveryUrls).kind === "site")
+    .map((p) => p.slug);
   const productTitle = (slug: string) => {
     const p = products.find((x) => x.slug === slug);
     return p ? `${p.title} · ${p.subtitle}` : slug;
@@ -80,7 +89,7 @@ export default async function PresetsPage() {
       </section>
 
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:py-16">
-      <PresetGrid items={items} />
+      <PresetGrid items={items} bundleSlugs={bundleSlugs} />
       </div>
 
       {reviews.length > 0 && (

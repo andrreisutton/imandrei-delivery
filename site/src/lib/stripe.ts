@@ -53,6 +53,27 @@ export async function createStripeCheckout(order: OrderRecord): Promise<string> 
   return session.url;
 }
 
+export async function createBundleStripeCheckout(orders: OrderRecord[]): Promise<string> {
+  const stripe = getStripe();
+  const session = await stripe.checkout.sessions.create({
+    mode: "payment",
+    customer_email: orders[0].email,
+    line_items: orders.map((order) => ({
+      price_data: {
+        currency: "usd",
+        unit_amount: Math.round(order.amount * 100),
+        product_data: { name: order.productTitle },
+      },
+      quantity: 1,
+    })),
+    metadata: { bundleOrderIds: orders.map((o) => o.id).join(",") },
+    success_url: `${siteUrl()}/order/bundle?tokens=${orders.map((o) => o.deliveryToken).join(",")}`,
+    cancel_url: `${siteUrl()}/store`,
+  });
+  if (!session.url) throw new Error("Stripe did not return a checkout URL");
+  return session.url;
+}
+
 export async function createBookingStripeCheckout(booking: BookingRecord): Promise<string> {
   const stripe = getStripe();
   const session = await stripe.checkout.sessions.create({
