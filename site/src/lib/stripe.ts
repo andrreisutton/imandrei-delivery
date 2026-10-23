@@ -3,8 +3,19 @@ import type { BookingCheckoutEvent, BookingRecord, OrderRecord } from "./types";
 import { siteUrl } from "./email";
 import { saveJSON } from "./store";
 
+// Standard (sk_) and restricted (rk_) keys both work.
 export function stripeEnabled(): boolean {
-  return !!process.env.STRIPE_SECRET_KEY?.startsWith("sk_");
+  return /^(sk|rk)_/.test(process.env.STRIPE_SECRET_KEY ?? "");
+}
+
+export function stripeLive(): boolean {
+  return /^(sk|rk)_live_/.test(process.env.STRIPE_SECRET_KEY ?? "");
+}
+
+// Previews may run on a test key; the live site only sells downloads on a live one.
+export function onSiteCheckoutReady(): boolean {
+  if (!stripeEnabled()) return process.env.VERCEL_ENV !== "production";
+  return stripeLive() || process.env.VERCEL_ENV !== "production";
 }
 
 export function getStripe(): Stripe {

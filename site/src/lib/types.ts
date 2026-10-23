@@ -95,7 +95,8 @@ export type OutboxEmail = {
     | "review-request"
     | "booking-confirmation"
     | "service-next-steps"
-    | "owner-notification";
+    | "owner-notification"
+    | "follow-up";
   refId?: string;
   channel: "resend" | "outbox";
   sentAt: string;

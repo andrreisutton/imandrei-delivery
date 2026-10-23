@@ -13,7 +13,8 @@ import { StripeMark, StripeSecured } from "@/components/stripe-mark";
 import { ProofCtaNote } from "@/components/proof";
 import { stripeEnabled } from "@/lib/stripe";
 import { averageRating, getReviewsForProduct } from "@/lib/reviews";
-import { isBuyable } from "@/lib/delivery";
+import { productSale } from "@/lib/delivery";
+import { getProductFiles } from "@/lib/product-files";
 
 export const dynamic = "force-dynamic";
 
@@ -32,12 +33,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ProductPage({ params }: Props) {
   const { slug } = await params;
-  const { products, deliveryUrls, pages } = await getSiteContent();
-  const payWithStripe = stripeEnabled();
+  const [{ products, deliveryUrls, pages }, files] = await Promise.all([
+    getSiteContent(),
+    getProductFiles(),
+  ]);
   const product = products.find((p) => p.slug === slug && p.type !== "service");
   if (!product) notFound();
-  const deliveredAsLink = !!deliveryUrls[product.slug];
-  const buyable = isBuyable(product, deliveryUrls);
+  const sale = productSale(product, files, deliveryUrls);
+  const payWithStripe = stripeEnabled() && sale.kind === "site";
+  const deliveredAsLink = sale.kind === "gumroad";
 
   const reviews = await getReviewsForProduct(product.slug).catch(() => []);
   const avg = averageRating(reviews);
@@ -135,7 +139,20 @@ export default async function ProductPage({ params }: Props) {
             {product.description}
           </p>
 
-          {!buyable ? (
+          {sale.kind === "gumroad" ? (
+            <>
+              <a
+                href={sale.url}
+                target="_blank"
+                rel="noopener"
+                className="btn btn-primary mt-8 w-full sm:w-auto sm:min-w-64"
+              >
+                {pages.product.buyLabel} on Gumroad
+                <ArrowSquareOut size={16} weight="bold" />
+              </a>
+              <ProofCtaNote className="mt-3" />
+            </>
+          ) : sale.kind === "none" ? (
             <div className="card card-pad-tight mt-8">
               <p className="font-semibold">Not for sale right now.</p>
               <p className="mt-1.5 text-[15px] text-muted">

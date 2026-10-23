@@ -5,6 +5,7 @@ import { CheckCircle, DownloadSimple, EnvelopeSimple } from "@phosphor-icons/rea
 import { getSiteContent } from "@/lib/content";
 import { getOrderIdByToken, getOrderState } from "@/lib/orders";
 import { PresetHandoff } from "@/components/preset-handoff";
+import { getProductFiles } from "@/lib/product-files";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Your order", robots: { index: false } };
@@ -16,14 +17,13 @@ export default async function OrderPage({ params }: { params: Promise<{ token: s
   const state = await getOrderState(orderId);
   if (!state) notFound();
 
-  const { products, deliveryUrls } = await getSiteContent();
+  const [{ products }, files] = await Promise.all([getSiteContent(), getProductFiles()]);
 
   const product = products.find((p) => p.slug === state.order.productSlug);
   const isService = product?.type === "service";
   const isPhotoVideo = product?.category === "photoVideo";
-  const presetLink = !isService
-    ? (state.order.deliveryUrl ?? deliveryUrls[state.order.productSlug])
-    : undefined;
+  const hasFile = !!(product && files[product.slug]);
+  const presetLink = !isService && !hasFile ? state.order.deliveryUrl : undefined;
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 lg:py-24">
@@ -61,7 +61,7 @@ export default async function OrderPage({ params }: { params: Promise<{ token: s
             </div>
           ) : presetLink ? (
             <PresetHandoff link={presetLink} />
-          ) : product ? (
+          ) : hasFile ? (
             <a href={`/api/download/${token}`} className="btn btn-primary mt-8" download>
               <DownloadSimple size={18} weight="bold" />
               Download your files

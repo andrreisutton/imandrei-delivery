@@ -35,11 +35,14 @@ export async function POST(request: Request): Promise<NextResponse> {
     const jsonResponse = await handleUpload({
       body,
       request,
-      onBeforeGenerateToken: async () => ({
+      onBeforeGenerateToken: async (pathname) => {
+        if (!pathname.startsWith("stems/")) throw new Error("Uploads go to stems/ only.");
+        return {
         allowedContentTypes: ALLOWED_CONTENT_TYPES,
         maximumSizeInBytes: MAX_BYTES,
         addRandomSuffix: true,
-      }),
+        };
+      },
       onUploadCompleted: async () => {},
     });
     return NextResponse.json(jsonResponse);

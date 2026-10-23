@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import { PencilSimple } from "@phosphor-icons/react/dist/ssr";
 import { isAdmin } from "@/lib/admin-auth";
 import { listJSON } from "@/lib/store";
 import { getSiteContent } from "@/lib/content";
-import { STUDIO_URL } from "@/lib/sanity";
+import { getProductFiles } from "@/lib/product-files";
+import { stripeLive } from "@/lib/stripe";
+import { fileLink } from "@/lib/email";
 import type {
   BookingRecord,
   OrderEvent,
@@ -17,8 +18,10 @@ import {
   adminDeleteReview,
   adminExpediteReviewEmails,
   adminLogout,
+  adminRemoveProductFile,
   adminRunEmailQueue,
 } from "./actions";
+import { ProductFileUpload } from "./product-file-upload";
 import { Stars } from "@/components/rating";
 
 export const dynamic = "force-dynamic";
@@ -102,10 +105,12 @@ export default async function AdminPage() {
     );
   }
 
-  const [{ orders, reviews, bookings, requests, outbox }, { products }] = await Promise.all([
+  const [{ orders, reviews, bookings, requests, outbox }, { products }, files] = await Promise.all([
     loadData(),
     getSiteContent(),
+    getProductFiles(),
   ]);
+  const downloads = products.filter((p) => p.type !== "service");
   const productTitle = (slug: string) => {
     const p = products.find((x) => x.slug === slug);
     return p ? `${p.title} · ${p.subtitle}` : slug;
@@ -116,15 +121,6 @@ export default async function AdminPage() {
       <div className="flex flex-wrap items-center justify-between gap-4">
         <h1 className="h-title text-6xl sm:text-8xl">Admin</h1>
         <div className="flex flex-wrap gap-2">
-          <a
-            href={STUDIO_URL}
-            target="_blank"
-            rel="noopener"
-            className="btn btn-primary !px-4 !py-2 text-sm"
-          >
-            <PencilSimple size={15} weight="bold" />
-            Edit the site
-          </a>
           <form action={adminRunEmailQueue}>
             <button className="btn btn-ghost !px-4 !py-2 text-sm">Send due review emails</button>
           </form>
@@ -151,6 +147,49 @@ export default async function AdminPage() {
           </div>
         ))}
       </div>
+
+      <section className="mt-10">
+        <h2 className="text-lg font-bold">Product files</h2>
+        <p className="mt-1 max-w-prose text-sm text-muted">
+          Upload the file a buyer gets for each product (zip a folder first). The moment a file is
+          here{stripeLive() ? "" : " and Stripe is on a live key"}, the product sells on the site and
+          the buyer downloads it straight after paying. Until then it sells on Gumroad, or shows as
+          not for sale.
+        </p>
+        <div className="mt-3 divide-y divide-line rounded-[8px] border border-line">
+          {downloads.map((p) => {
+            const f = files[p.slug];
+            return (
+              <div key={p.slug} className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 text-sm">
+                <div className="min-w-0">
+                  <p className="font-semibold">
+                    {p.title} · {p.subtitle}
+                  </p>
+                  {f ? (
+                    <p className="mt-0.5 break-all text-xs text-muted">
+                      <a href={`/api/admin/file?p=${encodeURIComponent(f.pathname)}`} className="hover:text-ink">
+                        {f.name}
+                      </a>{" "}
+                      · {(f.size / (1024 * 1024)).toFixed(1)} MB · {fmt(f.uploadedAt)}
+                    </p>
+                  ) : (
+                    <p className="mt-0.5 text-xs text-faint">No file yet</p>
+                  )}
+                </div>
+                <div className="flex items-start gap-2">
+                  <ProductFileUpload slug={p.slug} hasFile={!!f} />
+                  {f && (
+                    <form action={adminRemoveProductFile}>
+                      <input type="hidden" name="slug" value={p.slug} />
+                      <button className="btn btn-ghost !px-4 !py-2 text-sm">Remove</button>
+                    </form>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
 
       <section data-reveal className="mt-10">
         <h2 className="text-lg font-bold">Orders</h2>
@@ -281,7 +320,7 @@ export default async function AdminPage() {
                   {b.fileUrls && b.fileUrls.length > 0 && (
                     <p className="mt-1 flex flex-wrap gap-x-2 text-xs text-faint">
                       {b.fileUrls.map((u, i) => (
-                        <a key={u} href={u} target="_blank" rel="noreferrer" className="underline hover:text-ink">
+                        <a key={u} href={fileLink(u)} target="_blank" rel="noreferrer" className="underline hover:text-ink">
                           File {i + 1}
                         </a>
                       ))}
@@ -315,7 +354,7 @@ export default async function AdminPage() {
                   {r.fileUrls && r.fileUrls.length > 0 && (
                     <p className="mt-1 flex flex-wrap gap-x-2 text-xs text-faint">
                       {r.fileUrls.map((u, i) => (
-                        <a key={u} href={u} target="_blank" rel="noreferrer" className="underline hover:text-ink">
+                        <a key={u} href={fileLink(u)} target="_blank" rel="noreferrer" className="underline hover:text-ink">
                           File {i + 1}
                         </a>
                       ))}

@@ -54,7 +54,7 @@ export function StemsUpload({
         ]);
         try {
           const blob = await upload(`stems/${Date.now()}-${file.name}`, file, {
-            access: "public",
+            access: "private",
             handleUploadUrl: "/api/upload-stems",
             multipart: file.size > 8 * 1024 * 1024,
             onUploadProgress: ({ percentage }) => {
