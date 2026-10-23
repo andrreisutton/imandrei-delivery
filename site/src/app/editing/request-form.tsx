@@ -80,7 +80,7 @@ export function EditingRequestForm({ tiers }: { tiers: { id: string; title: stri
       <button type="submit" className="btn btn-primary" disabled={pending}>
         {pending ? "Sending…" : "Send request"}
       </button>
-      <ProofCtaNote className="justify-center" />
+      <ProofCtaNote className="justify-center" variant="editing" />
     </form>
   );
 }

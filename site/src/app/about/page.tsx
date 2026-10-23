@@ -4,7 +4,6 @@ import { getSiteContent } from "@/lib/content";
 import { TrustedByStrip } from "@/components/credentials";
 import { HeroWall } from "@/components/hero-wall";
 import { InstagramProfile } from "@/components/embeds";
-import { ProofCtaNote } from "@/components/proof";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { pages } = await getSiteContent();
@@ -50,7 +49,6 @@ export default async function AboutPage() {
             See mixing & mastering
           </Link>
         </div>
-        <ProofCtaNote className="mt-4" />
       </div>
 
       <div className="relative lg:min-h-0">

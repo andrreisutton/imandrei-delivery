@@ -132,7 +132,7 @@ export default async function MixingMasteringPage() {
           ))}
         </div>
         <p className="mt-6 text-sm text-muted">{pages.mixing.payNote}</p>
-        <ProofCtaNote className="mt-2" />
+        <ProofCtaNote className="mt-2" variant="mixing" />
       </section>
 
       <section data-reveal id="form" className="scroll-mt-20 border-t border-line">

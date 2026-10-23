@@ -77,7 +77,7 @@ export function ServiceRequestForm({ services }: { services: { slug: string; tit
       <button type="submit" className="btn btn-primary" disabled={pending || uploading}>
         {pending ? "Sending…" : uploading ? "Uploading files…" : "Send request"}
       </button>
-      <ProofCtaNote className="justify-center" />
+      <ProofCtaNote className="justify-center" variant="mixing" />
     </form>
   );
 }

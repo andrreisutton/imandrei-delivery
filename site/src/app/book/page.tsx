@@ -5,7 +5,6 @@ import { stripeEnabled } from "@/lib/stripe";
 import { Waveform } from "@/components/waveform";
 import { ApertureDisc } from "@/components/aperture-disc";
 import { HeroWall } from "@/components/hero-wall";
-import { ProofCtaNote } from "@/components/proof";
 import { BookingForm } from "./booking-form";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -69,7 +68,6 @@ export default async function BookPage() {
           <div className="max-w-2xl">
             <h1 className="h-title text-6xl sm:text-8xl">{pages.book.heading}</h1>
             <p className="mt-4 max-w-md text-lg leading-relaxed text-muted">{pages.book.intro}</p>
-            <ProofCtaNote className="mt-5" />
           </div>
         </div>
       </section>

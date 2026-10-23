@@ -6,7 +6,6 @@ import { HeroWall } from "@/components/hero-wall";
 import { TrustedByStrip } from "@/components/credentials";
 import { ProductCover } from "@/components/product-cover";
 import { ServiceLines, buildServiceLines } from "@/components/service-lines";
-import { ProofCtaNote } from "@/components/proof";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { pages } = await getSiteContent();
@@ -113,8 +112,6 @@ export default async function ServicesPage() {
               </li>
             ))}
           </ul>
-
-          <ProofCtaNote className="mt-5" />
         </div>
       </section>
       <section data-reveal className="grain-panel relative overflow-hidden border-t border-line">

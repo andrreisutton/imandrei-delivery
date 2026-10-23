@@ -9,10 +9,12 @@ export function CheckoutForm({
   productSlug,
   isDemo,
   price,
+  proofVariant = "visual",
 }: {
   productSlug: string;
   isDemo: boolean;
   price: number;
+  proofVariant?: "visual" | "mixing";
 }) {
   const [state, action, pending] = useActionState<ActionState, FormData>(startCheckout, {});
 
@@ -90,7 +92,7 @@ export function CheckoutForm({
         {!isDemo && <StripeMark size={15} />}
         {pending ? "Processing…" : `Pay $${price}`}
       </button>
-      <ProofCtaNote className="justify-center" />
+      <ProofCtaNote className="justify-center" variant={proofVariant} />
     </form>
   );
 }

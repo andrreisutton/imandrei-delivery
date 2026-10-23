@@ -154,7 +154,7 @@ export default async function EditingPage() {
             ))}
           </div>
           <p className="mt-6 text-sm text-muted">{pages.editing.payNote}</p>
-          <ProofCtaNote className="mt-2" />
+          <ProofCtaNote className="mt-2" variant="editing" />
         </div>
       </section>
 

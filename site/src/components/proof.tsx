@@ -132,7 +132,19 @@ export function ProofSection() {
   );
 }
 
-export function ProofCtaNote({ className = "" }: { className?: string }) {
+export function ProofCtaNote({
+  className = "",
+  variant = "visual",
+}: {
+  className?: string;
+  variant?: "visual" | "mixing" | "editing";
+}) {
+  const tail =
+    variant === "mixing"
+      ? "gets mixed and mastered by the same ear"
+      : variant === "editing"
+        ? "is cut and graded with these tools"
+        : "is shot with these tools";
   return (
     <p className={`flex items-center gap-2 text-xs text-faint ${className}`}>
       <SocialIcon label="YouTube" size={13} />
@@ -140,7 +152,7 @@ export function ProofCtaNote({ className = "" }: { className?: string }) {
         <ChannelLink className="font-semibold text-muted underline-offset-4 transition-colors hover:text-ink hover:underline">
           {copy.ctaNoteLink}
         </ChannelLink>{" "}
-        is shot with these tools
+        {tail}
       </span>
     </p>
   );

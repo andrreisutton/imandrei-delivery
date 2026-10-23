@@ -21,6 +21,7 @@ export default async function CheckoutPage({ params }: { params: Promise<{ slug:
 
   const isDemo = !stripeEnabled();
   const isPhotoVideo = product.category === "photoVideo";
+  const proofVariant = product.type === "service" && !isPhotoVideo ? "mixing" : "visual";
   const backHref =
     product.type === "service"
       ? isPhotoVideo
@@ -65,7 +66,12 @@ export default async function CheckoutPage({ params }: { params: Promise<{ slug:
               </>
             )}
           </p>
-          <CheckoutForm productSlug={product.slug} isDemo={isDemo} price={product.price} />
+          <CheckoutForm
+            productSlug={product.slug}
+            isDemo={isDemo}
+            price={product.price}
+            proofVariant={proofVariant}
+          />
         </div>
       </div>
     </div>

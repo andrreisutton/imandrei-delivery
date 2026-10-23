@@ -7,7 +7,6 @@ import { StripeMark, StripeSecured } from "@/components/stripe-mark";
 import { CheckCircle } from "@phosphor-icons/react";
 import { Select } from "@/components/select";
 import { ApertureDisc } from "@/components/aperture-disc";
-import { ProofCtaNote } from "@/components/proof";
 import { StemsUpload } from "@/components/stems-upload";
 
 const START_TIMES = [
@@ -222,7 +221,6 @@ export function BookingForm({
           No payment now. You pay at the session.
         </p>
       )}
-      <ProofCtaNote className="-mt-2 justify-center" />
     </form>
   );
 }
