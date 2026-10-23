@@ -7,6 +7,10 @@ import { blobPathname } from "./blob";
 
 type Brand = { name: string; shortName: string };
 
+export function emailEnabled(): boolean {
+  return !!process.env.RESEND_API_KEY;
+}
+
 export function siteUrl(): string {
   return (
     process.env.SITE_URL ||

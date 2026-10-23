@@ -6,6 +6,8 @@ import { getSiteContent } from "@/lib/content";
 import { getOrderIdByToken, getOrderState } from "@/lib/orders";
 import { PresetHandoff } from "@/components/preset-handoff";
 import { getProductFiles } from "@/lib/product-files";
+import { emailEnabled } from "@/lib/email";
+import { instagramHref } from "@/content/site";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Your order", robots: { index: false } };
@@ -23,6 +25,8 @@ export default async function OrderPage({ params }: { params: Promise<{ token: s
   const isService = product?.type === "service";
   const isPhotoVideo = product?.category === "photoVideo";
   const hasFile = !!(product && files[product.slug]);
+  const mail = emailEnabled();
+  const replyTo = mail ? "Reply to your receipt email" : "DM me on Instagram";
   const presetLink = !isService && !hasFile ? state.order.deliveryUrl : undefined;
 
   return (
@@ -45,16 +49,16 @@ export default async function OrderPage({ params }: { params: Promise<{ token: s
                 <>
                   <h2 className="font-bold">Next step: confirm the details</h2>
                   <p className="mt-2 text-[15px] leading-relaxed text-muted">
-                    Reply to your receipt email with the date, the location, and anything else I
-                    should know. I&apos;ll follow up to lock everything in.
+                    {replyTo} with the date, the location, and anything else I should know.
+                    I&apos;ll follow up to lock everything in.
                   </p>
                 </>
               ) : (
                 <>
                   <h2 className="font-bold">Next step: send your stems</h2>
                   <p className="mt-2 text-[15px] leading-relaxed text-muted">
-                    Reply to your receipt email with your stems (WAV, 24-bit if you have them) and a
-                    reference track. Your slot starts the moment the files land.
+                    {replyTo} with your stems (WAV, 24-bit if you have them) and a reference track.
+                    Your slot starts the moment the files land.
                   </p>
                 </>
               )}
@@ -70,20 +74,31 @@ export default async function OrderPage({ params }: { params: Promise<{ token: s
             <div className="card card-pad mt-8">
               <h2 className="font-bold">Your order is being sent by hand</h2>
               <p className="mt-2 text-[15px] leading-relaxed text-muted">
-                Reply to your receipt email and it goes out right away. Your payment is confirmed
-                and this page keeps working.
+                {replyTo} and it goes out right away. Your payment is confirmed and this page
+                keeps working.
               </p>
             </div>
           )}
 
           <div className="card card-pad-tight mt-8 flex items-start gap-3 text-sm text-muted">
             <EnvelopeSimple size={20} className="mt-0.5 shrink-0 text-accent-bright" />
-            <p>
-              A receipt {isService ? "with next steps " : presetLink ? "with this link " : "with this download link "}
-              was emailed to <strong className="text-ink">{state.order.email}</strong>.
-              {!isService &&
-                " A few hours from now you'll get one more email with a link to review your purchase."}
-            </p>
+            {mail ? (
+              <p>
+                A receipt {isService ? "with next steps " : presetLink ? "with this link " : "with this download link "}
+                was emailed to <strong className="text-ink">{state.order.email}</strong>.
+                {!isService &&
+                  " A few hours from now you'll get one more email with a link to review your purchase."}
+              </p>
+            ) : (
+              <p>
+                Bookmark this page: it&apos;s your receipt{isService ? "" : " and your download link"}.
+                Questions?{" "}
+                <a href={instagramHref} target="_blank" rel="noopener" className="text-ink underline underline-offset-2">
+                  DM me on Instagram
+                </a>
+                .
+              </p>
+            )}
           </div>
 
           <Link href="/store" className="mt-10 inline-block text-sm font-semibold text-muted transition-colors hover:text-ink">

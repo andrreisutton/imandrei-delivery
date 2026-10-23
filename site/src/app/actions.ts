@@ -9,6 +9,7 @@ import {
   createBookingStripeCheckout,
   createRetainerStripeCheckout,
   createStripeCheckout,
+  demoCheckoutAllowed,
   stripeEnabled,
 } from "@/lib/stripe";
 import {
@@ -91,7 +92,7 @@ export async function startCheckout(prev: ActionState, formData: FormData): Prom
     }
   } else {
     // Without Stripe there is no payment, so the live site never hands files out this way.
-    if (process.env.VERCEL_ENV === "production") {
+    if (!demoCheckoutAllowed()) {
       return { error: "Payments are down for a minute. Try again shortly." };
     }
     const order = await createOrder({ productSlug, email, name, mode: "demo" });

@@ -12,9 +12,15 @@ export function stripeLive(): boolean {
   return /^(sk|rk)_live_/.test(process.env.STRIPE_SECRET_KEY ?? "");
 }
 
+// The free demo checkout only exists on a developer's machine, never on any
+// Vercel deployment, so real files are never handed out without a payment.
+export function demoCheckoutAllowed(): boolean {
+  return !process.env.VERCEL;
+}
+
 // Previews may run on a test key; the live site only sells downloads on a live one.
 export function onSiteCheckoutReady(): boolean {
-  if (!stripeEnabled()) return process.env.VERCEL_ENV !== "production";
+  if (!stripeEnabled()) return demoCheckoutAllowed();
   return stripeLive() || process.env.VERCEL_ENV !== "production";
 }
 

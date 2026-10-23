@@ -7,6 +7,7 @@ import { Price } from "@/components/price";
 import { StripeMark } from "@/components/stripe-mark";
 import { ProductCover } from "@/components/product-cover";
 import { stripeEnabled } from "@/lib/stripe";
+import { emailEnabled } from "@/lib/email";
 import { productSale } from "@/lib/delivery";
 import { getProductFiles } from "@/lib/product-files";
 import { CheckoutForm } from "./checkout-form";
@@ -50,9 +51,11 @@ export default async function CheckoutPage({ params }: { params: Promise<{ slug:
           <div className="mt-5 border-t border-line pt-4 text-sm text-muted">
             {product.type === "service"
               ? isPhotoVideo
-                ? "After payment you'll get an email confirming the date, location, and next steps."
-                : "After payment you'll get an email with exactly how to send your stems."
-              : "Your download is on the next screen the moment payment clears, and the link is emailed to you."}
+                ? "After payment the next screen tells you how to lock in the date and location."
+                : "After payment the next screen tells you exactly how to send your stems."
+              : emailEnabled()
+                ? "Your download is on the next screen the moment payment clears, and the link is emailed to you."
+                : "Your download is on the next screen the moment payment clears."}
           </div>
         </aside>
 
