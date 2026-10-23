@@ -24,7 +24,7 @@ const ADD_ONS = [
   { label: "Extra edited photos", price: "+$75 per 10" },
   { label: "Additional reel", price: "+$75 each" },
   { label: "Extra hour on site", price: "+$100/hr" },
-  { label: "Rush delivery (48 hr)", price: "+25%" },
+  { label: "Rush delivery (cuts the wait by several days)", price: "+25%" },
   { label: "Additional location (same day)", price: "+$125" },
   { label: "Extended video edit (add 1 to 2 min)", price: "+$150" },
   { label: "Additional subject / artist", price: "+$75" },
@@ -55,7 +55,9 @@ function TierCard({
           {s.badge}
         </span>
       )}
-      <ProductCover product={s} />
+      <Link href={`/photo-video/${s.slug}`} aria-label={`See the full breakdown for ${s.title}`}>
+        <ProductCover product={s} />
+      </Link>
       <div className="flex flex-1 flex-col px-5 pb-5 pt-4 sm:px-6 sm:pb-6">
         {isQuote ? (
           <p className="text-lg font-semibold text-ink">Request a quote</p>
@@ -74,6 +76,12 @@ function TierCard({
             </li>
           ))}
         </ul>
+        <Link
+          href={`/photo-video/${s.slug}`}
+          className="mt-4 inline-flex w-fit items-center text-[11px] font-bold uppercase tracking-[0.14em] text-faint transition-colors hover:text-ink"
+        >
+          Full details
+        </Link>
         <div className="mt-auto pt-7">
           {isQuote ? (
             <a href="#form" className="btn btn-ghost w-full">

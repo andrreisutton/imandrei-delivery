@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { draftMode } from "next/headers";
 import { VisualEditing } from "next-sanity/visual-editing";
 import { ViewTransitions } from "next-view-transitions";
-import { Big_Shoulders } from "next/font/google";
+import { Big_Shoulders, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
@@ -22,6 +22,13 @@ const display = Big_Shoulders({
   weight: ["400", "700"],
   adjustFontFallback: false,
   fallback: ["Arial Narrow", "sans-serif"],
+});
+
+const body = Plus_Jakarta_Sans({
+  variable: "--font-body",
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  fallback: ["-apple-system", "BlinkMacSystemFont", "Helvetica Neue", "Arial", "sans-serif"],
 });
 
 export const viewport: Viewport = {
@@ -98,7 +105,7 @@ export default async function RootLayout({
     <ViewTransitions>
     <html
       lang="en"
-      className={`${display.variable} h-full antialiased`}
+      className={`${display.variable} ${body.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <script
