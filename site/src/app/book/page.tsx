@@ -20,7 +20,7 @@ export async function generateMetadata(): Promise<Metadata> {
       url: "/book",
       images: [
         {
-          url: "/og-book.png",
+          url: "/og-book.png?v=20261023",
           width: 1200,
           height: 630,
           alt: `${brand.name}. Book time with Andrei: attended mix sessions and color or edit sessions, paid by card.`,
@@ -31,7 +31,7 @@ export async function generateMetadata(): Promise<Metadata> {
       card: "summary_large_image",
       title: shareTitle,
       description: pages.book.intro,
-      images: ["/og-book.png"],
+      images: ["/og-book.png?v=20261023"],
     },
   };
 }

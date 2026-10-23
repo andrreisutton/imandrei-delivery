@@ -1,23 +1,30 @@
 import type { Metadata } from "next";
 import { Link } from "next-view-transitions";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { LockSimple } from "@phosphor-icons/react/dist/ssr";
 import { getSiteContent } from "@/lib/content";
 import { Price } from "@/components/price";
 import { StripeMark } from "@/components/stripe-mark";
 import { ProductCover } from "@/components/product-cover";
 import { stripeEnabled } from "@/lib/stripe";
-import { isBuyable } from "@/lib/delivery";
+import { emailEnabled } from "@/lib/email";
+import { productSale } from "@/lib/delivery";
+import { getProductFiles } from "@/lib/product-files";
 import { CheckoutForm } from "./checkout-form";
 
 export const metadata: Metadata = { title: "Checkout", robots: { index: false } };
 
 export default async function CheckoutPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const { products, deliveryUrls, checkoutCopy } = await getSiteContent();
+  const [{ products, deliveryUrls, checkoutCopy }, files] = await Promise.all([
+    getSiteContent(),
+    getProductFiles(),
+  ]);
   const product = products.find((p) => p.slug === slug);
-  if (!product || !isBuyable(product, deliveryUrls)) notFound();
-  const deliveredAsLink = !!deliveryUrls[product.slug];
+  if (!product) notFound();
+  const sale = productSale(product, files, deliveryUrls);
+  if (sale.kind === "gumroad") redirect(sale.url);
+  if (sale.kind !== "site") notFound();
 
   const isDemo = !stripeEnabled();
   const isPhotoVideo = product.category === "photoVideo";
@@ -45,11 +52,11 @@ export default async function CheckoutPage({ params }: { params: Promise<{ slug:
           <div className="mt-5 border-t border-line pt-4 text-sm text-muted">
             {product.type === "service"
               ? isPhotoVideo
-                ? "After payment you'll get an email confirming the date, location, and next steps."
-                : "After payment you'll get an email with exactly how to send your stems."
-              : deliveredAsLink
-                ? "Your download link arrives by email the moment payment clears, and it's on the next screen."
-                : "Your download link arrives by email the moment payment clears."}
+                ? "After payment the next screen tells you how to lock in the date and location."
+                : "After payment the next screen tells you exactly how to send your stems."
+              : emailEnabled()
+                ? "Your download is on the next screen the moment payment clears, and the link is emailed to you."
+                : "Your download is on the next screen the moment payment clears."}
           </div>
         </aside>
 

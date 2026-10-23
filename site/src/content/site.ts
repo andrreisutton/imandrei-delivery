@@ -1137,6 +1137,8 @@ export type Product = {
   compareAtPrice?: number;
   badge?: string;
   coverHue: number;
+  // Set from a thumbnail uploaded in /admin; replaces the drawn cover.
+  coverImage?: string;
   image?: string;
   showGradeCompare?: boolean;
   gradeBefore?: string;
@@ -1170,7 +1172,7 @@ export const products: Product[] = [
       "Node-based control over every stage of the grade",
       "Built-in film grain, already dialed",
       "Full video walkthrough plus install guide",
-      "Download link emailed the moment payment clears",
+      "Instant download the moment payment clears",
     ],
     price: 89,
     badge: "Flagship",
@@ -1189,7 +1191,7 @@ export const products: Product[] = [
       "My go-to Lightroom presets",
       "Works in Lightroom and Lightroom Classic",
       "Every slider stays editable",
-      "Download link emailed the moment payment clears",
+      "Instant download the moment payment clears",
     ],
     price: 39,
     coverHue: 264,
@@ -1208,7 +1210,7 @@ export const products: Product[] = [
       "Complete project file, ready to open",
       "Folder structure for footage, audio, graphics, and exports",
       "Reusable on every project you start",
-      "Download link emailed the moment payment clears",
+      "Instant download the moment payment clears",
     ],
     price: 29,
     coverHue: 320,
@@ -1225,7 +1227,7 @@ export const products: Product[] = [
       "Drag and drop into your edit",
       "Text and timing fully customizable",
       "Made for vertical and widescreen",
-      "Download link emailed the moment payment clears",
+      "Instant download the moment payment clears",
     ],
     price: 34,
     coverHue: 240,
@@ -1243,7 +1245,7 @@ export const products: Product[] = [
       "Tuning, compression, EQ, and reverb already set",
       "Labeled so you learn what each stage does",
       "Setup walkthrough for your first session",
-      "Download link emailed the moment payment clears",
+      "Instant download the moment payment clears",
     ],
     price: 29,
     badge: "Beginner",
@@ -1265,7 +1267,7 @@ export const products: Product[] = [
       "Throwback, telephone, and wide send effects",
       "Parallel compression and de-essing already set",
       "Notes on what to move first on a difficult take",
-      "Download link emailed the moment payment clears",
+      "Instant download the moment payment clears",
     ],
     price: 79,
     badge: "Advanced",
@@ -1288,7 +1290,7 @@ export const products: Product[] = [
       "The Go-To Lightroom presets for press photos",
       "The Premiere project and social animation templates",
       "The Starter vocal chain for FL Studio",
-      "Download link emailed the moment payment clears",
+      "Instant download the moment payment clears",
     ],
     price: 149,
     badge: "Best value",
@@ -1676,7 +1678,7 @@ export const pages = {
   product: {
     buyLabel: "Buy now",
     instantLine: "Instant delivery",
-    emailLine: "Link emailed to you",
+    emailLine: "Download right after you pay",
     insideHeading: "What's inside",
     compareHeading: "Drag to see the grade",
     compareBefore: "Log",

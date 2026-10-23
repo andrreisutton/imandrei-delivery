@@ -3,6 +3,8 @@ import { Link } from "next-view-transitions";
 import { notFound } from "next/navigation";
 import { CheckCircle } from "@phosphor-icons/react/dist/ssr";
 import { getBooking, reconcileBookingPayment } from "@/lib/bookings";
+import { emailEnabled } from "@/lib/email";
+import { instagramHref } from "@/content/site";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Session booked", robots: { index: false } };
@@ -19,6 +21,7 @@ export default async function BookingConfirmedPage({
   if (!booking) notFound();
   const sessionIdHint = typeof sp.session_id === "string" ? sp.session_id : undefined;
   const paid = await reconcileBookingPayment(id, sessionIdHint);
+  const mail = emailEnabled();
   const payAtSession = booking.paymentMode !== "stripe";
 
   const rows: [string, string][] = [
@@ -85,15 +88,27 @@ export default async function BookingConfirmedPage({
       <p className="mt-4 text-lg leading-relaxed text-muted">
         Thanks {booking.name.split(" ")[0]}.{" "}
         {paid
-          ? "Payment went through and your studio time is booked. Your receipt and confirmation are in your inbox."
-          : "Your session request is in. You pay at the session, and your confirmation is in your inbox."}
+          ? `Payment went through and your studio time is booked.${mail ? " Your receipt and confirmation are in your inbox." : ""}`
+          : `Your session request is in. You pay at the session${mail ? ", and your confirmation is in your inbox." : "."}`}
       </p>
 
       {summary}
 
       <p className="mt-6 text-[15px] leading-relaxed text-muted">
-        I confirm the exact start time by email within 24 hours. Need to change anything? Just
-        reply to the confirmation email.
+        {mail ? (
+          <>
+            I confirm the exact start time by email within 24 hours. Need to change anything? Just
+            reply to the confirmation email.
+          </>
+        ) : (
+          <>
+            I confirm the exact start time within 24 hours. Need to change anything?{" "}
+            <a href={instagramHref} target="_blank" rel="noopener" className="text-ink underline underline-offset-2">
+              DM me on Instagram
+            </a>
+            .
+          </>
+        )}
       </p>
 
       <div className="mt-8 flex flex-wrap gap-3">

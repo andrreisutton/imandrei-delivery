@@ -1,4 +1,5 @@
 import { cache } from "react";
+import { getCoverImages } from "./product-files";
 import { draftMode } from "next/headers";
 import { stegaClean } from "@sanity/client/stega";
 import {
@@ -732,6 +733,18 @@ function mapDocs(docs: RawDocs): Record<string, unknown> {
 }
 
 export const getSiteContent = cache(async (): Promise<SiteContent> => {
+  const content = await loadContent();
+  const covers = await getCoverImages();
+  if (Object.keys(covers).length === 0) return content;
+  return {
+    ...content,
+    products: content.products.map((p) =>
+      covers[p.slug] ? { ...p, coverImage: `/api/cover/${p.slug}?v=${covers[p.slug].v}` } : p
+    ),
+  };
+});
+
+async function loadContent(): Promise<SiteContent> {
   if (!sanityEnabled()) return sanitizeContent({});
   try {
     const draft = await draftMode()
@@ -751,4 +764,4 @@ export const getSiteContent = cache(async (): Promise<SiteContent> => {
     console.error("Sanity fetch failed; serving defaults:", e);
     return sanitizeContent({});
   }
-});
+}

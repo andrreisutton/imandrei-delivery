@@ -5,7 +5,29 @@ import { Price } from "./price";
 export function ProductCover({ product }: { product: Product }) {
   return (
     <div data-sleeve className="sleeve-stage relative aspect-square overflow-hidden">
-      <GeneratedCover product={product} />
+      {product.coverImage ? (
+        <>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={product.coverImage}
+            alt=""
+            className="absolute inset-0 size-full object-cover"
+            draggable={false}
+            loading="lazy"
+            decoding="async"
+          />
+          <h3 className="sr-only">{product.title}</h3>
+          <div className="absolute bottom-3 left-3 z-[2] rounded-[6px] bg-bg/80 px-2.5 py-1 backdrop-blur-sm">
+            {product.priceLabel === "quote" ? (
+              <span className="text-sm font-semibold text-ink">Quote</span>
+            ) : (
+              <Price price={product.price} compareAtPrice={product.compareAtPrice} />
+            )}
+          </div>
+        </>
+      ) : (
+        <GeneratedCover product={product} />
+      )}
     </div>
   );
 }

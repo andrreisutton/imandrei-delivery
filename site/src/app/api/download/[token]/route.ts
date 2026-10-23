@@ -1,7 +1,9 @@
-import { list } from "@vercel/blob";
 import { getOrderIdByToken, getOrderState } from "@/lib/orders";
-import { placeholderZips } from "@/lib/downloads-data";
 import { getSiteContent } from "@/lib/content";
+import { getProductFiles } from "@/lib/product-files";
+import { signedDownloadUrl } from "@/lib/blob";
+
+export const dynamic = "force-dynamic";
 
 export async function GET(_req: Request, { params }: { params: Promise<{ token: string }> }) {
   const { token } = await params;
@@ -10,34 +12,21 @@ export async function GET(_req: Request, { params }: { params: Promise<{ token: 
   const state = await getOrderState(orderId);
   if (!state || !state.paid) return new Response("Not found", { status: 404 });
 
-  const orderLink = state.order.deliveryUrl;
-  if (orderLink) return Response.redirect(orderLink, 302);
-
-  const { products, deliveryUrls } = await getSiteContent();
+  const { products } = await getSiteContent();
   const product = products.find((p) => p.slug === state.order.productSlug);
   if (!product || product.type === "service") return new Response("Not found", { status: 404 });
 
-  const catalogLink = deliveryUrls[product.slug];
-  if (catalogLink) return Response.redirect(catalogLink, 302);
-
-  if (process.env.BLOB_READ_WRITE_TOKEN) {
+  const file = (await getProductFiles())[product.slug];
+  if (file) {
     try {
-      const { blobs } = await list({ prefix: `downloads/${product.slug}.zip`, limit: 1 });
-      const real = blobs.find((b) => b.pathname === `downloads/${product.slug}.zip`);
-      if (real) return Response.redirect(real.url, 302);
-    } catch {
+      return Response.redirect(await signedDownloadUrl(file.pathname), 302);
+    } catch (e) {
+      console.error("could not sign download", orderId, e);
+      return new Response("Download is unavailable for a minute. Try again shortly.", { status: 503 });
     }
   }
 
-  const b64 = placeholderZips[product.slug];
-  if (!b64) return new Response("File not available", { status: 404 });
-  const bytes = Buffer.from(b64, "base64");
-  return new Response(new Uint8Array(bytes), {
-    headers: {
-      "Content-Type": "application/zip",
-      "Content-Disposition": `attachment; filename="${product.slug}.zip"`,
-      "Content-Length": String(bytes.length),
-      "Cache-Control": "no-store",
-    },
-  });
+  if (state.order.deliveryUrl) return Response.redirect(state.order.deliveryUrl, 302);
+
+  return new Response("Your file is on its way by email.", { status: 404 });
 }

@@ -1,9 +1,15 @@
 import { newId } from "./id";
 import { saveJSON } from "./store";
 import type { OrderRecord, BookingRecord, ServiceRequestRecord, OutboxEmail } from "./types";
+import type { Product } from "@/content/site";
 import { getSiteContent } from "./content";
+import { blobPathname } from "./blob";
 
 type Brand = { name: string; shortName: string };
+
+export function emailEnabled(): boolean {
+  return !!process.env.RESEND_API_KEY;
+}
 
 export function siteUrl(): string {
   return (
@@ -21,9 +27,15 @@ export function esc(s: string): string {
   );
 }
 
+// Uploaded files live in a private store; this link signs them in through /admin.
+export function fileLink(url: string): string {
+  const pathname = blobPathname(url);
+  return pathname ? `${siteUrl()}/api/admin/file?p=${encodeURIComponent(pathname)}` : url;
+}
+
 export function filesHtml(urls?: string[]): string {
   if (!urls || urls.length === 0) return "";
-  const items = urls.map((u, i) => `<a href="${esc(u)}" style="color:#f5f4f2;">File ${i + 1}</a>`).join(", ");
+  const items = urls.map((u, i) => `<a href="${esc(fileLink(u))}" style="color:#f5f4f2;">File ${i + 1}</a>`).join(", ");
   return `<br/><br/>Files: ${items}`;
 }
 
@@ -146,6 +158,32 @@ export async function renderReviewRequest(order: OrderRecord): Promise<{ subject
       p(`Hey ${esc(order.name.split(" ")[0])}, you grabbed <strong style="color:${C.ink}">${esc(order.productTitle)}</strong> earlier today. If you've had a chance to run a vocal through it, a quick review helps other artists know what they're getting.`) +
         p(`It takes about 30 seconds. Your review goes live on the product page.`) +
         button("Leave a review", reviewUrl),
+      brand
+    ),
+  };
+}
+
+export async function renderFollowUp(
+  order: OrderRecord,
+  picks: Product[]
+): Promise<{ subject: string; html: string }> {
+  const { brand } = await getSiteContent();
+  const rows = picks
+    .map(
+      (p) => `<tr>
+      <td style="padding:12px 0;border-top:1px solid ${C.line};"><a href="${siteUrl()}/store/${p.slug}" style="color:${C.ink};font-size:15px;text-decoration:none;font-weight:700;">${esc(p.title)}</a><br><span style="color:${C.muted};font-size:13px;">${esc(p.subtitle)}</span></td>
+      <td align="right" style="padding:12px 0;border-top:1px solid ${C.line};color:${C.ink};font-size:15px;font-weight:700;">$${p.price}</td>
+    </tr>`
+    )
+    .join("");
+  return {
+    subject: `What to grab after ${order.productTitle.split(" · ")[0]}`,
+    html: shell(
+      "Got more where that came from.",
+      p(`Hey ${esc(order.name.split(" ")[0])}, hope <strong style="color:${C.ink}">${esc(order.productTitle.split(" · ")[0])}</strong> is already on your work. These are the ones people pick up next:`) +
+        (rows ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:8px 0 6px 0;">${rows}</table>` : "") +
+        button("See the store", `${siteUrl()}/store`) +
+        p(`Need a mix, a master or a shoot instead? Just reply to this email.`),
       brand
     ),
   };

@@ -1,0 +1,64 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders:wght@700;800&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#000}
+  /* 1200x630, the share card. ?v=book renders the /book variant. */
+  #card{position:relative;width:1200px;height:630px;overflow:hidden;
+        background:#0a0a0a;font-family:'Plus Jakarta Sans',system-ui}
+  .wall{position:absolute;inset:0 0 0 50%;display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+  .col{display:flex;flex-direction:column;gap:6px}
+  .col:nth-child(odd){margin-top:-60px}
+  .col:nth-child(even){margin-top:-170px}
+  .col img{width:100%;aspect-ratio:2/3;object-fit:cover;display:block;flex:none}
+  .scrim{position:absolute;inset:0;
+    background:
+      linear-gradient(to right, #0a0a0a 0%, #0a0a0a 48%, rgba(10,10,10,.62) 53%, rgba(10,10,10,.14) 66%, rgba(10,10,10,.06) 100%),
+      linear-gradient(to top, rgba(10,10,10,.8) 2%, rgba(10,10,10,0) 28%)}
+  .seam{position:absolute;left:50%;top:0;bottom:0;width:2px;
+    background:linear-gradient(to bottom,transparent,oklch(0.64 0.19 250) 25%,oklch(0.60 0.21 285) 50%,oklch(0.65 0.20 322) 75%,transparent)}
+  .inner{position:absolute;inset:0 auto 0 0;width:54%;padding:56px 26px 56px 58px;display:flex;flex-direction:column;justify-content:space-between}
+  .logo{height:54px;width:auto;align-self:flex-start;object-fit:contain}
+  h1{font-family:'Big Shoulders';font-weight:800;text-transform:uppercase;
+     font-size:88px;line-height:.88;letter-spacing:.005em;
+     background-image:linear-gradient(135deg,oklch(0.64 0.19 250) 0%,oklch(0.60 0.21 285) 48%,oklch(0.65 0.20 322) 100%);
+     -webkit-background-clip:text;background-clip:text;color:transparent}
+  .sub{margin-top:18px;font-size:22px;line-height:1.4;color:rgba(255,255,255,.78);max-width:500px}
+  .names{display:flex;align-items:center;gap:11px;flex-wrap:nowrap;white-space:nowrap}
+  .names b{font-family:'Big Shoulders';font-weight:700;font-size:21px;letter-spacing:.03em;color:#fff;text-transform:uppercase}
+  .names i{width:1px;height:16px;background:rgba(255,255,255,.28);display:block}
+  .kicker{font-size:15px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+          color:rgba(255,255,255,.66);margin-bottom:14px;display:flex;align-items:center;gap:14px}
+  .kicker::before{content:"";width:34px;height:2px;display:block;
+    background:linear-gradient(90deg,oklch(0.64 0.19 250),oklch(0.65 0.20 322))}
+  .book .home-only,.home .book-only{display:none}
+</style></head><body>
+<div id="card" class="home">
+  <div class="wall">
+    <div class="col"><img src="/wall/flics-01.jpg"><img src="/wall/flics-04.jpg"><img src="/wall/flics-07.jpg"></div>
+    <div class="col"><img src="/wall/flics-02.jpg"><img src="/wall/flics-05.jpg"><img src="/wall/flics-08.jpg"></div>
+    <div class="col"><img src="/wall/flics-03.jpg"><img src="/wall/flics-06.jpg"><img src="/wall/flics-09.jpg"></div>
+  </div>
+  <div class="scrim"></div>
+  <div class="seam"></div>
+  <div class="inner">
+    <img class="logo" src="/brand/andrei-logo-white.png">
+    <div>
+      <h1 class="home-only">Cinema color.<br>Radio vocals.</h1>
+      <div class="book-only">
+        <h1>Book the room.</h1>
+        <p class="sub">Attended mix sessions and one on one color and edit sessions with Andrei Sutton.</p>
+      </div>
+    </div>
+    <div>
+      <div class="kicker home-only">Trusted by the teams of</div>
+      <div class="names home-only">
+        <b>ian</b><i></i><b>Lil Skies</b><i></i><b>BabyTron</b><i></i><b>The Kid LAROI</b><i></i><b>Will Swinton</b>
+      </div>
+      <div class="kicker book-only">Sessions · Mixing · Mastering</div>
+    </div>
+  </div>
+</div>
+<script>if(location.search.includes('v=book'))document.getElementById('card').className='book'</script>
+</body></html>

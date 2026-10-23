@@ -9,6 +9,7 @@ import {
   createBookingStripeCheckout,
   createRetainerStripeCheckout,
   createStripeCheckout,
+  demoCheckoutAllowed,
   stripeEnabled,
 } from "@/lib/stripe";
 import {
@@ -20,7 +21,8 @@ import {
   sendEmail,
 } from "@/lib/email";
 import { getSiteContent } from "@/lib/content";
-import { isDeliverable } from "@/lib/delivery";
+import { productSale } from "@/lib/delivery";
+import { getProductFiles } from "@/lib/product-files";
 import type { BookingRecord, ServiceRequestRecord } from "@/lib/types";
 
 export type ActionState = { error?: string; ok?: boolean };
@@ -63,16 +65,16 @@ export async function startCheckout(prev: ActionState, formData: FormData): Prom
   const email = str(formData, "email", 200);
   const name = str(formData, "name", 120);
 
-  const { products, deliveryUrls } = await getSiteContent();
+  const [{ products, deliveryUrls }, files] = await Promise.all([getSiteContent(), getProductFiles()]);
   const product = products.find((p) => p.slug === productSlug);
   if (!product) return { error: "That product no longer exists." };
   if (product.soldOut) return { error: "That one is off sale right now. Try another." };
   if (!(product.price > 0)) return { error: "That one has no price set yet. Try another." };
-  if (!isDeliverable(product, deliveryUrls)) {
+  if (productSale(product, files, deliveryUrls).kind !== "site") {
     await notifyOwner(
       "product that cannot be delivered",
       product.title,
-      `<p style="color:#b7b4ae;font-size:15px;">Someone tried to buy <strong style="color:#f5f4f2">${esc(product.title)}</strong> but it has no preset link set, so the sale was refused. Add the link in the Studio under Products &amp; Services, Delivery.</p>`
+      `<p style="color:#b7b4ae;font-size:15px;">Someone tried to buy <strong style="color:#f5f4f2">${esc(product.title)}</strong> on the site, but it has no file uploaded (or Stripe is not on a live key), so the sale was refused. Upload the file in /admin under Product files.</p>`
     );
     return { error: "That one isn't ready to buy yet. Try another, or check back shortly." };
   }
@@ -89,6 +91,10 @@ export async function startCheckout(prev: ActionState, formData: FormData): Prom
       return { error: "Payment provider is unavailable right now. Try again in a minute." };
     }
   } else {
+    // Without Stripe there is no payment, so the live site never hands files out this way.
+    if (!demoCheckoutAllowed()) {
+      return { error: "Payments are down for a minute. Try again shortly." };
+    }
     const order = await createOrder({ productSlug, email, name, mode: "demo" });
     await markPaid(order.id);
     await notifyOwner(

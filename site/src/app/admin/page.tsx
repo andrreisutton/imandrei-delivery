@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import { PencilSimple } from "@phosphor-icons/react/dist/ssr";
 import { isAdmin } from "@/lib/admin-auth";
 import { listJSON } from "@/lib/store";
 import { getSiteContent } from "@/lib/content";
-import { STUDIO_URL } from "@/lib/sanity";
+import { getProductFiles } from "@/lib/product-files";
+import { stripeLive } from "@/lib/stripe";
+import { fileLink } from "@/lib/email";
 import type {
   BookingRecord,
   OrderEvent,
@@ -17,8 +18,12 @@ import {
   adminDeleteReview,
   adminExpediteReviewEmails,
   adminLogout,
+  adminRemoveUpload,
   adminRunEmailQueue,
 } from "./actions";
+import { ProductFileUpload } from "./product-file-upload";
+import { PasswordForm } from "./password-form";
+import { getCoverImages } from "@/lib/product-files";
 import { Stars } from "@/components/rating";
 
 export const dynamic = "force-dynamic";
@@ -102,10 +107,13 @@ export default async function AdminPage() {
     );
   }
 
-  const [{ orders, reviews, bookings, requests, outbox }, { products }] = await Promise.all([
+  const [{ orders, reviews, bookings, requests, outbox }, { products }, files] = await Promise.all([
     loadData(),
     getSiteContent(),
+    getProductFiles(),
   ]);
+  const covers = await getCoverImages();
+  const downloads = products.filter((p) => p.type !== "service");
   const productTitle = (slug: string) => {
     const p = products.find((x) => x.slug === slug);
     return p ? `${p.title} · ${p.subtitle}` : slug;
@@ -116,15 +124,6 @@ export default async function AdminPage() {
       <div className="flex flex-wrap items-center justify-between gap-4">
         <h1 className="h-title text-6xl sm:text-8xl">Admin</h1>
         <div className="flex flex-wrap gap-2">
-          <a
-            href={STUDIO_URL}
-            target="_blank"
-            rel="noopener"
-            className="btn btn-primary !px-4 !py-2 text-sm"
-          >
-            <PencilSimple size={15} weight="bold" />
-            Edit the site
-          </a>
           <form action={adminRunEmailQueue}>
             <button className="btn btn-ghost !px-4 !py-2 text-sm">Send due review emails</button>
           </form>
@@ -152,7 +151,145 @@ export default async function AdminPage() {
         ))}
       </div>
 
-      <section data-reveal className="mt-10">
+      <section className="mt-8 rounded-[8px] border border-line bg-surface p-5 text-sm">
+        <h2 className="text-lg font-bold">How do I…</h2>
+        <dl className="mt-3 grid gap-4 sm:grid-cols-2">
+          <div>
+            <dt className="font-semibold">See who booked me?</dt>
+            <dd className="mt-1 text-muted">
+              Studio sessions are under <a href="#bookings" className="text-ink underline underline-offset-2">Session bookings</a>.
+              Paid mixing, mastering and shoot packages, and store sales, are under{" "}
+              <a href="#orders" className="text-ink underline underline-offset-2">Orders</a>. Quote requests and
+              custom asks are under <a href="#requests" className="text-ink underline underline-offset-2">Service requests</a>.
+              Every card payment also shows in your Stripe app.
+            </dd>
+          </div>
+          <div>
+            <dt className="font-semibold">Sell a product so the buyer gets it?</dt>
+            <dd className="mt-1 text-muted">
+              Upload its file under <a href="#product-files" className="text-ink underline underline-offset-2">Product files</a>.
+              The buyer gets a download button the second they pay.
+            </dd>
+          </div>
+          <div>
+            <dt className="font-semibold">Change wording, prices or add a product, without Claude?</dt>
+            <dd className="mt-1 text-muted">
+              All the words live in one file.{" "}
+              <a href="https://github.com/andrreisutton/imandrei-delivery/edit/main/site/src/content/site.ts" target="_blank" rel="noopener" className="text-ink underline underline-offset-2">
+                Open it on GitHub
+              </a>{" "}
+              (signed in as andrreisutton), press Cmd+F to find the words, change them between the
+              quotes, then press <strong className="text-ink">Commit changes</strong>. It&apos;s live in about
+              2 minutes. For a new product, copy an existing product block in that file and change it,
+              then upload its file here.
+            </dd>
+          </div>
+          <div>
+            <dt className="font-semibold">Change a product thumbnail?</dt>
+            <dd className="mt-1 text-muted">
+              Upload an image under <a href="#thumbnails" className="text-ink underline underline-offset-2">Thumbnails</a>.
+            </dd>
+          </div>
+          <div>
+            <dt className="font-semibold">Change my password?</dt>
+            <dd className="mt-1 text-muted">
+              Under <a href="#password" className="text-ink underline underline-offset-2">Password</a> at the bottom.
+            </dd>
+          </div>
+        </dl>
+      </section>
+
+      <section id="product-files" className="mt-10 scroll-mt-24">
+        <h2 className="text-lg font-bold">Product files</h2>
+        <p className="mt-1 max-w-prose text-sm text-muted">
+          Upload the file a buyer gets for each product (zip a folder first). The moment a file is
+          here{stripeLive() ? "" : " and Stripe is on a live key"}, the product sells on the site and
+          the buyer downloads it straight after paying. Until then it sells on Gumroad, or shows as
+          not for sale.
+        </p>
+        <div className="mt-3 divide-y divide-line rounded-[8px] border border-line">
+          {downloads.map((p) => {
+            const f = files[p.slug];
+            return (
+              <div key={p.slug} className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 text-sm">
+                <div className="min-w-0">
+                  <p className="font-semibold">
+                    {p.title} · {p.subtitle}
+                  </p>
+                  {f ? (
+                    <p className="mt-0.5 break-all text-xs text-muted">
+                      <a href={`/api/admin/file?p=${encodeURIComponent(f.pathname)}`} className="hover:text-ink">
+                        {f.name}
+                      </a>{" "}
+                      · {(f.size / (1024 * 1024)).toFixed(1)} MB · {fmt(f.uploadedAt)}
+                    </p>
+                  ) : (
+                    <p className="mt-0.5 text-xs text-faint">No file yet</p>
+                  )}
+                </div>
+                <div className="flex items-start gap-2">
+                  <ProductFileUpload slug={p.slug} hasFile={!!f} />
+                  {f && (
+                    <form action={adminRemoveUpload}>
+                      <input type="hidden" name="slug" value={p.slug} />
+                      <input type="hidden" name="kind" value="downloads" />
+                      <button className="btn btn-ghost !px-4 !py-2 text-sm">Remove</button>
+                    </form>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      <section id="thumbnails" className="mt-10 scroll-mt-24">
+        <h2 className="text-lg font-bold">Thumbnails</h2>
+        <p className="mt-1 max-w-prose text-sm text-muted">
+          Upload a square image (at least 1200 by 1200, JPG, PNG or WebP) to replace a product&apos;s
+          drawn cover everywhere on the site: the store, the product page and checkout. Remove it to
+          go back to the drawn cover.
+        </p>
+        <div className="mt-3 divide-y divide-line rounded-[8px] border border-line">
+          {products.map((p) => {
+            const c = covers[p.slug];
+            return (
+              <div key={p.slug} className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 text-sm">
+                <div className="flex min-w-0 items-center gap-3">
+                  {c ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={`/api/cover/${p.slug}?v=${c.v}`}
+                      alt=""
+                      className="size-12 shrink-0 rounded-[6px] object-cover"
+                    />
+                  ) : (
+                    <span className="size-12 shrink-0 rounded-[6px] border border-line" aria-hidden="true" />
+                  )}
+                  <p className="font-semibold">
+                    {p.title} · {p.subtitle}
+                    <span className="block text-xs font-normal text-faint">
+                      {c ? "Custom image" : "Drawn cover"}
+                    </span>
+                  </p>
+                </div>
+                <div className="flex items-start gap-2">
+                  <ProductFileUpload slug={p.slug} hasFile={!!c} kind="covers" />
+                  {c && (
+                    <form action={adminRemoveUpload}>
+                      <input type="hidden" name="slug" value={p.slug} />
+                      <input type="hidden" name="kind" value="covers" />
+                      <button className="btn btn-ghost !px-4 !py-2 text-sm">Remove</button>
+                    </form>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      <section id="orders" data-reveal className="mt-10 scroll-mt-24">
         <h2 className="text-lg font-bold">Orders</h2>
         <div className="mt-3 overflow-x-auto rounded-[8px] border border-line">
           {orders.length === 0 ? (
@@ -255,7 +392,7 @@ export default async function AdminPage() {
       </section>
 
       <div className="mt-10 grid gap-10 lg:grid-cols-2">
-        <section data-reveal>
+        <section id="bookings" data-reveal className="scroll-mt-24">
           <h2 className="text-lg font-bold">Session bookings</h2>
           <div className="mt-3 grid gap-3">
             {bookings.length === 0 ? (
@@ -281,7 +418,7 @@ export default async function AdminPage() {
                   {b.fileUrls && b.fileUrls.length > 0 && (
                     <p className="mt-1 flex flex-wrap gap-x-2 text-xs text-faint">
                       {b.fileUrls.map((u, i) => (
-                        <a key={u} href={u} target="_blank" rel="noreferrer" className="underline hover:text-ink">
+                        <a key={u} href={fileLink(u)} target="_blank" rel="noreferrer" className="underline hover:text-ink">
                           File {i + 1}
                         </a>
                       ))}
@@ -292,7 +429,7 @@ export default async function AdminPage() {
             )}
           </div>
         </section>
-        <section data-reveal>
+        <section id="requests" data-reveal className="scroll-mt-24">
           <h2 className="text-lg font-bold">Service requests</h2>
           <div className="mt-3 grid gap-3">
             {requests.length === 0 ? (
@@ -315,7 +452,7 @@ export default async function AdminPage() {
                   {r.fileUrls && r.fileUrls.length > 0 && (
                     <p className="mt-1 flex flex-wrap gap-x-2 text-xs text-faint">
                       {r.fileUrls.map((u, i) => (
-                        <a key={u} href={u} target="_blank" rel="noreferrer" className="underline hover:text-ink">
+                        <a key={u} href={fileLink(u)} target="_blank" rel="noreferrer" className="underline hover:text-ink">
                           File {i + 1}
                         </a>
                       ))}
@@ -368,6 +505,14 @@ export default async function AdminPage() {
             </table>
           )}
         </div>
+      </section>
+
+      <section id="password" className="mt-10 scroll-mt-24">
+        <h2 className="text-lg font-bold">Password</h2>
+        <p className="mt-1 max-w-prose text-sm text-muted">
+          Change the password for this page. Anyone signed in with the old one is signed out.
+        </p>
+        <PasswordForm />
       </section>
     </div>
   );
