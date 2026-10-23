@@ -1461,19 +1461,6 @@ export const products: Product[] = [
     coverHue: 190,
   },
   {
-    slug: "video-visualizer",
-    type: "service",
-    category: "photoVideo",
-    subcategory: "videography",
-    title: "Visualizer / Lyric Video",
-    subtitle: "New — for a single release",
-    description:
-      "A visualizer or lyric-style video for a track, synced and ready to post the day the song drops — the same cover-art and color sense that goes into my own releases.",
-    includes: ["One track, up to 3 minutes", "Synced visualizer or lyric treatment", "Delivered in 5 to 7 days"],
-    price: 350,
-    coverHue: 190,
-  },
-  {
     slug: "video-full-day",
     type: "service",
     category: "photoVideo",
