@@ -1085,6 +1085,27 @@ export const graphicDesign: GraphicPiece[] = [
     after: "/graphics/rangers-seager.jpg",
     aspect: "square",
   },
+  {
+    id: "royals-witt",
+    title: "Bobby Witt Jr.",
+    note: "Kansas City Royals",
+    after: "/graphics/royals-witt.webp",
+    aspect: "portrait",
+  },
+  {
+    id: "nuggets-jokic",
+    title: "Nikola Jokic",
+    note: "Denver Nuggets, NBA Playoffs",
+    after: "/graphics/nuggets-jokic.jpg",
+    aspect: "portrait",
+  },
+  {
+    id: "hurricanes-hall",
+    title: "Taylor Hall, playoff point leader",
+    note: "Carolina Hurricanes, Stanley Cup Playoffs",
+    after: "/graphics/hurricanes-hall.jpg",
+    aspect: "portrait",
+  },
 ];
 
 export type Daw = "DaVinci Resolve" | "Premiere Pro" | "Lightroom" | "FL Studio";
