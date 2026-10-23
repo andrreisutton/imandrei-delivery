@@ -427,6 +427,8 @@ export function sanitizeContent(
     color: isObj(workLanesRaw.color) ? (workLanesRaw.color as Record<string, unknown>) : {},
     video: isObj(workLanesRaw.video) ? (workLanesRaw.video as Record<string, unknown>) : {},
     photo: isObj(workLanesRaw.photo) ? (workLanesRaw.photo as Record<string, unknown>) : {},
+    sports: isObj(workLanesRaw.sports) ? (workLanesRaw.sports as Record<string, unknown>) : {},
+    design: isObj(workLanesRaw.design) ? (workLanesRaw.design as Record<string, unknown>) : {},
     music: isObj(workLanesRaw.music) ? (workLanesRaw.music as Record<string, unknown>) : {},
   };
 
@@ -559,6 +561,14 @@ export function sanitizeContent(
           photo: {
             heading: h.s(workLanes.photo?.heading, d.pages.work.lanes.photo.heading, 60),
             note: h.s(workLanes.photo?.note, d.pages.work.lanes.photo.note, 200),
+          },
+          sports: {
+            heading: h.s(workLanes.sports?.heading, d.pages.work.lanes.sports.heading, 60),
+            note: h.s(workLanes.sports?.note, d.pages.work.lanes.sports.note, 200),
+          },
+          design: {
+            heading: h.s(workLanes.design?.heading, d.pages.work.lanes.design.heading, 60),
+            note: h.s(workLanes.design?.note, d.pages.work.lanes.design.note, 200),
           },
           music: {
             heading: h.s(workLanes.music?.heading, d.pages.work.lanes.music.heading, 60),

@@ -67,7 +67,7 @@ export const credentials: Credential[] = [
   },
 ];
 
-export type WorkLane = "color" | "video" | "photo" | "music";
+export type WorkLane = "color" | "video" | "photo" | "sports" | "design" | "music";
 
 export type VideoWork = {
   videoId: string;
@@ -1012,6 +1012,7 @@ export type PhotoSet = {
   note: string;
   href: string;
   photos: Photo[];
+  lane?: WorkLane;
 };
 
 const p = (src: string, w: number, h: number, alt: string): Photo => ({ src, w, h, alt });
@@ -1054,6 +1055,35 @@ export const photoSets: PhotoSet[] = [
       p("/photos/tron-7.jpg", 1080, 1350, "BabyTron under blue light, pointing out"),
       p("/photos/tron-3.jpg", 1080, 1350, "BabyTron through a crowd of raised phones"),
     ],
+  },
+];
+
+export type GraphicPiece = {
+  id: string;
+  title: string;
+  note: string;
+  after: string;
+  before?: string;
+  beforeLabel?: string;
+  afterLabel?: string;
+  aspect?: "portrait" | "square";
+  href?: string;
+};
+
+export const graphicDesign: GraphicPiece[] = [
+  {
+    id: "hurricanes-gameday",
+    title: "Hurricanes vs. Flyers gameday",
+    note: "Andrei Svechnikov",
+    after: "/graphics/hurricanes-gameday.webp",
+    aspect: "portrait",
+  },
+  {
+    id: "rangers-seager",
+    title: "Corey Seager stat card",
+    note: "Texas Rangers",
+    after: "/graphics/rangers-seager.jpg",
+    aspect: "square",
   },
 ];
 
@@ -1496,6 +1526,8 @@ export const pages = {
       color: { heading: "Color", note: "Grades, LUTs, and the PowerGrade running on real jobs." },
       video: { heading: "Video", note: "Tutorials and workflow breakdowns, start to finish." },
       photo: { heading: "Photo", note: "Stills from the same shows." },
+      sports: { heading: "Sports", note: "Shooting the games themselves." },
+      design: { heading: "Graphic design", note: "How a graphic goes from rough to finished." },
       music: { heading: "Music", note: "Records I wrote, recorded, mixed, and released." },
     },
     reelsNote: "Straight from my Instagram.",

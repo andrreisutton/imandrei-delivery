@@ -8,15 +8,16 @@ import { ReelWall } from "@/components/reel-wall";
 import { InstagramProfile, SpotifyPlaylist } from "@/components/embeds";
 import { GradeCompare } from "@/components/grade-compare";
 import { PhotoWall } from "@/components/photo-wall";
-import { compares, photoSets, reels, type WorkLane } from "@/content/site";
+import { GraphicWall } from "@/components/graphic-wall";
+import { compares, photoSets, reels, graphicDesign, type WorkLane } from "@/content/site";
 
 export const metadata: Metadata = {
   title: "Work",
   description:
-    "Color, video, photos, and records by Andrei Sutton. Tour recaps, grades, concert photography, channel edits, and his own releases.",
+    "Color, video, photos, sports, graphic design, and records by Andrei Sutton. Tour recaps, grades, concert photography, channel edits, and his own releases.",
 };
 
-const LANES: WorkLane[] = ["color", "video", "photo", "music"];
+const LANES: WorkLane[] = ["color", "video", "photo", "sports", "design", "music"];
 
 export default async function WorkPage() {
   const content = await getSiteContent();
@@ -43,8 +44,11 @@ export default async function WorkPage() {
         const videos = videoWork.filter((v) => (v.lane ?? "video") === lane);
         const laneReels = reels.filter((r) => r.lane === lane);
         const records = lane === "music" ? musicCredits : [];
-        const photos = lane === "photo" ? photoSets : [];
-        if (!videos.length && !laneReels.length && !records.length && !photos.length) return null;
+        const photos = photoSets.filter((p) => (p.lane ?? "photo") === lane);
+        const graphics = lane === "design" ? graphicDesign : [];
+        if (!videos.length && !laneReels.length && !records.length && !photos.length && !graphics.length) {
+          return null;
+        }
         const l = copy.lanes[lane];
 
         return (
@@ -74,6 +78,8 @@ export default async function WorkPage() {
               )}
 
               {photos.length > 0 && <PhotoWall sets={photos} className="mt-8" />}
+
+              {graphics.length > 0 && <GraphicWall pieces={graphics} className="mt-7" />}
 
               {lane === "music" && (
                 <div className="mt-10">
