@@ -30,7 +30,11 @@ function GeneratedCover({ product }: { product: Product }) {
             className="h-[15px] w-auto object-contain object-left opacity-95"
             draggable={false}
           />
-          <Price price={product.price} compareAtPrice={product.compareAtPrice} />
+          {product.priceLabel === "quote" ? (
+            <span className="text-lg font-semibold text-ink">Quote</span>
+          ) : (
+            <Price price={product.price} compareAtPrice={product.compareAtPrice} />
+          )}
         </div>
       </div>
     </div>

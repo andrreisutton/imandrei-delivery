@@ -55,7 +55,7 @@ export function buildServiceLines({
     .filter((p) => p.type === "service" && p.category !== "photoVideo")
     .map((p) => p.price);
   const photoVideoPrices = products
-    .filter((p) => p.type === "service" && p.category === "photoVideo")
+    .filter((p) => p.type === "service" && p.category === "photoVideo" && p.price > 0)
     .map((p) => p.price);
   const lines: ServiceLine[] = [];
 
