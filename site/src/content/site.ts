@@ -1293,6 +1293,7 @@ export const products: Product[] = [
       "Instant download the moment payment clears",
     ],
     price: 149,
+    compareAtPrice: 191,
     badge: "Best value",
     coverHue: 256,
     showGradeCompare: true,
