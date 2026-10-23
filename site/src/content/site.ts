@@ -1137,6 +1137,8 @@ export type Product = {
   compareAtPrice?: number;
   badge?: string;
   coverHue: number;
+  // Set from a thumbnail uploaded in /admin; replaces the drawn cover.
+  coverImage?: string;
   image?: string;
   showGradeCompare?: boolean;
   gradeBefore?: string;

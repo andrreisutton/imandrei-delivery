@@ -33,13 +33,42 @@ export const getProductFiles = cache(async (): Promise<Record<string, ProductFil
   return out;
 });
 
-export async function removeOtherProductFiles(slug: string, keepPathname: string): Promise<void> {
-  const { blobs } = await list({ prefix: productFilePrefix(slug), limit: 1000 });
+export type CoverImage = { pathname: string; v: string };
+
+// Thumbnails uploaded in /admin, newest per product.
+export const getCoverImages = cache(async (): Promise<Record<string, CoverImage>> => {
+  if (!blobEnabled()) return {};
+  const out: Record<string, CoverImage & { at: number }> = {};
+  try {
+    const { blobs } = await list({ prefix: "covers/", limit: 1000 });
+    for (const b of blobs) {
+      const [, slug, ...rest] = b.pathname.split("/");
+      if (!slug || rest.length === 0) continue;
+      const at = new Date(b.uploadedAt).getTime();
+      if (out[slug] && out[slug].at >= at) continue;
+      out[slug] = { pathname: b.pathname, v: String(at), at };
+    }
+  } catch (e) {
+    console.error("could not list cover images", e);
+  }
+  return out;
+});
+
+export async function removeOthers(prefix: string, keepPathname: string): Promise<void> {
+  const { blobs } = await list({ prefix, limit: 1000 });
   const stale = blobs.filter((b) => b.pathname !== keepPathname).map((b) => b.url);
   if (stale.length) await del(stale);
 }
 
-export async function removeProductFiles(slug: string): Promise<void> {
-  const { blobs } = await list({ prefix: productFilePrefix(slug), limit: 1000 });
+export async function removeAll(prefix: string): Promise<void> {
+  const { blobs } = await list({ prefix, limit: 1000 });
   if (blobs.length) await del(blobs.map((b) => b.url));
+}
+
+export async function removeOtherProductFiles(slug: string, keepPathname: string): Promise<void> {
+  await removeOthers(productFilePrefix(slug), keepPathname);
+}
+
+export async function removeProductFiles(slug: string): Promise<void> {
+  await removeAll(productFilePrefix(slug));
 }

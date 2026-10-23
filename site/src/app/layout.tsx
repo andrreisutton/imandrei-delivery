@@ -51,7 +51,7 @@ export async function generateMetadata(): Promise<Metadata> {
       type: "website",
       images: [
         {
-          url: "/og.png",
+          url: "/og.png?v=20261023",
           width: 1200,
           height: 630,
           alt: `${brand.name}. Cinema color, radio vocals: PowerGrade, presets, templates, and custom mixing.`,
@@ -62,7 +62,7 @@ export async function generateMetadata(): Promise<Metadata> {
       card: "summary_large_image",
       title: brand.name,
       description: brand.tagline,
-      images: ["/og.png"],
+      images: ["/og.png?v=20261023"],
     },
   };
 }

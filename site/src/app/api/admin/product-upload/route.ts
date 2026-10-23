@@ -18,10 +18,19 @@ export async function POST(request: Request): Promise<NextResponse> {
       request,
       onBeforeGenerateToken: async (pathname) => {
         if (!(await isAdmin())) throw new Error("Sign in to /admin first.");
-        const m = pathname.match(/^downloads\/([a-z0-9-]+)\/[^/]+$/);
+        const m = pathname.match(/^(downloads|covers)\/([a-z0-9-]+)\/[^/]+$/);
         const { products } = await getSiteContent();
-        if (!m || !products.some((p) => p.slug === m[1] && p.type !== "service")) {
+        const product = m && products.find((p) => p.slug === m[2]);
+        if (!m || !product || (m[1] === "downloads" && product.type === "service")) {
           throw new Error("Unknown product.");
+        }
+        if (m[1] === "covers") {
+          return {
+            allowedContentTypes: ["image/jpeg", "image/png", "image/webp", "image/avif"],
+            maximumSizeInBytes: 15 * 1024 * 1024,
+            addRandomSuffix: false,
+            allowOverwrite: true,
+          };
         }
         return {
           maximumSizeInBytes: MAX_BYTES,

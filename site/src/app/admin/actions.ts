@@ -7,15 +7,16 @@ import {
   clearAdminCookie,
   isAdmin,
   setAdminCookie,
+  setPassword,
 } from "@/lib/admin-auth";
 import { deleteRecord } from "@/lib/store";
 import { processDueReviewEmails } from "@/lib/orders";
-import { removeOtherProductFiles, removeProductFiles } from "@/lib/product-files";
+import { removeAll, removeOthers } from "@/lib/product-files";
 import type { ActionState } from "@/app/actions";
 
 export async function adminLogin(prev: ActionState, formData: FormData): Promise<ActionState> {
   const password = formData.get("password");
-  if (typeof password !== "string" || !checkPassword(password)) {
+  if (typeof password !== "string" || !(await checkPassword(password))) {
     return { error: "Wrong password." };
   }
   await setAdminCookie();
@@ -49,18 +50,41 @@ export async function adminExpediteReviewEmails(): Promise<void> {
   revalidatePath("/admin");
 }
 
-// After an upload, the new file is the one buyers get; older ones are removed.
-export async function adminKeepProductFile(slug: string, pathname: string): Promise<void> {
+type UploadKind = "downloads" | "covers";
+const KINDS: UploadKind[] = ["downloads", "covers"];
+
+// After an upload, the new file is the one in use; older ones are removed.
+export async function adminKeepUpload(kind: UploadKind, slug: string, pathname: string): Promise<void> {
   if (!(await isAdmin())) return;
-  if (!/^[a-z0-9-]+$/.test(slug) || !pathname.startsWith(`downloads/${slug}/`)) return;
-  await removeOtherProductFiles(slug, pathname);
-  revalidatePath("/admin");
+  if (!KINDS.includes(kind) || !/^[a-z0-9-]+$/.test(slug)) return;
+  if (!pathname.startsWith(`${kind}/${slug}/`)) return;
+  await removeOthers(`${kind}/${slug}/`, pathname);
+  revalidatePath("/", "layout");
 }
 
-export async function adminRemoveProductFile(formData: FormData): Promise<void> {
+export async function adminRemoveUpload(formData: FormData): Promise<void> {
   if (!(await isAdmin())) return;
   const slug = formData.get("slug");
-  if (typeof slug !== "string" || !/^[a-z0-9-]+$/.test(slug)) return;
-  await removeProductFiles(slug);
+  const kind = formData.get("kind") as UploadKind;
+  if (typeof slug !== "string" || !/^[a-z0-9-]+$/.test(slug) || !KINDS.includes(kind)) return;
+  await removeAll(`${kind}/${slug}/`);
+  revalidatePath("/", "layout");
+}
+
+export async function adminChangePassword(prev: ActionState, formData: FormData): Promise<ActionState> {
+  if (!(await isAdmin())) return { error: "Sign in first." };
+  const current = formData.get("current");
+  const next = formData.get("next");
+  const confirm = formData.get("confirm");
+  if (typeof current !== "string" || !(await checkPassword(current))) {
+    return { error: "Your current password is wrong." };
+  }
+  if (typeof next !== "string" || next.length < 10) {
+    return { error: "Use at least 10 characters." };
+  }
+  if (next !== confirm) return { error: "The two new passwords don't match." };
+  await setPassword(next);
+  await setAdminCookie();
   revalidatePath("/admin");
+  return { ok: true };
 }
