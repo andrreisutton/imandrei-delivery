@@ -1675,6 +1675,14 @@ export const pages = {
     heading: "The Store",
     intro:
       "PowerGrades, presets, templates, and vocal chains for DaVinci Resolve, Premiere Pro, Lightroom, and FL Studio. The same files I use on my own shoots and records. Your download link lands the moment payment clears.",
+    howItWorksHeading: "How it works",
+    howItWorks: [
+      { title: "Buy", body: "Checkout in one step. No account, no waiting on approval." },
+      { title: "Download", body: "Your file lands the moment payment clears." },
+      { title: "Drop it in", body: "Load it into DaVinci, Premiere, Lightroom, or FL Studio." },
+      { title: "Match and ship", body: "Dial it to your shot or your take, and you're done." },
+    ],
+    reviewsHeading: "What buyers are saying",
   },
   product: {
     buyLabel: "Buy now",

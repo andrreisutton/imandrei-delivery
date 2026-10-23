@@ -523,6 +523,20 @@ export function sanitizeContent(
       presets: {
         heading: h.s(pg("presets").heading, d.pages.presets.heading, 80),
         intro: h.s(pg("presets").intro, d.pages.presets.intro, 400),
+        howItWorksHeading: h.s(
+          pg("presets").howItWorksHeading,
+          d.pages.presets.howItWorksHeading,
+          80
+        ),
+        howItWorks: Array.isArray(pg("presets").howItWorks)
+          ? d.pages.presets.howItWorks.map((ds, i) => {
+              const rs = isObj((pg("presets").howItWorks as unknown[])[i])
+                ? ((pg("presets").howItWorks as unknown[])[i] as Record<string, unknown>)
+                : {};
+              return { title: h.s(rs.title, ds.title, 60), body: h.s(rs.body, ds.body, 200) };
+            })
+          : d.pages.presets.howItWorks,
+        reviewsHeading: h.s(pg("presets").reviewsHeading, d.pages.presets.reviewsHeading, 80),
       },
       product: {
         buyLabel: h.s(pg("product").buyLabel, d.pages.product.buyLabel, 40),
