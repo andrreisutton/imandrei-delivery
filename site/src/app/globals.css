@@ -51,7 +51,11 @@
   }
 
   body {
-    background: var(--color-bg);
+    background:
+      radial-gradient(1100px 650px at 12% -8%, oklch(0.58 0.19 280 / 12%), transparent 60%),
+      radial-gradient(900px 600px at 100% 0%, oklch(0.65 0.20 322 / 9%), transparent 55%),
+      radial-gradient(1000px 700px at 50% 110%, oklch(0.60 0.21 285 / 7%), transparent 60%),
+      var(--color-bg);
     color: var(--color-ink);
     font-family: var(--font-sans);
     text-rendering: optimizeLegibility;

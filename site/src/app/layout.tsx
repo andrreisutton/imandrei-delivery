@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { draftMode } from "next/headers";
 import { VisualEditing } from "next-sanity/visual-editing";
 import { ViewTransitions } from "next-view-transitions";
-import { Big_Shoulders, Plus_Jakarta_Sans } from "next/font/google";
+import { Bricolage_Grotesque, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
@@ -16,12 +16,12 @@ import { SanityLive } from "@/lib/live";
 import { sanityEnabled } from "@/lib/sanity";
 import { siteUrl } from "@/lib/email";
 
-const display = Big_Shoulders({
+const display = Bricolage_Grotesque({
   variable: "--font-poster",
   subsets: ["latin"],
   weight: ["400", "700"],
   adjustFontFallback: false,
-  fallback: ["Arial Narrow", "sans-serif"],
+  fallback: ["Arial", "sans-serif"],
 });
 
 const body = Plus_Jakarta_Sans({
