@@ -1,7 +1,7 @@
 export const brand = {
   name: "Andrei Sutton",
   shortName: "ANDREI!",
-  tagline: "Cinema color. Radio vocals.",
+  tagline: "Create your sound. Capture Your Vision.",
   description:
     "The PowerGrade, presets, and templates behind my shoots and records, plus custom mixing, mastering, and monthly editing for artists and channels. Instant delivery.",
   email: "",
